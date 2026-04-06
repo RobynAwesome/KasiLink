@@ -43,6 +43,7 @@ KasiLink is designed around township realities:
 - Shared server utilities are in `lib/*` (`db`, validation, geo helpers, orchestration client)
 - Middleware-like protection uses Clerk route matching in `proxy.ts`
 - Canonical structure docs are in `docs/architecture.md` and `docs/repo-map.md`
+- Delivery tracker is in `docs/phase-plan-20-tasks.md`
 
 ## Quick Start
 

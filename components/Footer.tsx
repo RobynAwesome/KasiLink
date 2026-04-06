@@ -102,7 +102,7 @@ export default function Footer() {
           <p className="text-xs text-outline">
             © {year} KasiLink. Made in South Africa.
           </p>
-          <div className="gap-4 flex">
+          <div className="gap-4 flex items-center">
             {legalLinks.map(({ label, href }) => (
               <Link
                 key={href}
@@ -112,6 +112,9 @@ export default function Footer() {
                 {label}
               </Link>
             ))}
+            <a href="#main-content" className="text-xs text-outline hover:text-primary no-underline">
+              Back to top
+            </a>
           </div>
         </div>
       </div>

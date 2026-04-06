@@ -70,11 +70,16 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" data-theme="dark" suppressHydrationWarning>
         <body className="bg-background text-on-background font-body antialiased">
+          <a href="#main-content" className="skip-link">
+            Skip to main content
+          </a>
           <GoogleAnalytics />
           <ThemeProvider>
             <ServiceWorkerRegistration />
             <Navbar />
-            <main className="page-content">{children}</main>
+            <main id="main-content" className="page-content">
+              {children}
+            </main>
             <Footer />
           </ThemeProvider>
         </body>

@@ -1,5 +1,7 @@
 "use client";
 
+import { formatRelativeTime } from "@/lib/format";
+
 interface Conversation {
   _id: string;
   gigTitle: string;
@@ -51,7 +53,7 @@ export default function ConversationList({
                 </p>
               </div>
               <span className="text-[10px] uppercase tracking-wider text-outline">
-                {new Date(conversation.lastMessageAt).toLocaleDateString()}
+                {formatRelativeTime(conversation.lastMessageAt)}
               </span>
             </div>
           </button>

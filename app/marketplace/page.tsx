@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { formatRelativeTime } from "@/lib/format";
 
 // ── Types ──────────────────────────────────────────────────────────
 interface Gig {
@@ -39,15 +40,6 @@ const CATEGORIES = [
 
 const CITY_OPTIONS = ["", "Johannesburg", "Cape Town"];
 const RADIUS_OPTIONS = ["5", "10", "25", "50"];
-
-function timeAgo(dateStr: string) {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return `${Math.floor(hrs / 24)}d ago`;
-}
 
 // ── GigCard ────────────────────────────────────────────────────────
 function GigCard({ gig }: { gig: Gig }) {
@@ -95,7 +87,7 @@ function GigCard({ gig }: { gig: Gig }) {
             </span>
           )}
           <span>👤 {gig.providerName}</span>
-          <span>⏱ {timeAgo(gig.createdAt)}</span>
+          <span>⏱ {formatRelativeTime(gig.createdAt)}</span>
         </div>
 
         {/* Footer */}
@@ -356,7 +348,12 @@ function MarketplaceInner() {
         )}
       </div>
 
+      <p className="sr-only" role="status" aria-live="polite">
+        {loading ? "Loading gigs" : `${gigs.length} gigs loaded`}
+      </p>
+
       {/* Gig grid */}
+      <div aria-busy={loading}>
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -381,6 +378,7 @@ function MarketplaceInner() {
           ))}
         </div>
       )}
+      </div>
 
       {/* Pagination */}
       {total > 20 && (

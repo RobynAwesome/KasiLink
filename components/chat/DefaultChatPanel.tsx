@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useUser } from "@clerk/nextjs";
+import { formatRelativeTime } from "@/lib/format";
 
 interface Message {
   _id: string;
@@ -31,6 +32,7 @@ export default function DefaultChatPanel({
     let cancelled = false;
 
     const fetchMessages = async () => {
+      if (document.visibilityState === "hidden") return;
       try {
         const res = await fetch(`/api/messages?conversationId=${conversationId}`);
         if (!res.ok) return;
@@ -116,10 +118,7 @@ export default function DefaultChatPanel({
                 </p>
                 <p className="text-sm leading-relaxed break-words">{message.text}</p>
                 <p className="mt-1 text-[10px] opacity-75">
-                  {new Date(message.createdAt).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  {formatRelativeTime(message.createdAt)}
                 </p>
               </div>
             );
@@ -135,6 +134,7 @@ export default function DefaultChatPanel({
           onChange={(event) => setText(event.target.value)}
           className="kasi-input flex-1"
           placeholder="Type your message..."
+          aria-label="Message text"
           maxLength={1000}
         />
         <button

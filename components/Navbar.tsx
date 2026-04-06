@@ -240,6 +240,7 @@ export default function Navbar() {
   return (
     <>
       <nav
+        aria-label="Primary navigation"
         className={`fixed top-0 left-0 right-0 z-[200] bg-background/90 backdrop-blur-md border-b transition-all duration-250 ${
           scrolled
             ? "border-outline-variant/30 shadow-sm"
@@ -311,6 +312,8 @@ export default function Navbar() {
                       onClick={handleToggleNotifs}
                       className="btn btn-ghost btn-sm p-2 relative text-on-surface-variant hover:text-on-surface"
                       aria-label="Notifications"
+                      aria-expanded={showNotifs}
+                      aria-controls="notifications-menu"
                     >
                       <BellIcon />
                       {unreadCount > 0 && (
@@ -320,7 +323,10 @@ export default function Navbar() {
 
                     {/* Notifications Dropdown */}
                     {showNotifs && (
-                      <div className="absolute right-0 mt-2 w-72 max-h-[400px] overflow-y-auto bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-lg z-50 flex flex-col py-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div
+                        id="notifications-menu"
+                        className="absolute right-0 mt-2 w-72 max-h-[400px] overflow-y-auto bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-lg z-50 flex flex-col py-2 animate-in fade-in slide-in-from-top-2 duration-200"
+                      >
                         <div className="px-4 py-2 border-b border-outline-variant/30 mb-1">
                           <h3 className="font-bold text-sm">Notifications</h3>
                         </div>
