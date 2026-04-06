@@ -41,3 +41,5 @@ New strategic notes should land in `Structure/Schematics/` first. Legacy folders
 1. Billing notes move into numbered Schematics summaries first.
 2. Project audit findings move next so product state is visible from the canonical path.
 3. Issue hubs and QA references follow so delivery risk stays attached to strategy.
+4. Execution, operating rules, and collaboration rules move next so the canonical layer governs real work.
+5. Truth normalization notes call out stale legacy claims instead of letting them silently persist.

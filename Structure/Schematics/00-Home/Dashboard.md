@@ -42,6 +42,10 @@ status: active
 ## 04 - Updates
 
 - [[Coordination Hub]] - Canonical coordination map into `Structure/Updates/`.
+- [[Execution Note]] - Current execution priorities and hardening direction.
+- [[Operating Rules]] - Canonical operating and placement rules.
+- [[Collaboration Protocol]] - Delegation and review standard.
+- [[Truth Register]] - Normalized corrections to stale legacy claims.
 - [[Billing Model]] - Billing, pricing, and provider strategy snapshot.
 - [[Project Audit Snapshot]] - Current product and repo inventory summary.
 - [[Issue Hub]] - QA and regression synthesis entry point.

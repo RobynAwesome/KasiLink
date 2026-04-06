@@ -28,6 +28,9 @@ status: active
 - Project audit: [../../Updates/project-audit.md](../../Updates/project-audit.md)
 - Billing plan: [../../Updates/billing-plan.md](../../Updates/billing-plan.md)
 - Smoke-test tracker: [../../Issues/qa-smoke-test-todo.md](../../Issues/qa-smoke-test-todo.md)
+- Master TODO: [../../Updates/master-todo.md](../../Updates/master-todo.md)
+- Alignment notes: [../../Updates/current-alignment-notes.md](../../Updates/current-alignment-notes.md)
+- Delegation protocol: [../../Updates/delegation-protocol.md](../../Updates/delegation-protocol.md)
 - Structure map: [../../index.md](../../index.md)
 
 ## Rule

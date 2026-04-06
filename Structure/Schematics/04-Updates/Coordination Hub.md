@@ -20,6 +20,14 @@ Use this note as the Schematics-facing entry into the existing execution stack.
 1. [[Billing Model]] - Billing plans, provider direction, and implementation rules.
 2. [[Project Audit Snapshot]] - Condensed product and system inventory.
 3. [[Issue Hub]] - QA and regression entry point.
+4. [[Execution Note]] - Current phase direction and execution priorities.
+5. [[Operating Rules]] - Canonical file-placement, styling, and documentation rules.
+6. [[Collaboration Protocol]] - Durable delegation and review rules.
+7. [[Truth Register]] - Verified corrections where legacy notes drift from the repo.
+
+## Register
+
+- Compact index: [index.md](index.md)
 
 ## Canonical Coordination Notes
 
@@ -35,3 +43,5 @@ Use this note as the Schematics-facing entry into the existing execution stack.
 
 `Structure/Schematics/` explains what matters.
 `Structure/Updates/` records who is doing it, what changed, and what remains blocked.
+
+Legacy notes remain useful source material, but this hub and its numbered notes are now the cleaner truth layer.
