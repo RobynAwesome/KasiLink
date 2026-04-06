@@ -121,11 +121,20 @@ function MarketplaceInner() {
   const [suburb, setSuburb] = useState(searchParams.get("suburb") ?? "");
   const [city, setCity] = useState(searchParams.get("city") ?? "");
   const [radius, setRadius] = useState(searchParams.get("radius") ?? "10");
+  const [verifiedOnly, setVerifiedOnly] = useState(
+    searchParams.get("verified") === "1",
+  );
   const [userCoords, setUserCoords] = useState<{
     lat: number;
     lng: number;
   } | null>(null);
-  const activeFilterCount = [query, category, suburb, city].filter(Boolean).length;
+  const activeFilterCount = [
+    query,
+    category,
+    suburb,
+    city,
+    verifiedOnly ? "verified" : "",
+  ].filter(Boolean).length;
 
   // Ask for location once
   useEffect(() => {
@@ -181,6 +190,7 @@ function MarketplaceInner() {
     newSuburb: string,
     newCity: string,
     newRadius: string,
+    newVerifiedOnly: boolean = verifiedOnly,
     newSort: string = sortBy,
   ) => {
     const params = new URLSearchParams();
@@ -189,6 +199,7 @@ function MarketplaceInner() {
     if (newSuburb) params.set("suburb", newSuburb);
     if (newCity) params.set("city", newCity);
     if (newRadius) params.set("radius", newRadius);
+    if (newVerifiedOnly) params.set("verified", "1");
     if (newSort && newSort !== "newest") params.set("sort", newSort);
     router.replace(`/marketplace?${params.toString()}`, { scroll: false });
     setPage(1);
@@ -200,6 +211,7 @@ function MarketplaceInner() {
     setSuburb("");
     setCity("");
     setRadius("10");
+    setVerifiedOnly(false);
     setSortBy("newest");
     setPage(1);
     router.replace("/marketplace", { scroll: false });
@@ -220,6 +232,10 @@ function MarketplaceInner() {
     }
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
+
+  const visibleGigs = verifiedOnly
+    ? sortedGigs.filter((gig) => gig.isProviderVerified)
+    : sortedGigs;
 
   return (
     <div className="container pt-8 pb-12">
@@ -253,12 +269,14 @@ function MarketplaceInner() {
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter")
-              applyFilter(query, category, suburb, city, radius, sortBy);
+              applyFilter(query, category, suburb, city, radius, verifiedOnly, sortBy);
           }}
         />
         <button
           className="btn btn-primary"
-          onClick={() => applyFilter(query, category, suburb, city, radius, sortBy)}
+          onClick={() =>
+            applyFilter(query, category, suburb, city, radius, verifiedOnly, sortBy)
+          }
         >
           Search
         </button>
@@ -285,7 +303,15 @@ function MarketplaceInner() {
           value={city}
           onChange={(e) => {
             setCity(e.target.value);
-            applyFilter(query, category, suburb, e.target.value, radius, sortBy);
+            applyFilter(
+              query,
+              category,
+              suburb,
+              e.target.value,
+              radius,
+              verifiedOnly,
+              sortBy,
+            );
           }}
         >
           <option value="">All cities</option>
@@ -300,7 +326,15 @@ function MarketplaceInner() {
           value={radius}
           onChange={(e) => {
             setRadius(e.target.value);
-            applyFilter(query, category, suburb, city, e.target.value, sortBy);
+            applyFilter(
+              query,
+              category,
+              suburb,
+              city,
+              e.target.value,
+              verifiedOnly,
+              sortBy,
+            );
           }}
         >
           {RADIUS_OPTIONS.map((option) => (
@@ -321,7 +355,15 @@ function MarketplaceInner() {
           value={sortBy}
           onChange={(e) => {
             setSortBy(e.target.value);
-            applyFilter(query, category, suburb, city, radius, e.target.value);
+            applyFilter(
+              query,
+              category,
+              suburb,
+              city,
+              radius,
+              verifiedOnly,
+              e.target.value,
+            );
           }}
         >
           <option value="newest">Newest first</option>
@@ -330,6 +372,19 @@ function MarketplaceInner() {
         </select>
       </div>
 
+      <label className="mb-5 flex items-center gap-2 text-sm text-on-surface-variant">
+        <input
+          type="checkbox"
+          checked={verifiedOnly}
+          onChange={(e) => {
+            const next = e.target.checked;
+            setVerifiedOnly(next);
+            applyFilter(query, category, suburb, city, radius, next, sortBy);
+          }}
+        />
+        Show verified providers only
+      </label>
+
       {/* Category chips */}
       <div className="flex gap-2 overflow-x-auto pb-2 mb-6 no-scrollbar">
         {CATEGORIES.map((cat) => (
@@ -337,7 +392,7 @@ function MarketplaceInner() {
             key={cat.value}
             onClick={() => {
               setCategory(cat.value);
-              applyFilter(query, cat.value, suburb, city, radius);
+              applyFilter(query, cat.value, suburb, city, radius, verifiedOnly);
             }}
             className={`shrink-0 px-4 py-1.5 rounded-full text-sm cursor-pointer whitespace-nowrap transition-all border ${
               category === cat.value
@@ -396,6 +451,9 @@ function MarketplaceInner() {
         {sortBy !== "newest" && (
           <span className="badge badge-info">Sort: {sortBy.replace("-", " ")}</span>
         )}
+        {verifiedOnly && (
+          <span className="badge badge-success">Verified providers only</span>
+        )}
       </div>
 
       <p className="sr-only" role="status" aria-live="polite">
@@ -404,13 +462,13 @@ function MarketplaceInner() {
 
       {/* Gig grid */}
       <div aria-busy={loading}>
-      {loading ? (
+        {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="kasi-card skeleton h-[180px]" />
           ))}
         </div>
-      ) : gigs.length === 0 ? (
+      ) : visibleGigs.length === 0 ? (
         <div className="text-center py-12 text-on-surface-variant">
           <p className="text-xl mb-3">😕 No gigs found</p>
           <p>Try a different category or search term</p>
@@ -428,7 +486,7 @@ function MarketplaceInner() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {sortedGigs.map((gig) => (
+          {visibleGigs.map((gig) => (
             <GigCard key={gig._id} gig={gig} />
           ))}
         </div>

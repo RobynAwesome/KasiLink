@@ -41,7 +41,7 @@ function ForumInner() {
   const [posts, setPosts] = useState<ForumPostData[]>([]);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+  const page = Math.max(1, Number(searchParams.get("page")) || 1);
   const limit = 10;
 
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
@@ -54,6 +54,7 @@ function ForumInner() {
   const [newContent, setNewContent] = useState("");
   const [newCategory, setNewCategory] = useState("general");
   const [postError, setPostError] = useState("");
+  const [postStatus, setPostStatus] = useState("");
   const [isPosting, setIsPosting] = useState(false);
   const activeFilterCount = [query, category !== "all" ? category : ""].filter(Boolean).length;
 
@@ -89,14 +90,12 @@ function ForumInner() {
     if (sortBy && sortBy !== "newest") params.set("sort", sortBy);
     params.set("page", "1");
     router.replace(`/forum?${params.toString()}`, { scroll: false });
-    setPage(1);
   };
 
   const clearFilters = () => {
     setQuery("");
     setCategory("all");
     setSortBy("newest");
-    setPage(1);
     router.replace("/forum", { scroll: false });
   };
 
@@ -109,18 +108,22 @@ function ForumInner() {
   const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
     setPostError("");
+    setPostStatus("");
     if (!isSignedIn) {
       setPostError("You must be signed in to post.");
+      setPostStatus("You must be signed in to post.");
       return;
     }
 
     if (newTitle.trim().length < 5) {
       setPostError("Title must be at least 5 characters.");
+      setPostStatus("Title must be at least 5 characters.");
       return;
     }
 
     if (newContent.trim().length < 20) {
       setPostError("Message must be at least 20 characters.");
+      setPostStatus("Message must be at least 20 characters.");
       return;
     }
 
@@ -144,12 +147,16 @@ function ForumInner() {
       setNewTitle("");
       setNewContent("");
       setNewCategory("general");
-      setPage(1);
+      setPostStatus("Thread posted successfully.");
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", "1");
+      router.replace(`/forum?${params.toString()}`, { scroll: false });
       fetchPosts();
     } catch (err: unknown) {
-      setPostError(
-        err instanceof Error ? err.message : "Failed to create post",
-      );
+      const message =
+        err instanceof Error ? err.message : "Failed to create post";
+      setPostError(message);
+      setPostStatus(`Posting failed: ${message}`);
     } finally {
       setIsPosting(false);
     }
@@ -258,6 +265,9 @@ function ForumInner() {
           <p className="sr-only" role="status" aria-live="polite">
             {loading ? "Loading threads" : `${posts.length} threads loaded`}
           </p>
+          <p className="sr-only" role="status" aria-live="polite">
+            {postStatus}
+          </p>
 
           {loading ? (
             <div className="text-center py-10 text-on-surface-variant">
@@ -297,7 +307,11 @@ function ForumInner() {
                 className="btn btn-outline btn-sm"
                 disabled={page <= 1}
                 onClick={() => {
-                  setPage((p) => p - 1);
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.set("page", String(page - 1));
+                  router.replace(`/forum?${params.toString()}`, {
+                    scroll: false,
+                  });
                   window.scrollTo(0, 0);
                 }}
               >
@@ -310,7 +324,11 @@ function ForumInner() {
                 className="btn btn-outline btn-sm"
                 disabled={page >= Math.ceil(total / limit)}
                 onClick={() => {
-                  setPage((p) => p + 1);
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.set("page", String(page + 1));
+                  router.replace(`/forum?${params.toString()}`, {
+                    scroll: false,
+                  });
                   window.scrollTo(0, 0);
                 }}
               >

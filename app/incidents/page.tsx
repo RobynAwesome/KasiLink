@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 interface Incident {
@@ -43,12 +43,18 @@ export default function IncidentsPage() {
   const [loading, setLoading] = useState(true);
   const [suburb, setSuburb] = useState("");
   const [type, setType] = useState("");
-  const activeFilterCount = [suburb, type].filter(Boolean).length;
+  const [severity, setSeverity] = useState<"" | "high" | "medium" | "low">("");
+  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "severity">(
+    "newest",
+  );
+  const activeFilterCount = [suburb, type, severity].filter(Boolean).length;
 
   const clearFilters = () => {
     setLoading(true);
     setSuburb("");
     setType("");
+    setSeverity("");
+    setSortBy("newest");
   };
 
   useEffect(() => {
@@ -61,6 +67,36 @@ export default function IncidentsPage() {
       .catch(() => setIncidents([]))
       .finally(() => setLoading(false));
   }, [suburb, type]);
+
+  const visibleIncidents = useMemo(() => {
+    const filtered = severity
+      ? incidents.filter((incident) => incident.severity === severity)
+      : incidents;
+
+    const severityWeight: Record<Incident["severity"], number> = {
+      high: 3,
+      medium: 2,
+      low: 1,
+    };
+
+    const sorted = [...filtered].sort((a, b) => {
+      if (sortBy === "oldest") {
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      }
+      if (sortBy === "severity") {
+        return severityWeight[b.severity] - severityWeight[a.severity];
+      }
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+
+    return sorted;
+  }, [incidents, severity, sortBy]);
+
+  const totalCount = incidents.length;
+  const highSeverityCount = incidents.filter(
+    (incident) => incident.severity === "high",
+  ).length;
+  const filteredCount = visibleIncidents.length;
 
   return (
     <div className="container max-w-screen-md pt-8 pb-12">
@@ -99,9 +135,45 @@ export default function IncidentsPage() {
             <option key={v} value={v}>{l}</option>
           ))}
         </select>
+        <select
+          className="kasi-input max-w-[180px]"
+          value={severity}
+          onChange={(e) => setSeverity(e.target.value as "" | "high" | "medium" | "low")}
+        >
+          <option value="">All severity</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+        <select
+          className="kasi-input max-w-[200px]"
+          value={sortBy}
+          onChange={(e) =>
+            setSortBy(e.target.value as "newest" | "oldest" | "severity")
+          }
+        >
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="severity">Highest severity first</option>
+        </select>
         <button className="btn btn-outline btn-sm" onClick={clearFilters}>
           Clear filters
         </button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+        <div className="kasi-card bg-surface-container-low text-center">
+          <p className="text-xs uppercase tracking-wider text-outline mb-1">Total</p>
+          <p className="text-lg font-bold">{totalCount}</p>
+        </div>
+        <div className="kasi-card bg-surface-container-low text-center">
+          <p className="text-xs uppercase tracking-wider text-outline mb-1">High Severity</p>
+          <p className="text-lg font-bold text-danger">{highSeverityCount}</p>
+        </div>
+        <div className="kasi-card bg-surface-container-low text-center">
+          <p className="text-xs uppercase tracking-wider text-outline mb-1">Filtered</p>
+          <p className="text-lg font-bold">{filteredCount}</p>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
@@ -114,19 +186,24 @@ export default function IncidentsPage() {
             Type: {TYPE_LABELS[type] ?? type}
           </span>
         )}
+        {severity && (
+          <span className={`badge ${SEVERITY_CLASSES[severity] ?? "badge-secondary"}`}>
+            Severity: {severity}
+          </span>
+        )}
       </div>
 
       <p className="sr-only" role="status" aria-live="polite">
         {loading
           ? "Loading incidents"
-          : incidents.length === 0
+          : visibleIncidents.length === 0
             ? "No incidents found"
-            : `${incidents.length} incidents loaded`}
+            : `${visibleIncidents.length} incidents loaded`}
       </p>
 
       {loading ? (
         <p className="text-on-surface-variant text-center py-8">Loading incidents...</p>
-      ) : incidents.length === 0 ? (
+      ) : visibleIncidents.length === 0 ? (
         <div className="kasi-card text-center">
           <p className="text-on-surface-variant mb-3">No active incidents in this area.</p>
           {activeFilterCount > 0 && (
@@ -138,7 +215,7 @@ export default function IncidentsPage() {
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          {incidents.map((incident) => (
+          {visibleIncidents.map((incident) => (
             <div key={incident._id} className="kasi-card">
               <div className="flex items-start justify-between gap-3 mb-2">
                 <div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 interface Session {
@@ -27,12 +27,18 @@ export default function TutoringPage() {
   const [loading, setLoading] = useState(true);
   const [subject, setSubject] = useState("");
   const [suburb, setSuburb] = useState("");
-  const activeFilterCount = [subject, suburb].filter(Boolean).length;
+  const [locationFilter, setLocationFilter] = useState<"all" | "online" | "physical">(
+    "all",
+  );
+  const [sortBy, setSortBy] = useState<"soonest" | "latest">("soonest");
+  const activeFilterCount = [subject, suburb, locationFilter !== "all" ? locationFilter : ""].filter(Boolean).length;
 
   const clearFilters = () => {
     setLoading(true);
     setSubject("");
     setSuburb("");
+    setLocationFilter("all");
+    setSortBy("soonest");
   };
 
   useEffect(() => {
@@ -45,6 +51,25 @@ export default function TutoringPage() {
       .catch(() => setSessions([]))
       .finally(() => setLoading(false));
   }, [subject, suburb]);
+
+  const visibleSessions = useMemo(() => {
+    const filtered =
+      locationFilter === "all"
+        ? sessions
+        : sessions.filter((session) => session.location === locationFilter);
+
+    const sorted = [...filtered].sort((a, b) => {
+      const aTime = new Date(a.date).getTime();
+      const bTime = new Date(b.date).getTime();
+      return sortBy === "latest" ? bTime - aTime : aTime - bTime;
+    });
+
+    return sorted;
+  }, [sessions, locationFilter, sortBy]);
+
+  const totalSessions = sessions.length;
+  const onlineCount = sessions.filter((session) => session.location === "online").length;
+  const filteredCount = visibleSessions.length;
 
   function formatDate(iso: string) {
     return new Date(iso).toLocaleDateString("en-ZA", {
@@ -98,9 +123,43 @@ export default function TutoringPage() {
             setSuburb(e.target.value);
           }}
         />
+        <select
+          className="kasi-input max-w-[180px]"
+          value={locationFilter}
+          onChange={(e) =>
+            setLocationFilter(e.target.value as "all" | "online" | "physical")
+          }
+        >
+          <option value="all">All locations</option>
+          <option value="online">Online</option>
+          <option value="physical">Physical</option>
+        </select>
+        <select
+          className="kasi-input max-w-[180px]"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value as "soonest" | "latest")}
+        >
+          <option value="soonest">Soonest first</option>
+          <option value="latest">Latest first</option>
+        </select>
         <button className="btn btn-outline btn-sm" onClick={clearFilters}>
           Clear filters
         </button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+        <div className="kasi-card bg-surface-container-low text-center">
+          <p className="text-xs uppercase tracking-wider text-outline mb-1">Total Sessions</p>
+          <p className="text-lg font-bold">{totalSessions}</p>
+        </div>
+        <div className="kasi-card bg-surface-container-low text-center">
+          <p className="text-xs uppercase tracking-wider text-outline mb-1">Online</p>
+          <p className="text-lg font-bold">{onlineCount}</p>
+        </div>
+        <div className="kasi-card bg-surface-container-low text-center">
+          <p className="text-xs uppercase tracking-wider text-outline mb-1">Filtered</p>
+          <p className="text-lg font-bold">{filteredCount}</p>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
@@ -109,19 +168,25 @@ export default function TutoringPage() {
         )}
         {subject && <span className="badge badge-secondary">Subject: {subject}</span>}
         {suburb && <span className="badge badge-secondary">Suburb: {suburb}</span>}
+        {locationFilter !== "all" && (
+          <span className="badge badge-secondary">
+            Location: {locationFilter}
+          </span>
+        )}
+        <span className="badge badge-info">Sort: {sortBy}</span>
       </div>
 
       <p className="sr-only" role="status" aria-live="polite">
         {loading
           ? "Loading tutoring sessions"
-          : sessions.length === 0
+          : visibleSessions.length === 0
             ? "No tutoring sessions found"
-            : `${sessions.length} tutoring sessions loaded`}
+            : `${visibleSessions.length} tutoring sessions loaded`}
       </p>
 
       {loading ? (
         <p className="text-on-surface-variant text-center py-8">Loading sessions...</p>
-      ) : sessions.length === 0 ? (
+      ) : visibleSessions.length === 0 ? (
         <div className="kasi-card text-center">
           <p className="text-on-surface-variant mb-3">No tutoring sessions available right now.</p>
           {activeFilterCount > 0 && (
@@ -135,7 +200,7 @@ export default function TutoringPage() {
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          {sessions.map((s) => (
+          {visibleSessions.map((s) => (
             <Link key={s._id} href={`/tutoring/${s._id}`} className="kasi-card hover:border-primary/50 transition-colors no-underline">
               <div className="flex items-start justify-between gap-3 mb-2">
                 <div>

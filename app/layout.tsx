@@ -5,6 +5,7 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -69,19 +70,15 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" data-theme="dark" suppressHydrationWarning>
-        <body className="bg-background text-on-background font-body antialiased">
-          <a href="#main-content" className="skip-link">
-            Skip to main content
-          </a>
+        <body className="bg-background font-body text-on-background antialiased">
           <GoogleAnalytics />
           <ThemeProvider>
             <ServiceWorkerRegistration />
             <Navbar />
-            <main id="main-content" className="page-content">
-              {children}
-            </main>
+            <main className="page-content">{children}</main>
             <Footer />
           </ThemeProvider>
+          <Analytics />
         </body>
       </html>
     </ClerkProvider>

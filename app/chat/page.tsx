@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import SkinSelector, { type SkinId } from "@/components/chat-skins/SkinSelector";
 import WhatsAppSkin from "@/components/chat-skins/WhatsAppSkin";
 import DiscordSkin from "@/components/chat-skins/DiscordSkin";
@@ -29,11 +29,32 @@ const SKIN_LABELS: Record<SkinId, string> = {
 export default function ChatPage() {
   const { user, isSignedIn, isLoaded } = useUser();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConversationId, setActiveConversationId] = useState("");
   const [activeSkin, setActiveSkin] = useState<SkinId>("default");
   const [loading, setLoading] = useState(true);
-  const [conversationQuery, setConversationQuery] = useState("");
+  const [conversationQuery, setConversationQuery] = useState(
+    searchParams.get("q") ?? "",
+  );
+
+  useEffect(() => {
+    const urlQuery = searchParams.get("q") ?? "";
+    if (urlQuery !== conversationQuery) {
+      setConversationQuery(urlQuery);
+    }
+  }, [searchParams, conversationQuery]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (conversationQuery.trim()) {
+      params.set("q", conversationQuery.trim());
+    } else {
+      params.delete("q");
+    }
+    const nextUrl = params.toString() ? `/chat?${params.toString()}` : "/chat";
+    router.replace(nextUrl, { scroll: false });
+  }, [conversationQuery, router, searchParams]);
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
@@ -161,14 +182,24 @@ export default function ChatPage() {
           </div>
 
           <div className="mb-4 space-y-3">
-            <input
-              type="search"
-              value={conversationQuery}
-              onChange={(event) => setConversationQuery(event.target.value)}
-              className="kasi-input"
-              placeholder="Search conversations by gig title..."
-              aria-label="Search conversations"
-            />
+            <div className="flex gap-2">
+              <input
+                type="search"
+                value={conversationQuery}
+                onChange={(event) => setConversationQuery(event.target.value)}
+                className="kasi-input"
+                placeholder="Search conversations by gig title..."
+                aria-label="Search conversations"
+              />
+              <button
+                type="button"
+                className="btn btn-outline btn-sm"
+                onClick={() => setConversationQuery("")}
+                disabled={!conversationQuery.trim()}
+              >
+                Clear
+              </button>
+            </div>
             <div className="flex flex-wrap gap-2 text-xs">
               <span className="badge badge-primary">
                 {filteredConversations.length} shown
@@ -183,6 +214,15 @@ export default function ChatPage() {
             <p className="py-8 text-center text-sm text-on-surface-variant">
               Loading conversations...
             </p>
+          ) : conversations.length > 0 && filteredConversations.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-outline-variant p-6 text-center">
+              <p className="text-sm text-on-surface-variant">
+                No conversations match “{conversationQuery.trim()}”.
+              </p>
+              <p className="mt-2 text-xs text-outline">
+                Try a different gig title or clear search.
+              </p>
+            </div>
           ) : (
             <ConversationList
               conversations={filteredConversations}
