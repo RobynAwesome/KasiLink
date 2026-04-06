@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { formatRelativeTime } from "@/lib/format";
 
 interface Business {
   _id: string;
@@ -11,6 +12,7 @@ interface Business {
   suburb: string;
   phone: string;
   verified: boolean;
+  createdAt?: string;
 }
 
 export default function SpotlightPage() {
@@ -18,6 +20,12 @@ export default function SpotlightPage() {
   const [loading, setLoading] = useState(true);
   const [suburb, setSuburb] = useState("");
   const [category, setCategory] = useState("all");
+
+  const clearFilters = () => {
+    setLoading(true);
+    setSuburb("");
+    setCategory("all");
+  };
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -57,12 +65,20 @@ export default function SpotlightPage() {
           className="kasi-input max-w-[220px]"
           placeholder="Filter by suburb"
           value={suburb}
-          onChange={(e) => setSuburb(e.target.value)}
+          onChange={(e) => {
+            setLoading(true);
+            setSuburb(e.target.value);
+          }}
+          aria-label="Filter businesses by suburb"
         />
         <select
           className="kasi-input max-w-[220px]"
           value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          onChange={(e) => {
+            setLoading(true);
+            setCategory(e.target.value);
+          }}
+          aria-label="Filter businesses by category"
         >
           {categories.map((item) => (
             <option key={item} value={item}>
@@ -70,7 +86,14 @@ export default function SpotlightPage() {
             </option>
           ))}
         </select>
+        <button className="btn btn-outline btn-sm" onClick={clearFilters}>
+          Clear filters
+        </button>
       </div>
+
+      <p className="sr-only" role="status" aria-live="polite">
+        {loading ? "Loading businesses" : `${businesses.length} businesses loaded`}
+      </p>
 
       {loading ? (
         <div className="kasi-card py-10 text-center text-on-surface-variant">
@@ -99,6 +122,11 @@ export default function SpotlightPage() {
               <p className="mt-3 text-sm font-medium text-on-background">
                 {business.phone}
               </p>
+              {business.createdAt && (
+                <p className="mt-2 text-xs text-outline">
+                  Added {formatRelativeTime(business.createdAt)}
+                </p>
+              )}
               {business.verified && (
                 <span className="badge badge-success mt-3">Verified</span>
               )}

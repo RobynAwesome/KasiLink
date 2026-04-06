@@ -1,4 +1,6 @@
 // components/JobCard.tsx
+import { formatRelativeTime } from "@/lib/format";
+
 interface JobCardProps {
   title: string;
   description: string;
@@ -17,16 +19,16 @@ export default function JobCard({
   pay,
 }: JobCardProps) {
   return (
-    <div className="rounded-lg border bg-white p-4 shadow-sm">
+    <article className="kasi-card h-full">
       <h2 className="text-lg font-semibold">{title}</h2>
-      <p className="text-sm text-gray-600">{description}</p>
-      <div className="mt-2 text-sm text-gray-500">
+      <p className="text-sm text-on-surface-variant">{description}</p>
+      <div className="mt-2 text-sm text-outline">
         <span>{category}</span> • <span>{location}</span>
       </div>
-      <div className="mt-2 text-sm text-gray-400">
-        Posted: {new Date(postedAt).toLocaleDateString()}
+      <div className="mt-2 text-sm text-outline">
+        Posted: {formatRelativeTime(postedAt)}
       </div>
-      <div className="mt-2 font-bold text-green-600">{pay}</div>
-    </div>
+      <div className="mt-2 font-bold text-primary">{pay}</div>
+    </article>
   );
 }

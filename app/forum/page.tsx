@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { formatRelativeTime } from "@/lib/format";
 
 const discussionTopics = [
   {
@@ -86,6 +87,13 @@ function ForumInner() {
     params.set("page", "1");
     router.replace(`/forum?${params.toString()}`, { scroll: false });
     setPage(1);
+  };
+
+  const clearFilters = () => {
+    setQuery("");
+    setCategory("all");
+    setPage(1);
+    router.replace("/forum", { scroll: false });
   };
 
   const handlePost = async (e: React.FormEvent) => {
@@ -206,7 +214,14 @@ function ForumInner() {
             <button className="btn btn-primary" onClick={applyFilters}>
               Search
             </button>
+            <button className="btn btn-outline" onClick={clearFilters}>
+              Clear
+            </button>
           </div>
+
+          <p className="sr-only" role="status" aria-live="polite">
+            {loading ? "Loading threads" : `${posts.length} threads loaded`}
+          </p>
 
           {loading ? (
             <div className="text-center py-10 text-on-surface-variant">
@@ -225,7 +240,7 @@ function ForumInner() {
                       {post.category.replace("-", " ")}
                     </span>
                     <span className="text-xs text-outline">
-                      {new Date(post.createdAt).toLocaleDateString()}
+                      {formatRelativeTime(post.createdAt)}
                     </span>
                   </div>
                   <h3 className="font-bold text-xl mb-2">{post.title}</h3>
@@ -281,8 +296,9 @@ function ForumInner() {
                 </div>
               )}
               <div>
-                <label className="label">Category</label>
+                <label htmlFor="forum-category" className="label">Category</label>
                 <select
+                  id="forum-category"
                   className="kasi-input"
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value)}
@@ -294,8 +310,9 @@ function ForumInner() {
                 </select>
               </div>
               <div>
-                <label className="label">Title</label>
+                <label htmlFor="forum-title" className="label">Title</label>
                 <input
+                  id="forum-title"
                   type="text"
                   className="kasi-input"
                   required
@@ -305,8 +322,9 @@ function ForumInner() {
                 />
               </div>
               <div>
-                <label className="label">Message</label>
+                <label htmlFor="forum-message" className="label">Message</label>
                 <textarea
+                  id="forum-message"
                   className="kasi-input"
                   rows={5}
                   required

@@ -44,6 +44,7 @@ KasiLink is designed around township realities:
 - Middleware-like protection uses Clerk route matching in `proxy.ts`
 - Canonical structure docs are in `docs/architecture.md` and `docs/repo-map.md`
 - Delivery tracker is in `docs/phase-plan-20-tasks.md`
+- Delivery tracker v2 is in `docs/phase-plan-20-tasks-v2.md`
 
 ## Quick Start
 

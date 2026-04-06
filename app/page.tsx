@@ -36,6 +36,13 @@ export default async function HomePage() {
     },
   ];
 
+  const quickActions = [
+    { href: "/marketplace", label: "Browse Marketplace", helper: "Live local gigs" },
+    { href: "/forum", label: "Open Community", helper: "Safety and hustle updates" },
+    { href: "/utility-schedule", label: "Check Utilities", helper: "Plan around disruptions" },
+    { href: "/chat", label: "Continue Chats", helper: "Follow up with providers" },
+  ];
+
   return (
     <div className="pb-12">
       {/* === YOUR ORIGINAL HOMEPAGE (100% unchanged) === */}
@@ -116,6 +123,29 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <section className="container pt-8">
+        <div className="kasi-card">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <h2 className="font-headline text-xl font-bold">Quick Actions</h2>
+            <span className="text-xs text-outline uppercase tracking-wider">
+              Fast navigation
+            </span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {quickActions.map((action) => (
+              <Link
+                key={action.href}
+                href={action.href}
+                className="rounded-lg border border-outline-variant/40 px-4 py-3 hover:border-primary/60 hover:bg-surface-container-low transition-colors no-underline"
+              >
+                <p className="font-semibold text-on-background">{action.label}</p>
+                <p className="text-xs text-on-surface-variant mt-1">{action.helper}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Recent Gigs */}
       <section className="container pt-10">
         <div className="flex justify-between items-baseline mb-6">
@@ -136,6 +166,12 @@ export default async function HomePage() {
             </Link>
           </div>
         ) : (
+          <div className="sr-only" role="status" aria-live="polite">
+            {gigs.length} recent gigs loaded
+          </div>
+        )}
+
+        {gigs.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {gigs.map((gig: any) => (
