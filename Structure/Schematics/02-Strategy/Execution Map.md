@@ -1,0 +1,37 @@
+---
+title: Execution Map
+created: 2026-04-06
+updated: 2026-04-06
+author: RobynAwesome
+tags:
+  - strategy
+  - execution
+  - roadmap
+priority: critical
+status: active
+---
+
+# Execution Map
+
+This note is the strategy bridge between mission and implementation.
+
+## Current Priorities
+
+- Keep KasiLink production-safe while expanding township utility, trust, and gig features.
+- Standardize project knowledge under `Structure/Schematics/` so Obsidian and repo navigation use one pattern.
+- Preserve design, information, and issue archives as supporting evidence rather than scattering core direction.
+
+## Canonical Flow
+
+`Dashboard -> KasiLink Blueprint -> Execution Map -> System Map -> Coordination Hub -> AI Editor Rules -> Reference Map`
+
+## Source Notes
+
+- Alignment rules: [../../Updates/current-alignment-notes.md](../../Updates/current-alignment-notes.md)
+- Task execution: [../../Updates/master-todo.md](../../Updates/master-todo.md)
+- Audit trail: [../../Updates/comms-log.md](../../Updates/comms-log.md)
+- Build history: [../../Updates/project-audit.md](../../Updates/project-audit.md)
+
+## Reorganization Rule
+
+New strategic notes should land in `Structure/Schematics/` first. Legacy folders remain valid, but they should be linked from Schematics rather than treated as isolated systems.

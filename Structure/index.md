@@ -1,7 +1,7 @@
 ---
 title: KasiLink Structure Map
 created: 2026-04-05
-updated: 2026-04-05
+updated: 2026-04-06
 author: Codex
 tags:
   - structure
@@ -25,12 +25,26 @@ status: active
 > Start here when you need to understand how the project is organized.
 > This folder is the control plane for product intent, planning, reference material, and design evidence.
 
+## Primary Entry Point
+
+The canonical navigation layer now starts in `Structure/Schematics/`, following the same numbered vault pattern used in `Introduction to MCP`.
+
+- [Schematics/00-Home/Dashboard.md](Schematics/00-Home/Dashboard.md) - standard home dashboard for mission, strategy, architecture, updates, training, and reference.
+
 ## Read Flow
 
-`Structure/index.md` -> `Structure/technical-Specifications.md` -> `Structure/Updates/index.md` -> `Structure/Information/index.md` -> `Structure/Design/index.md` -> `Structure/Details/index.md` -> `Structure/Issues/index.md`
+`Structure/index.md` -> `Structure/Schematics/00-Home/Dashboard.md` -> `Structure/technical-Specifications.md` -> `Structure/Updates/index.md` -> `Structure/Information/index.md` -> `Structure/Design/index.md` -> `Structure/Details/index.md` -> `Structure/Issues/index.md`
 
 ## Folder Map
 
+- [Schematics/00-Home/Dashboard.md](Schematics/00-Home/Dashboard.md) - canonical dashboard modeled on the Anthropic vault standard.
+- [Schematics/01-Mission/KasiLink Blueprint.md](Schematics/01-Mission/KasiLink%20Blueprint.md) - mission synthesis note linked to the full technical specification.
+- [Schematics/02-Strategy/Execution Map.md](Schematics/02-Strategy/Execution%20Map.md) - strategy and execution path.
+- [Schematics/03-Architecture/System Map.md](Schematics/03-Architecture/System%20Map.md) - architecture and styling guardrails.
+- [Schematics/04-Updates/Coordination Hub.md](Schematics/04-Updates/Coordination%20Hub.md) - entry into the live execution layer.
+- [Schematics/05-Training/AI Editor Rules.md](Schematics/05-Training/AI%20Editor%20Rules.md) - editor and orch guardrails.
+- [Schematics/06-Reference/Reference Map.md](Schematics/06-Reference/Reference%20Map.md) - canonical cross-links into the reference archives.
+- [Schematics/Templates/Note Template.md](Schematics/Templates/Note%20Template.md) - standard frontmatter template for new notes.
 - [technical-Specifications.md](technical-Specifications.md) - mission, product intent, and feature vision.
 - [Updates/index.md](Updates/index.md) - active planning, coordination, billing, and execution control.
 - [Information/index.md](Information/index.md) - source-backed facts, FAQs, services, and archive references.

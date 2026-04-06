@@ -47,6 +47,7 @@ Related documents:
 6. Prefer extending existing aligned routes before creating new parallel ones.
 7. Run `npm run build` after any structural edits.
 8. If a file already exists in `Structure/Updates/`, treat it as coordination or planning only.
+9. New canonical knowledge notes should start in `Structure/Schematics/` and then link outward to legacy folders.
 
 ## Styling Alignment Rules
 
@@ -150,6 +151,7 @@ The technical specification says KasiLink is a township-first, mobile-first PWA 
 - Mobile and low-data experience matter as much as marketplace functionality.
 - The `Structure/Information/` archive should feed user-facing content and trust context.
 - The updates layer exists to keep execution aligned, not to become the product itself.
+- The `Structure/Schematics/` layer is the canonical navigation and synthesis standard for repo-backed documentation.
 
 When there is tension between speed and clarity, keep the mission clear and the file ownership strict.
 
