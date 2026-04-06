@@ -42,6 +42,9 @@ status: active
 ## 04 - Updates
 
 - [[Coordination Hub]] - Canonical coordination map into `Structure/Updates/`.
+- [[Billing Model]] - Billing, pricing, and provider strategy snapshot.
+- [[Project Audit Snapshot]] - Current product and repo inventory summary.
+- [[Issue Hub]] - QA and regression synthesis entry point.
 
 ## 05 - Training
 

@@ -15,6 +15,12 @@ status: active
 
 Use this note as the Schematics-facing entry into the existing execution stack.
 
+## Numbered Update Notes
+
+1. [[Billing Model]] - Billing plans, provider direction, and implementation rules.
+2. [[Project Audit Snapshot]] - Condensed product and system inventory.
+3. [[Issue Hub]] - QA and regression entry point.
+
 ## Canonical Coordination Notes
 
 - Updates index: [../../Updates/index.md](../../Updates/index.md)

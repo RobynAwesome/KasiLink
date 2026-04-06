@@ -35,3 +35,9 @@ This note is the strategy bridge between mission and implementation.
 ## Reorganization Rule
 
 New strategic notes should land in `Structure/Schematics/` first. Legacy folders remain valid, but they should be linked from Schematics rather than treated as isolated systems.
+
+## Current Migration Sequence
+
+1. Billing notes move into numbered Schematics summaries first.
+2. Project audit findings move next so product state is visible from the canonical path.
+3. Issue hubs and QA references follow so delivery risk stays attached to strategy.

@@ -26,6 +26,8 @@ status: active
 
 - Styling regression root cause: [../../Issues/tailwind-v4-global-css-regression-2026-04-06.md](../../Issues/tailwind-v4-global-css-regression-2026-04-06.md)
 - Project audit: [../../Updates/project-audit.md](../../Updates/project-audit.md)
+- Billing plan: [../../Updates/billing-plan.md](../../Updates/billing-plan.md)
+- Smoke-test tracker: [../../Issues/qa-smoke-test-todo.md](../../Issues/qa-smoke-test-todo.md)
 - Structure map: [../../index.md](../../index.md)
 
 ## Rule
