@@ -25,8 +25,11 @@ This note captures concrete corrections where legacy planning notes no longer ma
 | Conversation model | `Conversation.ts` is a 1-line stub | [../../lib/models/Conversation.ts](../../lib/models/Conversation.ts) is implemented with schema, indexes, and model export |
 | Message model | `Message.ts` is a 1-line stub | [../../lib/models/Message.ts](../../lib/models/Message.ts) is implemented with schema, indexes, and model export |
 | Logger | Logger was deferred/empty in legacy notes | [../../lib/logger.ts](../../lib/logger.ts) now exists and is wired into multiple API routes |
+| Spotlight creation flow | `spotlight/new` was treated as a completed surface in some planning notes | The live CTA in [../../app/spotlight/page.tsx](../../app/spotlight/page.tsx) points to `/spotlight/new`, but that route is still being restored |
+| Community calendar creation flow | `community-calendar/new` was treated as a completed surface in some planning notes | The live CTA in [../../app/community-calendar/page.tsx](../../app/community-calendar/page.tsx) points to `/community-calendar/new`, but that route is still being restored |
 | Load-shedding API | Route shown as in progress in old alignment note | [../../app/api/load-shedding/route.ts](../../app/api/load-shedding/route.ts) exists now |
 | Incidents pages | Old alignment note says DEV_2 in progress | [../../app/incidents/page.tsx](../../app/incidents/page.tsx) and [../../app/incidents/new/page.tsx](../../app/incidents/new/page.tsx) exist now |
+| Auth route placement | `app/auth/route.ts` is treated as canonical API placement in some legacy notes | The canonical route-handler convention is still `app/api/**/route.ts`; `app/auth/route.ts` should be read as a legacy compatibility alias, not the preferred placement |
 | Community-status API | Listed in old alignment note | No `app/api/community-status/route.ts` exists in the current file tree |
 | Community-events alias route | Listed as consolidated route | No `app/api/community-events/route.ts` exists in the current file tree |
 | Business-spotlight alias route | Listed as consolidated route | No `app/api/business-spotlight/route.ts` exists in the current file tree |

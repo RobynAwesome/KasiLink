@@ -18,6 +18,7 @@ status: active
 
 - App routes and UI belong under `app/`.
 - API handlers belong under `app/api/**/route.ts`.
+- Legacy compatibility aliases may exist temporarily, but they are not canonical route-handler placement.
 - Shared models and utilities belong under `lib/`.
 - Planning, audits, and reference material belong under `Structure/`.
 

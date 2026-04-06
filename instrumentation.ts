@@ -1,9 +1,10 @@
-import { registerOTel } from "@vercel/otel";
 import type { Instrumentation } from "next";
 import { braintrustEnabled, braintrustLogger } from "@/lib/braintrust";
 
-export function register() {
+export async function register() {
   if (process.env.NEXT_RUNTIME !== "nodejs") return;
+
+  const { registerOTel } = await import("@vercel/otel");
   registerOTel("kasi-link");
 }
 

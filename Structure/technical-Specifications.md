@@ -1,22 +1,24 @@
----
+\*\*---
 title: Technical Specifications
 created: 2026-04-05
 updated: 2026-04-05
 author: Robyn
 tags:
-  - mission
-  - product-intent
-  - strategy
-  - pwa
-  - township
-  - planning
-priority: critical
-audience:
-  - owner
-  - lead
-  - devs
-  - reviewers
-status: active
+
+- mission
+- product-intent
+- strategy
+- pwa
+- township
+- planning
+  priority: critical
+  audience:
+- owner
+- lead
+- devs
+- reviewers
+  status: active
+
 ---
 
 # KasiLink Technical Specifications
@@ -34,6 +36,7 @@ status: active
 KasiLink is a mobile-first Progressive Web App (PWA) that connects unemployed youth, job seekers, and small informal businesses in Gauteng with instant local gigs and services.
 
 It focuses on work that township users actually need:
+
 - car washes
 - tutoring
 - cleaning
@@ -48,6 +51,7 @@ The product is built around smooth interactions, real-time matching, verified pr
 ## Why This Matters
 
 South Africa’s youth unemployment remains critically high, and the informal economy powers daily life for millions. Generic job portals do not solve:
+
 - locality
 - trust
 - speed
@@ -66,6 +70,7 @@ KasiLink exists to solve those problems directly.
 In Gauteng’s townships, unemployed youth and job seekers face fragmented, unreliable job boards and high competition, while small informal businesses and households waste time searching for trustworthy local help.
 
 Traditional platforms often:
+
 - ignore the informal economy
 - charge high fees
 - require formal qualifications
@@ -77,6 +82,7 @@ This creates missed opportunities, economic leakage, and a cycle of unemployment
 ## How We Solve It
 
 KasiLink delivers one elegant platform built on:
+
 - verified local talent
 - instant matching
 - community trust
@@ -170,12 +176,14 @@ All flows should stay data-light and offline-capable.
 ## UI Direction
 
 Vibrant township energy aesthetic:
+
 - bright colours
 - bold typography
 - dark mode for night browsing
 - subtle kasi motifs
 
 Key motion patterns:
+
 - animated gig cards with distance and pay
 - instant match confirmation with progress animations
 - hustle feed with parallax and reaction emojis
@@ -184,6 +192,7 @@ Key motion patterns:
 ## APIs
 
 Clerk-protected routes:
+
 - `POST /api/gigs`
 - `GET /api/gigs/nearby?lat=...&lng=...`
 - `POST /api/applications`
@@ -252,3 +261,4 @@ KasiLink is a living blueprint for connecting talent, creating real opportunity,
 
 [Go back to the Structure map](index.md)
 
+\*\*

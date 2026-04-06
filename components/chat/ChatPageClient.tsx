@@ -1,0 +1,277 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter, useSearchParams } from "next/navigation";
+import SkinSelector, { type SkinId } from "@/components/chat-skins/SkinSelector";
+import WhatsAppSkin from "@/components/chat-skins/WhatsAppSkin";
+import DiscordSkin from "@/components/chat-skins/DiscordSkin";
+import InstagramSkin from "@/components/chat-skins/InstagramSkin";
+import ConversationList from "@/components/chat/ConversationList";
+import DefaultChatPanel from "@/components/chat/DefaultChatPanel";
+
+interface Conversation {
+  _id: string;
+  gigId: string;
+  gigTitle: string;
+  lastMessageAt: string;
+  lastMessageText?: string;
+  participants: string[];
+}
+
+const SKIN_LABELS: Record<SkinId, string> = {
+  default: "Default",
+  whatsapp: "WhatsApp",
+  discord: "Discord",
+  instagram: "Instagram",
+};
+
+export default function ChatPageClient() {
+  const { user, isSignedIn, isLoaded } = useUser();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [activeConversationId, setActiveConversationId] = useState("");
+  const [activeSkin, setActiveSkin] = useState<SkinId>("default");
+  const [loading, setLoading] = useState(true);
+  const [conversationQuery, setConversationQuery] = useState(
+    searchParams.get("q") ?? "",
+  );
+
+  useEffect(() => {
+    const urlQuery = searchParams.get("q") ?? "";
+    if (urlQuery !== conversationQuery) {
+      setConversationQuery(urlQuery);
+    }
+  }, [searchParams, conversationQuery]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (conversationQuery.trim()) {
+      params.set("q", conversationQuery.trim());
+    } else {
+      params.delete("q");
+    }
+    const nextUrl = params.toString() ? `/chat?${params.toString()}` : "/chat";
+    router.replace(nextUrl, { scroll: false });
+  }, [conversationQuery, router, searchParams]);
+
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push("/sign-in");
+    }
+  }, [isLoaded, isSignedIn, router]);
+
+  useEffect(() => {
+    if (!isSignedIn) return;
+
+    let cancelled = false;
+
+    const fetchConversations = async () => {
+      try {
+        const res = await fetch("/api/chat");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (cancelled) return;
+        const nextConversations = (data.conversations ?? []) as Conversation[];
+        setConversations(nextConversations);
+        if (!activeConversationId && nextConversations.length > 0) {
+          setActiveConversationId(nextConversations[0]._id);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchConversations();
+    const interval = setInterval(fetchConversations, 5000);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, [isSignedIn, activeConversationId]);
+
+  const activeConversation = useMemo(
+    () =>
+      conversations.find(
+        (conversation) => conversation._id === activeConversationId,
+      ) ?? null,
+    [conversations, activeConversationId],
+  );
+
+  const filteredConversations = useMemo(() => {
+    const query = conversationQuery.trim().toLowerCase();
+    if (!query) return conversations;
+    return conversations.filter((conversation) =>
+      conversation.gigTitle.toLowerCase().includes(query),
+    );
+  }, [conversations, conversationQuery]);
+
+  const selectedConversationLabel = activeConversation
+    ? activeConversation.gigTitle
+    : "None selected";
+
+  const skinContent = useMemo(() => {
+    if (!activeConversation) return null;
+
+    if (activeSkin === "whatsapp") {
+      return (
+        <WhatsAppSkin
+          conversationId={activeConversation._id}
+          gigTitle={activeConversation.gigTitle}
+        />
+      );
+    }
+
+    if (activeSkin === "discord") {
+      return (
+        <DiscordSkin
+          conversationId={activeConversation._id}
+          gigTitle={activeConversation.gigTitle}
+        />
+      );
+    }
+
+    if (activeSkin === "instagram") {
+      return (
+        <InstagramSkin
+          conversationId={activeConversation._id}
+          gigTitle={activeConversation.gigTitle}
+        />
+      );
+    }
+
+    return null;
+  }, [activeConversation, activeSkin]);
+
+  if (!isLoaded || !isSignedIn) {
+    return null;
+  }
+
+  return (
+    <div className="container mx-auto max-w-6xl px-4 py-8">
+      <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <p className="mb-2 inline-flex rounded-full bg-primary-container px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
+            Chat
+          </p>
+          <h1 className="font-headline text-3xl font-bold">In-App Messaging</h1>
+          <p className="max-w-2xl text-sm text-on-surface-variant">
+            Switch between community chat skins while keeping the default KasiLink
+            experience intact.
+          </p>
+        </div>
+        <div className="text-sm text-on-surface-variant">
+          Signed in as {user?.firstName || user?.username || "member"}
+        </div>
+      </div>
+
+      <div className="mb-6">
+        <SkinSelector activeSkin={activeSkin} onSkinChange={setActiveSkin} />
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+        <aside className="kasi-card h-fit">
+          <div className="mb-4">
+            <h2 className="text-lg font-bold">Conversations</h2>
+            <p className="text-sm text-on-surface-variant">
+              Recent gig conversations and community follow-ups.
+            </p>
+          </div>
+
+          <div className="mb-4 space-y-3">
+            <div className="flex gap-2">
+              <input
+                type="search"
+                value={conversationQuery}
+                onChange={(event) => setConversationQuery(event.target.value)}
+                className="kasi-input"
+                placeholder="Search conversations by gig title..."
+                aria-label="Search conversations"
+              />
+              <button
+                type="button"
+                className="btn btn-outline btn-sm"
+                onClick={() => setConversationQuery("")}
+                disabled={!conversationQuery.trim()}
+              >
+                Clear
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-2 text-xs">
+              <span className="badge badge-primary">
+                {filteredConversations.length} shown
+              </span>
+              <span className="badge badge-secondary">
+                Selected: {selectedConversationLabel}
+              </span>
+            </div>
+          </div>
+
+          {loading ? (
+            <p className="py-8 text-center text-sm text-on-surface-variant">
+              Loading conversations...
+            </p>
+          ) : conversations.length > 0 && filteredConversations.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-outline-variant p-6 text-center">
+              <p className="text-sm text-on-surface-variant">
+                No conversations match &quot;{conversationQuery.trim()}&quot;.
+              </p>
+              <p className="mt-2 text-xs text-outline">
+                Try a different gig title or clear search.
+              </p>
+            </div>
+          ) : (
+            <ConversationList
+              conversations={filteredConversations}
+              activeConversationId={activeConversationId}
+              onSelect={setActiveConversationId}
+            />
+          )}
+        </aside>
+
+        <section className="space-y-4">
+          {activeConversation ? (
+            <>
+              <div className="kasi-card border border-outline-variant/60">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-outline">
+                      Active skin
+                    </p>
+                    <h2 className="text-xl font-bold">
+                      {SKIN_LABELS[activeSkin]} on {activeConversation.gigTitle}
+                    </h2>
+                  </div>
+                  <p className="text-sm text-on-surface-variant">
+                    Conversation ID: {activeConversation._id}
+                  </p>
+                </div>
+              </div>
+
+              {activeSkin === "default" ? (
+                <DefaultChatPanel
+                  conversationId={activeConversation._id}
+                  gigTitle={activeConversation.gigTitle}
+                />
+              ) : (
+                skinContent
+              )}
+            </>
+          ) : (
+            <div className="kasi-card min-h-[70vh] flex items-center justify-center text-center">
+              <div>
+                <h2 className="text-xl font-bold">No conversation selected</h2>
+                <p className="mt-2 text-sm text-on-surface-variant">
+                  Pick a conversation from the list to open the chat skins.
+                </p>
+              </div>
+            </div>
+          )}
+        </section>
+      </div>
+    </div>
+  );
+}

@@ -4,12 +4,12 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 const isProtectedRoute = createRouteMatcher([
   "/profile(.*)",
   "/gigs/new(.*)",
-  "/gigs/edit(.*)",
-  "/applications(.*)",
   "/chat(.*)",
-  "/api/gigs/create(.*)",
-  "/api/applications(.*)",
-  "/api/users/me(.*)",
+  "/incidents/new(.*)",
+  "/tutoring/new(.*)",
+  "/community-calendar/new(.*)",
+  "/spotlight/new(.*)",
+  "/my-water-reports(.*)",
 ]);
 
 // Next.js 16: export named "proxy" (middleware.ts is deprecated)

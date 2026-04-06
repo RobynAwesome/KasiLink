@@ -46,6 +46,7 @@ This note mirrors the enduring file-placement, styling, and mission-alignment ru
 
 - `app/api/load-shedding/route.ts` exists in the repo and should not be treated as "in progress".
 - `app/incidents/page.tsx` and `app/incidents/new/page.tsx` exist in the repo and should not be treated as "in progress" placeholders.
+- `app/auth/route.ts` exists, but it should be treated as a legacy compatibility alias rather than the canonical route-handler placement.
 - `app/api/community-status/route.ts` does not exist in the current file tree and should not remain listed as a canonical route owner until created.
 - `app/api/community-events/route.ts` and `app/api/business-spotlight/route.ts` do not exist in the current file tree and should be treated as historical consolidation notes, not active route files.
 

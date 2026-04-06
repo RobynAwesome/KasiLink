@@ -32,9 +32,9 @@ This note condenses the legacy project audit into the Schematics layer so the cu
 
 ## Known Structural Gaps Called Out By Audit
 
-- `lib/models/Conversation.ts` is still identified as a stub in the legacy audit.
-- `lib/models/Message.ts` is still identified as a stub in the legacy audit.
-- `lib/logger.ts` was historically flagged as incomplete and should be re-checked against the current codebase before relying on the old note.
+- `lib/models/Conversation.ts`, `lib/models/Message.ts`, and `lib/logger.ts` are implemented in the current tree; any stub language in older notes is historical only.
+- The live `spotlight` and `community-calendar` list pages still point to restoration routes at `/spotlight/new` and `/community-calendar/new`, so those create flows remain active gaps in the app surface.
+- `app/auth/route.ts` should be treated as a legacy compatibility alias, not the canonical place for route handlers.
 - Some legacy route ownership statuses in `Structure/Updates/current-alignment-notes.md` are stale and should eventually be normalized into the Schematics layer.
 
 ## Why This Matters
