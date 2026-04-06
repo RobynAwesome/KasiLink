@@ -94,8 +94,10 @@ Open `http://localhost:3000`.
 | `ESKOMSEPUSH_API_KEY` | Enables live load-shedding status fetch |
 | `ORCH_BASE_URL` | Backend orchestration proxy target |
 | `NEXT_PUBLIC_ORCH_BASE_URL` | Client-visible fallback orchestration base URL |
-| `BRAINTRUST_API_KEY` / `NEXT_PUBLIC_BRAINTRUST_API_KEY` | Braintrust tracing |
-| `BRAINTRUST_PROJECT_ID` | Braintrust project routing |
+| `OBSERVATION_BRAINTRUST_API_KEY` | Primary Braintrust API key (Vercel integration format) |
+| `OBSERVATION_BRAINTRUST_PROJECT_ID` | Primary Braintrust project ID (Vercel integration format) |
+| `BRAINTRUST_API_KEY` / `NEXT_PUBLIC_BRAINTRUST_API_KEY` | Legacy/fallback Braintrust API keys |
+| `BRAINTRUST_PROJECT_ID` | Legacy/fallback Braintrust project ID |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics instrumentation |
 
 ## Clerk Webhook Setup
