@@ -17,6 +17,9 @@ status: active
 
 # Task Board
 
+> Normalized in Schematics by `Structure/Schematics/04-Updates/04-Execution Note.md`, `Structure/Schematics/04-Updates/07-Truth Register.md`, and `Structure/Schematics/04-Updates/08-Implementation Gaps.md`.
+> Keep this file as a historical sprint board. Some status rows and gap notes below no longer match the current repo state.
+
 > Sprint tracker for KasiLink MVP. Lead updates this. Dev 2/3 reference their assignments here.
 > Status: `DONE` | `IN-PROGRESS` | `NOT-STARTED` | `BLOCKED` | `DEFERRED`
 

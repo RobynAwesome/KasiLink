@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import connectDB from "@/lib/db";
+import { log } from "@/lib/logger";
 import mongoose from "mongoose";
 
 const BusinessSchema = new mongoose.Schema(
@@ -55,9 +56,14 @@ export async function GET(req: NextRequest) {
       .limit(30)
       .lean();
 
+    log("info", "/api/spotlight", "GET_SUCCESS", {
+      count: businesses.length,
+    });
     return NextResponse.json({ businesses });
   } catch (err) {
-    console.error("[GET /api/spotlight]", err);
+    log("error", "/api/spotlight", "GET_FAILED", {
+      error: String(err),
+    });
     return NextResponse.json(
       { error: "Failed to fetch businesses" },
       { status: 500 },
@@ -69,6 +75,7 @@ export async function POST(req: NextRequest) {
   try {
     const { userId } = await auth();
     if (!userId) {
+      log("warn", "/api/spotlight", "POST_UNAUTHORISED");
       return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
     }
 
@@ -114,9 +121,15 @@ export async function POST(req: NextRequest) {
       verified: false,
     });
 
+    log("info", "/api/spotlight", "POST_SUCCESS", {
+      userId,
+      businessId: String(business._id),
+    });
     return NextResponse.json({ business }, { status: 201 });
   } catch (err) {
-    console.error("[POST /api/spotlight]", err);
+    log("error", "/api/spotlight", "POST_FAILED", {
+      error: String(err),
+    });
     return NextResponse.json(
       { error: "Failed to create business listing" },
       { status: 500 },

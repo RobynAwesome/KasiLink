@@ -19,6 +19,9 @@ status: active
 
 # Delegation Protocol
 
+> Superseded for canonical navigation by `Structure/Schematics/04-Updates/06-Collaboration Protocol.md`.
+> Keep this file as historical operating context. Named agent hierarchy and staffing references below are session-era details, not current timeless repo truth.
+
 > Rules of engagement for multi-agent development on KasiLink.
 > All developers (human or AI) must read this before touching code.
 

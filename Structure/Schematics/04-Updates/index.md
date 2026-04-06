@@ -22,6 +22,7 @@ status: active
 5. [[Operating Rules]]
 6. [[Collaboration Protocol]]
 7. [[Truth Register]]
+8. [[Implementation Gaps]]
 
 ## Role
 

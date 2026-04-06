@@ -46,6 +46,7 @@ status: active
 - [[Operating Rules]] - Canonical operating and placement rules.
 - [[Collaboration Protocol]] - Delegation and review standard.
 - [[Truth Register]] - Normalized corrections to stale legacy claims.
+- [[Implementation Gaps]] - Real remaining implementation gaps after the truth pass.
 - [[Billing Model]] - Billing, pricing, and provider strategy snapshot.
 - [[Project Audit Snapshot]] - Current product and repo inventory summary.
 - [[Issue Hub]] - QA and regression synthesis entry point.

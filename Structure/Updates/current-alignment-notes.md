@@ -19,6 +19,9 @@ status: active
 
 # Current Alignment Notes
 
+> Superseded for canonical navigation by `Structure/Schematics/04-Updates/05-Operating Rules.md`.
+> Keep this file as a legacy source record. Some route/status tables below are historical snapshots and should be read through the Schematics `Operating Rules` and `Truth Register`.
+
 > Canonical mission alignment, file ownership, and structure rules for KasiLink.
 > **Lead Developer:** Claude Opus 4.6 | **Effective:** 2026-04-04
 > **Mission anchor:** [Structure/technical-Specifications.md](../technical-Specifications.md)

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import connectDB from "@/lib/db";
+import { log } from "@/lib/logger";
 import mongoose from "mongoose";
 import User from "@/lib/models/User";
 
@@ -52,9 +53,14 @@ export async function GET(req: NextRequest) {
       .limit(30)
       .lean();
 
+    log("info", "/api/community-calendar", "GET_SUCCESS", {
+      count: events.length,
+    });
     return NextResponse.json({ events });
   } catch (err) {
-    console.error("[GET /api/community-calendar]", err);
+    log("error", "/api/community-calendar", "GET_FAILED", {
+      error: String(err),
+    });
     return NextResponse.json(
       { error: "Failed to fetch events" },
       { status: 500 },
@@ -66,6 +72,7 @@ export async function POST(req: NextRequest) {
   try {
     const { userId } = await auth();
     if (!userId) {
+      log("warn", "/api/community-calendar", "POST_UNAUTHORISED");
       return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
     }
 
@@ -112,9 +119,15 @@ export async function POST(req: NextRequest) {
       time,
     });
 
+    log("info", "/api/community-calendar", "POST_SUCCESS", {
+      userId,
+      eventId: String(event._id),
+    });
     return NextResponse.json({ event }, { status: 201 });
   } catch (err) {
-    console.error("[POST /api/community-calendar]", err);
+    log("error", "/api/community-calendar", "POST_FAILED", {
+      error: String(err),
+    });
     return NextResponse.json(
       { error: "Failed to create event" },
       { status: 500 },

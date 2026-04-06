@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import connectDB from "@/lib/db";
+import { log } from "@/lib/logger";
 import mongoose from "mongoose";
 
 const WaterAlertSchema = new mongoose.Schema(
@@ -50,9 +51,16 @@ export async function GET(req: NextRequest) {
       WaterAlert.countDocuments(filter),
     ]);
 
+    log("info", "/api/water-alerts", "GET_SUCCESS", {
+      count: alerts.length,
+      total,
+      mine,
+    });
     return NextResponse.json({ alerts, total });
   } catch (err) {
-    console.error("[GET /api/water-alerts]", err);
+    log("error", "/api/water-alerts", "GET_FAILED", {
+      error: String(err),
+    });
     return NextResponse.json(
       { error: "Failed to fetch water alerts" },
       { status: 500 },
@@ -64,6 +72,7 @@ export async function POST(req: NextRequest) {
   try {
     const { userId } = await auth();
     if (!userId) {
+      log("warn", "/api/water-alerts", "POST_UNAUTHORISED");
       return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
     }
 
@@ -94,9 +103,15 @@ export async function POST(req: NextRequest) {
       type: body.type ?? "water_outage",
     });
 
+    log("info", "/api/water-alerts", "POST_SUCCESS", {
+      userId,
+      alertId: String(alert._id),
+    });
     return NextResponse.json({ alert }, { status: 201 });
   } catch (err) {
-    console.error("[POST /api/water-alerts]", err);
+    log("error", "/api/water-alerts", "POST_FAILED", {
+      error: String(err),
+    });
     return NextResponse.json(
       { error: "Failed to report outage" },
       { status: 500 },

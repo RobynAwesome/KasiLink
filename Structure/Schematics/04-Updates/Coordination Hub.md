@@ -24,6 +24,7 @@ Use this note as the Schematics-facing entry into the existing execution stack.
 5. [[Operating Rules]] - Canonical file-placement, styling, and documentation rules.
 6. [[Collaboration Protocol]] - Durable delegation and review rules.
 7. [[Truth Register]] - Verified corrections where legacy notes drift from the repo.
+8. [[Implementation Gaps]] - Current real implementation gaps after normalization.
 
 ## Register
 

@@ -18,6 +18,9 @@ status: active
 
 # Dev Activity Tracker
 
+> Normalized in Schematics by `Structure/Schematics/04-Updates/06-Collaboration Protocol.md` and `Structure/Schematics/04-Updates/07-Truth Register.md`.
+> Keep this file as a historical activity ledger. Route counts, role names, and task status snapshots below should not be treated as current canonical truth.
+
 > **Color Code:** 🟢 Done | 🟡 In Progress | 🔴 Blocked/Failed | ⚪ Not Started | 🔵 Lead Action
 > **Rule:** Every check-in gets a timestamp. Devs tick off their checklist items here. Lead updates on every review.
 

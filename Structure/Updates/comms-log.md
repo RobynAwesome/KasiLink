@@ -18,6 +18,9 @@ status: active
 
 # Comms Log
 
+> Normalized in Schematics by `Structure/Schematics/04-Updates/06-Collaboration Protocol.md` and `Structure/Schematics/04-Updates/07-Truth Register.md`.
+> Keep this file append-only as historical operations history. Old route counts, assignments, and staffing references below are time-bound records, not current canonical truth.
+
 > Single source of truth for dev status updates. Owner reads this to know what's happening.
 > **Rules:** Newest first. Append only. No editing past entries. Use the format below.
 

@@ -20,6 +20,9 @@ status: active
 
 # KasiLink Master TODO — Next 10 Steps
 
+> Superseded for canonical navigation by `Structure/Schematics/04-Updates/04-Execution Note.md`.
+> Keep this file as legacy planning history. For current normalized truth, use the Schematics `Execution Note`, `Operating Rules`, and `Truth Register`.
+
 > **Created:** 2026-04-04 14:30 | **Last updated:** 2026-04-05 | **Author:** Lead
 > **Status:** Build fixed after Grok AI integration. Entering Hardening + Launch Prep phase.
 > **Live:** kasilink.com (Vercel) | **Build:** 42 routes, PASSING | **Branch:** main
