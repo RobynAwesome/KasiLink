@@ -38,9 +38,11 @@ KasiLink is designed around township realities:
 
 - UI routes are in `app/**/page.tsx` (marketplace, forum, profile, chat, utilities, tutoring, verified, etc.)
 - API routes are in `app/api/**/route.ts`
+- Feature services are in `features/**` and keep domain logic out of route handlers
 - Data models are in `lib/models/*`
 - Shared server utilities are in `lib/*` (`db`, validation, geo helpers, orchestration client)
 - Middleware-like protection uses Clerk route matching in `proxy.ts`
+- Canonical structure docs are in `docs/architecture.md` and `docs/repo-map.md`
 
 ## Quick Start
 
@@ -124,6 +126,8 @@ npm run dev
 npm run build
 npm run start
 npm run lint
+npm run typecheck
+npm run test
 ```
 
 ## API Surface (High-Level)
@@ -144,13 +148,15 @@ Representative endpoints:
 
 ```text
 app/                # Next.js App Router pages + API routes
+features/           # Domain services used by routes/pages
 components/         # UI components (chat skins, profile, nav, widgets)
 lib/                # DB, models, validation, logging, integrations
 public/             # Static assets + PWA manifest/service worker assets
 scripts/            # Seed and maintenance scripts
-styles/             # Global styles and design tokens
 tests/              # Validation/unit tests
-Structure/          # Product/design/architecture working docs
+docs/               # Canonical architecture and repo structure docs
+prototypes/         # Non-runtime prototype source files
+Structure/          # Historical/project-vault docs (non-canonical)
 ```
 
 ## License
