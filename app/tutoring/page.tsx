@@ -32,7 +32,6 @@ export default function TutoringPage() {
     const params = new URLSearchParams();
     if (subject) params.set("subject", subject);
     if (suburb) params.set("suburb", suburb);
-    setLoading(true);
     fetch(`/api/tutoring?${params.toString()}`)
       .then((r) => r.json())
       .then((d) => setSessions(d.sessions ?? []))
@@ -73,7 +72,10 @@ export default function TutoringPage() {
         <select
           className="kasi-input max-w-[200px]"
           value={subject}
-          onChange={(e) => setSubject(e.target.value)}
+          onChange={(e) => {
+            setLoading(true);
+            setSubject(e.target.value);
+          }}
         >
           <option value="">All subjects</option>
           {SUBJECTS.map((s) => (
@@ -84,7 +86,10 @@ export default function TutoringPage() {
           className="kasi-input max-w-[180px]"
           placeholder="Filter by suburb"
           value={suburb}
-          onChange={(e) => setSuburb(e.target.value)}
+          onChange={(e) => {
+            setLoading(true);
+            setSuburb(e.target.value);
+          }}
         />
       </div>
 

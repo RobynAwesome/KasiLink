@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useUser } from "@clerk/nextjs";
 
 interface Message {
   _id: string;
@@ -17,7 +16,6 @@ interface SkinProps {
 }
 
 export default function DiscordSkin({ conversationId, gigTitle }: SkinProps) {
-  const { user } = useUser();
   const [messages, setMessages] = useState<Message[]>([]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);

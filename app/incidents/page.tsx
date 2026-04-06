@@ -48,7 +48,6 @@ export default function IncidentsPage() {
     const params = new URLSearchParams();
     if (suburb) params.set("suburb", suburb);
     if (type) params.set("type", type);
-    setLoading(true);
     fetch(`/api/incidents?${params.toString()}`)
       .then((r) => r.json())
       .then((d) => setIncidents(d.incidents ?? []))
@@ -75,12 +74,18 @@ export default function IncidentsPage() {
           className="kasi-input max-w-[180px]"
           placeholder="Filter by suburb"
           value={suburb}
-          onChange={(e) => setSuburb(e.target.value)}
+          onChange={(e) => {
+            setLoading(true);
+            setSuburb(e.target.value);
+          }}
         />
         <select
           className="kasi-input max-w-[200px]"
           value={type}
-          onChange={(e) => setType(e.target.value)}
+          onChange={(e) => {
+            setLoading(true);
+            setType(e.target.value);
+          }}
         >
           <option value="">All types</option>
           {Object.entries(TYPE_LABELS).map(([v, l]) => (
