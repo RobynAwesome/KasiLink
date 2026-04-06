@@ -42,6 +42,7 @@ This note mirrors the highest-value issue tracking context into Schematics so QA
 
 ## Canonical Sources
 
+- Schematics Index: [[Schematics Index]]
 - Dashboard: [[Dashboard]]
 - Coordination hub: [[Coordination Hub]]
 - Legacy issues index: [../../Issues/index.md](../../Issues/index.md)

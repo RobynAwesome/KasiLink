@@ -63,7 +63,13 @@ KasiLink Vault/
 
 ## Read Flow
 
-`00-Home` -> `01-Mission` -> `02-Strategy` -> `03-Architecture` -> `04-Updates` -> `05-Training` -> `06-Reference`
+`Structure/Schematics/index.md` -> `00-Home` -> `01-Mission` -> `02-Strategy` -> `03-Architecture` -> `04-Updates` -> `05-Training` -> `06-Reference`
+
+## Obsidian UX Rules
+
+- Use `[[Schematics Index]]` as the stable root note inside the vault.
+- Use `[[Dashboard]]` as the canonical home note for active reading and navigation.
+- Treat `dashboard.md` as an alias file, not a second home note.
 
 ## What to Link
 

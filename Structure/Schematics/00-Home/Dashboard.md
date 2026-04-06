@@ -3,6 +3,9 @@ title: KasiLink Schematics Dashboard
 created: 2026-04-06
 updated: 2026-04-06
 author: RobynAwesome
+aliases:
+  - Dashboard
+  - Schematics Dashboard
 tags:
   - home
   - dashboard
@@ -16,6 +19,12 @@ status: active
 
 > Canonical home for the `Structure/Schematics/` layer.
 > This mirrors the Anthropic `Introduction to MCP` vault pattern while staying grounded in KasiLink's repo-backed docs.
+
+## Start Here
+
+- Root index: [[Schematics Index]]
+- Main structure map: [../../index.md](../../index.md)
+- Mission spec: [../../technical-Specifications.md](../../technical-Specifications.md)
 
 ## Active Right Now
 
@@ -61,8 +70,6 @@ status: active
 
 ## Quick Links
 
-- Main structure map: [../../index.md](../../index.md)
-- Mission spec: [../../technical-Specifications.md](../../technical-Specifications.md)
 - Updates hub: [../../Updates/index.md](../../Updates/index.md)
 - Issues hub: [../../Issues/index.md](../../Issues/index.md)
 - Obsidian guide: [../../Obsidian/index.md](../../Obsidian/index.md)

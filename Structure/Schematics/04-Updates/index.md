@@ -13,6 +13,12 @@ status: active
 
 # Schematics Updates Index
 
+## Start Here
+
+- Root note: [[Schematics Index]]
+- Home note: [[Dashboard]]
+- Coordination hub: [[Coordination Hub]]
+
 ## Numbered Register
 
 1. [[Billing Model]]

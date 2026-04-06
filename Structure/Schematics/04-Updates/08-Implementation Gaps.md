@@ -37,6 +37,8 @@ This note tracks the current implementation gaps that still matter after the Sch
 
 ## Canonical Sources
 
+- Schematics Index: [[Schematics Index]]
+- Dashboard: [[Dashboard]]
 - Coordination hub: [[Coordination Hub]]
 - Truth register: [[Truth Register]]
 - Operating rules: [[Operating Rules]]

@@ -58,6 +58,7 @@ This note mirrors the enduring file-placement, styling, and mission-alignment ru
 
 ## Canonical Sources
 
+- Schematics Index: [[Schematics Index]]
 - Dashboard: [[Dashboard]]
 - System map: [[System Map]]
 - Coordination hub: [[Coordination Hub]]

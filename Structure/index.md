@@ -29,14 +29,17 @@ status: active
 
 The canonical navigation layer now starts in `Structure/Schematics/`, following the same numbered vault pattern used in `Introduction to MCP`.
 
+- [Schematics/index.md](Schematics/index.md) - Schematics root index and stable entrypoint.
 - [Schematics/00-Home/Dashboard.md](Schematics/00-Home/Dashboard.md) - standard home dashboard for mission, strategy, architecture, updates, training, and reference.
+- [Schematics/dashboard.md](Schematics/dashboard.md) - Obsidian-safe alias that redirects to the canonical dashboard.
 
 ## Read Flow
 
-`Structure/index.md` -> `Structure/Schematics/00-Home/Dashboard.md` -> `Structure/technical-Specifications.md` -> `Structure/Updates/index.md` -> `Structure/Information/index.md` -> `Structure/Design/index.md` -> `Structure/Details/index.md` -> `Structure/Issues/index.md`
+`Structure/index.md` -> `Structure/Schematics/index.md` -> `Structure/Schematics/00-Home/Dashboard.md` -> `Structure/technical-Specifications.md` -> `Structure/Updates/index.md` -> `Structure/Information/index.md` -> `Structure/Design/index.md` -> `Structure/Details/index.md` -> `Structure/Issues/index.md`
 
 ## Folder Map
 
+- [Schematics/index.md](Schematics/index.md) - root index for the Schematics navigation layer.
 - [Schematics/00-Home/Dashboard.md](Schematics/00-Home/Dashboard.md) - canonical dashboard modeled on the Anthropic vault standard.
 - [Schematics/01-Mission/KasiLink Blueprint.md](Schematics/01-Mission/KasiLink%20Blueprint.md) - mission synthesis note linked to the full technical specification.
 - [Schematics/02-Strategy/Execution Map.md](Schematics/02-Strategy/Execution%20Map.md) - strategy and execution path.

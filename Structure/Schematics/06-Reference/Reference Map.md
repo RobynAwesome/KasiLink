@@ -14,6 +14,12 @@ status: active
 
 # Reference Map
 
+## Start Here
+
+- Root note: [[Schematics Index]]
+- Home note: [[Dashboard]]
+- Structure map: [../../index.md](../../index.md)
+
 ## Primary Reference Buckets
 
 - Design evidence: [../../Design/index.md](../../Design/index.md)
@@ -31,7 +37,6 @@ status: active
 - Master TODO: [../../Updates/master-todo.md](../../Updates/master-todo.md)
 - Alignment notes: [../../Updates/current-alignment-notes.md](../../Updates/current-alignment-notes.md)
 - Delegation protocol: [../../Updates/delegation-protocol.md](../../Updates/delegation-protocol.md)
-- Structure map: [../../index.md](../../index.md)
 
 ## Rule
 

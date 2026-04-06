@@ -45,6 +45,7 @@ This note condenses the legacy project audit into the Schematics layer so the cu
 
 ## Canonical Sources
 
+- Schematics Index: [[Schematics Index]]
 - Dashboard: [[Dashboard]]
 - System map: [[System Map]]
 - Coordination hub: [[Coordination Hub]]

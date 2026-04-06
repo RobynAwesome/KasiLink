@@ -56,6 +56,7 @@ This note mirrors the highest-value billing decisions from the legacy updates la
 
 ## Canonical Sources
 
+- Schematics Index: [[Schematics Index]]
 - Dashboard: [[Dashboard]]
 - Coordination hub: [[Coordination Hub]]
 - Legacy billing source: [../../Updates/billing-plan.md](../../Updates/billing-plan.md)

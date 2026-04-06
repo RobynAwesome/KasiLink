@@ -15,6 +15,7 @@ priority: medium
 
 ## Canonical Sources
 
+- Schematics Index: [[Schematics Index]]
 - Dashboard: [[Dashboard]]
 
 ## Notes

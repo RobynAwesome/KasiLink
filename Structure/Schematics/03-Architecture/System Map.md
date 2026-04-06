@@ -39,6 +39,8 @@ status: active
 
 ## Canonical Sources
 
+- Schematics index: [[Schematics Index]]
+- Dashboard: [[Dashboard]]
 - Alignment rules: [../../Updates/current-alignment-notes.md](../../Updates/current-alignment-notes.md)
 - Technical spec: [../../technical-Specifications.md](../../technical-Specifications.md)
 - CSS regression audit: [../../Issues/tailwind-v4-global-css-regression-2026-04-06.md](../../Issues/tailwind-v4-global-css-regression-2026-04-06.md)

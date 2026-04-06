@@ -45,6 +45,8 @@ This note captures concrete corrections where legacy planning notes no longer ma
 
 ## Canonical Sources
 
+- Schematics Index: [[Schematics Index]]
+- Dashboard: [[Dashboard]]
 - Coordination hub: [[Coordination Hub]]
 - Operating rules: [[Operating Rules]]
 - Project audit snapshot: [[Project Audit Snapshot]]

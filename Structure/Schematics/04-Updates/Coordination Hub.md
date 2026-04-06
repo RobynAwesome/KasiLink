@@ -15,6 +15,12 @@ status: active
 
 Use this note as the Schematics-facing entry into the existing execution stack.
 
+## Start Here
+
+- Root note: [[Schematics Index]]
+- Home note: [[Dashboard]]
+- Compact updates register: [index.md](index.md)
+
 ## Numbered Update Notes
 
 1. [[Billing Model]] - Billing plans, provider direction, and implementation rules.
@@ -25,10 +31,6 @@ Use this note as the Schematics-facing entry into the existing execution stack.
 6. [[Collaboration Protocol]] - Durable delegation and review rules.
 7. [[Truth Register]] - Verified corrections where legacy notes drift from the repo.
 8. [[Implementation Gaps]] - Current real implementation gaps after normalization.
-
-## Register
-
-- Compact index: [index.md](index.md)
 
 ## Canonical Coordination Notes
 

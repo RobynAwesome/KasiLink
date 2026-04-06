@@ -41,6 +41,7 @@ This note mirrors the durable parts of `Structure/Updates/delegation-protocol.md
 
 ## Canonical Sources
 
+- Schematics Index: [[Schematics Index]]
 - Dashboard: [[Dashboard]]
 - Coordination hub: [[Coordination Hub]]
 - Legacy delegation source: [../../Updates/delegation-protocol.md](../../Updates/delegation-protocol.md)

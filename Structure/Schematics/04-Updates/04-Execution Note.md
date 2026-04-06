@@ -46,6 +46,7 @@ This note mirrors the highest-value execution logic from `Structure/Updates/mast
 
 ## Canonical Sources
 
+- Schematics Index: [[Schematics Index]]
 - Dashboard: [[Dashboard]]
 - Coordination hub: [[Coordination Hub]]
 - Legacy execution source: [../../Updates/master-todo.md](../../Updates/master-todo.md)
