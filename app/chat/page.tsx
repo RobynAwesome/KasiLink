@@ -8,6 +8,7 @@ import WhatsAppSkin from "@/components/chat-skins/WhatsAppSkin";
 import DiscordSkin from "@/components/chat-skins/DiscordSkin";
 import InstagramSkin from "@/components/chat-skins/InstagramSkin";
 import ConversationList from "@/components/chat/ConversationList";
+import DefaultChatPanel from "@/components/chat/DefaultChatPanel";
 
 interface Conversation {
   _id: string;
@@ -179,17 +180,10 @@ export default function ChatPage() {
               </div>
 
               {activeSkin === "default" ? (
-                <div className="kasi-card min-h-[70vh]">
-                  <div className="mb-4 border-b border-outline-variant pb-4">
-                    <p className="text-sm text-outline">Default chat view</p>
-                    <h3 className="text-lg font-bold">{activeConversation.gigTitle}</h3>
-                  </div>
-                  <p className="text-sm text-on-surface-variant">
-                    The themed chat skins are available above. Select WhatsApp,
-                    Discord, or Instagram to render the alternate layout for this
-                    conversation.
-                  </p>
-                </div>
+                <DefaultChatPanel
+                  conversationId={activeConversation._id}
+                  gigTitle={activeConversation.gigTitle}
+                />
               ) : (
                 skinContent
               )}

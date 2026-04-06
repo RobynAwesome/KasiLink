@@ -100,7 +100,7 @@ export default function Footer() {
         {/* Bottom row */}
         <div className="border-outline-variant/30 pt-5 gap-3 flex flex-wrap items-center justify-between border-t">
           <p className="text-xs text-outline">
-            © {year} KasiLink. Made in South Africa 🇿🇦
+            © {year} KasiLink. Made in South Africa.
           </p>
           <div className="gap-4 flex">
             {legalLinks.map(({ label, href }) => (

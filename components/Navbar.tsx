@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUser, SignInButton, UserButton } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ThemeToggle } from "@/components/ThemeProvider";
 
 // Icons as inline SVG to avoid extra deps
@@ -174,6 +174,7 @@ export default function Navbar() {
   const [showNotifs, setShowNotifs] = useState(false);
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const notificationsRef = useRef<HTMLDivElement>(null);
 
   // Scroll shadow effect
   useEffect(() => {
@@ -210,6 +211,31 @@ export default function Navbar() {
       }
     }
   };
+
+  useEffect(() => {
+    const onPointerDown = (event: MouseEvent) => {
+      if (
+        notificationsRef.current &&
+        !notificationsRef.current.contains(event.target as Node)
+      ) {
+        setShowNotifs(false);
+      }
+    };
+
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setShowNotifs(false);
+        setMobileOpen(false);
+      }
+    };
+
+    window.addEventListener("mousedown", onPointerDown);
+    window.addEventListener("keydown", onEscape);
+    return () => {
+      window.removeEventListener("mousedown", onPointerDown);
+      window.removeEventListener("keydown", onEscape);
+    };
+  }, []);
 
   return (
     <>
@@ -251,8 +277,9 @@ export default function Navbar() {
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
                     active
                       ? "font-medium text-primary bg-primary-container"
-                      : "font-normal text-on-surface-variant hover:bg-surface-variant"
+                      : "font-normal text-on-surface-variant hover:bg-surface-container-high/60"
                   }`}
+                  aria-current={active ? "page" : undefined}
                 >
                   {label}
                 </Link>
@@ -279,7 +306,7 @@ export default function Navbar() {
             {isLoaded &&
               (isSignedIn ? (
                 <div className="flex items-center gap-3">
-                  <div className="relative">
+                  <div className="relative" ref={notificationsRef}>
                     <button
                       onClick={handleToggleNotifs}
                       className="btn btn-ghost btn-sm p-2 relative text-on-surface-variant hover:text-on-surface"
@@ -369,11 +396,13 @@ export default function Navbar() {
                 <Link
                   key={href}
                   href={href}
+                  onClick={() => setMobileOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg text-base transition-colors ${
                     active
                       ? "font-medium text-primary bg-primary-container"
                       : "font-normal text-on-background hover:bg-primary-subtle"
                   }`}
+                  aria-current={active ? "page" : undefined}
                 >
                   <Icon />
                   {label}

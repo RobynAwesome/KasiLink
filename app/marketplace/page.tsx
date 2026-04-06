@@ -198,6 +198,16 @@ function MarketplaceInner() {
     setPage(1);
   };
 
+  const clearFilters = () => {
+    setQuery("");
+    setCategory("");
+    setSuburb("");
+    setCity("");
+    setRadius("10");
+    setPage(1);
+    router.replace("/marketplace", { scroll: false });
+  };
+
   return (
     <div className="container pt-8 pb-12">
       <div className="mb-8 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
@@ -238,6 +248,9 @@ function MarketplaceInner() {
           onClick={() => applyFilter(query, category, suburb, city, radius)}
         >
           Search
+        </button>
+        <button className="btn btn-outline" onClick={clearFilters}>
+          Clear
         </button>
       </div>
 
@@ -333,6 +346,11 @@ function MarketplaceInner() {
           <span className="badge badge-secondary">Suburb: {suburb}</span>
         )}
         {city && <span className="badge badge-secondary">City: {city}</span>}
+        {category && (
+          <span className="badge badge-secondary">
+            Category: {category.replace("_", " ")}
+          </span>
+        )}
         {userCoords && (
           <span className="badge badge-primary">Nearby within {radius} km</span>
         )}
