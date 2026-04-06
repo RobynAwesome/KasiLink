@@ -3,6 +3,9 @@ title: KasiLink Blueprint
 created: 2026-04-06
 updated: 2026-04-06
 author: RobynAwesome
+aliases:
+  - Blueprint
+  - KasiLink Mission
 tags:
   - mission
   - blueprint
@@ -24,6 +27,8 @@ KasiLink is a township-first, mobile-first Progressive Web App for instant local
 
 ## Canonical Sources
 
+- Schematics Index: [[Schematics Index]]
+- Dashboard: [[Dashboard]]
 - Product specification: [../../technical-Specifications.md](../../technical-Specifications.md)
 - Detailed audit: [../../Updates/project-audit.md](../../Updates/project-audit.md)
 - Orch alignment: [../../Updates/orch-blueprint.md](../../Updates/orch-blueprint.md)

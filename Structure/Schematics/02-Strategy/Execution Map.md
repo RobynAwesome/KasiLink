@@ -3,6 +3,9 @@ title: Execution Map
 created: 2026-04-06
 updated: 2026-04-06
 author: RobynAwesome
+aliases:
+  - Strategy Map
+  - Roadmap
 tags:
   - strategy
   - execution
@@ -23,10 +26,12 @@ This note is the strategy bridge between mission and implementation.
 
 ## Canonical Flow
 
-`Dashboard -> KasiLink Blueprint -> Execution Map -> System Map -> Coordination Hub -> AI Editor Rules -> Reference Map`
+`Schematics Index -> Dashboard -> KasiLink Blueprint -> Execution Map -> System Map -> Coordination Hub -> AI Editor Rules -> Reference Map`
 
-## Source Notes
+## Canonical Sources
 
+- Schematics Index: [[Schematics Index]]
+- Dashboard: [[Dashboard]]
 - Alignment rules: [../../Updates/current-alignment-notes.md](../../Updates/current-alignment-notes.md)
 - Task execution: [../../Updates/master-todo.md](../../Updates/master-todo.md)
 - Audit trail: [../../Updates/comms-log.md](../../Updates/comms-log.md)
