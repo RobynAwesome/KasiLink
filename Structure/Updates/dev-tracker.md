@@ -30,6 +30,31 @@ status: active
 
 ---
 
+## 2026-04-06 — DEV_3 WATCHER MODE (SESSION RULES ENFORCED)
+
+| Time | Item | Status |
+|------|------|--------|
+| Session | DEV_3 watcher protocol dispatched (7 rule set) | 🟢 |
+| Session | DEV_3 acknowledged all watcher rules | 🟢 |
+| Session | DEV_3 no-edit standby confirmed | 🟢 |
+| Session | Orch records updated for watcher activation | 🟢 |
+
+---
+
+## 2026-04-06 — LEAD SESSION BEHAVIOR TRACE (ACTIVE)
+
+| Time | Item | Status |
+|------|------|--------|
+| Session | Multi-phase delivery cycles executed under direct user "Proceed" directives | 🟢 |
+| Session | `DEV_2` delegated, watched, and verified with bounded scope | 🟢 |
+| Session | `DEV_3` brought online as standby background worker | 🟢 |
+| Session | `DEV_2` resumed for explicit no-edit supervision check | 🟢 |
+| Session | Orch logs updated in `comms-log`, `dev-tracker`, `orch-blueprint` | 🟢 |
+| Session | Verification gates run before release (`lint`, `typecheck`, `test`) | 🟢 |
+| Session | Production deployments completed and aliased successfully | 🟢 |
+
+---
+
 ## DEV_1 (Codex) — ALL ASSIGNMENTS COMPLETE ✅
 
 ### Assignment: Wire SkinSelector into chat page

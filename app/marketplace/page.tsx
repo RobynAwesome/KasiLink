@@ -114,6 +114,7 @@ function MarketplaceInner() {
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
+  const [sortBy, setSortBy] = useState(searchParams.get("sort") ?? "newest");
 
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [category, setCategory] = useState(searchParams.get("category") ?? "");
@@ -124,6 +125,7 @@ function MarketplaceInner() {
     lat: number;
     lng: number;
   } | null>(null);
+  const activeFilterCount = [query, category, suburb, city].filter(Boolean).length;
 
   // Ask for location once
   useEffect(() => {
@@ -179,6 +181,7 @@ function MarketplaceInner() {
     newSuburb: string,
     newCity: string,
     newRadius: string,
+    newSort: string = sortBy,
   ) => {
     const params = new URLSearchParams();
     if (newQ) params.set("q", newQ);
@@ -186,6 +189,7 @@ function MarketplaceInner() {
     if (newSuburb) params.set("suburb", newSuburb);
     if (newCity) params.set("city", newCity);
     if (newRadius) params.set("radius", newRadius);
+    if (newSort && newSort !== "newest") params.set("sort", newSort);
     router.replace(`/marketplace?${params.toString()}`, { scroll: false });
     setPage(1);
   };
@@ -196,9 +200,26 @@ function MarketplaceInner() {
     setSuburb("");
     setCity("");
     setRadius("10");
+    setSortBy("newest");
     setPage(1);
     router.replace("/marketplace", { scroll: false });
   };
+
+  const sortedGigs = [...gigs].sort((a, b) => {
+    if (sortBy === "nearest") {
+      const aDist = typeof a.distance === "number" ? a.distance : Number.MAX_SAFE_INTEGER;
+      const bDist = typeof b.distance === "number" ? b.distance : Number.MAX_SAFE_INTEGER;
+      return aDist - bDist;
+    }
+    if (sortBy === "pay-high") {
+      const parsePay = (value: string) => {
+        const match = value.replace(/,/g, "").match(/\d+(\.\d+)?/);
+        return match ? Number(match[0]) : 0;
+      };
+      return parsePay(b.payDisplay) - parsePay(a.payDisplay);
+    }
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
 
   return (
     <div className="container pt-8 pb-12">
@@ -232,16 +253,20 @@ function MarketplaceInner() {
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter")
-              applyFilter(query, category, suburb, city, radius);
+              applyFilter(query, category, suburb, city, radius, sortBy);
           }}
         />
         <button
           className="btn btn-primary"
-          onClick={() => applyFilter(query, category, suburb, city, radius)}
+          onClick={() => applyFilter(query, category, suburb, city, radius, sortBy)}
         >
           Search
         </button>
-        <button className="btn btn-outline" onClick={clearFilters}>
+        <button
+          className="btn btn-outline"
+          onClick={clearFilters}
+          disabled={activeFilterCount === 0 && radius === "10"}
+        >
           Clear
         </button>
       </div>
@@ -260,7 +285,7 @@ function MarketplaceInner() {
           value={city}
           onChange={(e) => {
             setCity(e.target.value);
-            applyFilter(query, category, suburb, e.target.value, radius);
+            applyFilter(query, category, suburb, e.target.value, radius, sortBy);
           }}
         >
           <option value="">All cities</option>
@@ -275,7 +300,7 @@ function MarketplaceInner() {
           value={radius}
           onChange={(e) => {
             setRadius(e.target.value);
-            applyFilter(query, category, suburb, city, e.target.value);
+            applyFilter(query, category, suburb, city, e.target.value, sortBy);
           }}
         >
           {RADIUS_OPTIONS.map((option) => (
@@ -283,6 +308,25 @@ function MarketplaceInner() {
               {option} km radius
             </option>
           ))}
+        </select>
+      </div>
+
+      <div className="mb-5 max-w-[240px]">
+        <label htmlFor="marketplace-sort" className="label">
+          Sort results
+        </label>
+        <select
+          id="marketplace-sort"
+          className="kasi-input"
+          value={sortBy}
+          onChange={(e) => {
+            setSortBy(e.target.value);
+            applyFilter(query, category, suburb, city, radius, e.target.value);
+          }}
+        >
+          <option value="newest">Newest first</option>
+          <option value="nearest">Nearest first</option>
+          <option value="pay-high">Highest pay first</option>
         </select>
       </div>
 
@@ -334,6 +378,9 @@ function MarketplaceInner() {
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
+        {activeFilterCount > 0 && (
+          <span className="badge badge-info">{activeFilterCount} active filters</span>
+        )}
         {suburb && (
           <span className="badge badge-secondary">Suburb: {suburb}</span>
         )}
@@ -345,6 +392,9 @@ function MarketplaceInner() {
         )}
         {userCoords && (
           <span className="badge badge-primary">Nearby within {radius} km</span>
+        )}
+        {sortBy !== "newest" && (
+          <span className="badge badge-info">Sort: {sortBy.replace("-", " ")}</span>
         )}
       </div>
 
@@ -367,13 +417,18 @@ function MarketplaceInner() {
           <p className="mt-2 text-xs text-outline">
             If this keeps happening, loosen the suburb or radius filter first.
           </p>
+          {activeFilterCount > 0 && (
+            <button className="btn btn-outline mt-4" onClick={clearFilters}>
+              Reset all filters
+            </button>
+          )}
           <Link href="/gigs/new" className="btn btn-primary mt-5">
             Post the first gig
           </Link>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {gigs.map((gig) => (
+          {sortedGigs.map((gig) => (
             <GigCard key={gig._id} gig={gig} />
           ))}
         </div>

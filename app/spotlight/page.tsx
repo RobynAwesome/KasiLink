@@ -20,6 +20,7 @@ export default function SpotlightPage() {
   const [loading, setLoading] = useState(true);
   const [suburb, setSuburb] = useState("");
   const [category, setCategory] = useState("all");
+  const activeFilterCount = [suburb, category !== "all" ? category : ""].filter(Boolean).length;
 
   const clearFilters = () => {
     setLoading(true);
@@ -91,6 +92,16 @@ export default function SpotlightPage() {
         </button>
       </div>
 
+      <div className="mb-5 flex flex-wrap gap-2">
+        {activeFilterCount > 0 && (
+          <span className="badge badge-info">{activeFilterCount} active filters</span>
+        )}
+        {suburb && <span className="badge badge-secondary">Suburb: {suburb}</span>}
+        {category !== "all" && (
+          <span className="badge badge-secondary">Category: {category}</span>
+        )}
+      </div>
+
       <p className="sr-only" role="status" aria-live="polite">
         {loading ? "Loading businesses" : `${businesses.length} businesses loaded`}
       </p>
@@ -102,6 +113,13 @@ export default function SpotlightPage() {
       ) : businesses.length === 0 ? (
         <div className="kasi-card py-10 text-center text-on-surface-variant">
           No businesses listed in this area yet.
+          {activeFilterCount > 0 && (
+            <div className="mt-4">
+              <button className="btn btn-outline btn-sm" onClick={clearFilters}>
+                Reset filters
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
@@ -119,8 +137,13 @@ export default function SpotlightPage() {
               <p className="text-sm text-on-surface-variant">
                 {business.description}
               </p>
-              <p className="mt-3 text-sm font-medium text-on-background">
-                {business.phone}
+              <p className="mt-3 text-sm font-medium">
+                <a
+                  href={`tel:${business.phone.replace(/\s+/g, "")}`}
+                  className="text-primary hover:underline"
+                >
+                  {business.phone}
+                </a>
               </p>
               {business.createdAt && (
                 <p className="mt-2 text-xs text-outline">

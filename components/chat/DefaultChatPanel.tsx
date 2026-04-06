@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
 import { formatRelativeTime } from "@/lib/format";
 
 interface Message {
@@ -26,6 +27,8 @@ export default function DefaultChatPanel({
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState("");
+  const [copyFeedbackId, setCopyFeedbackId] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -65,6 +68,7 @@ export default function DefaultChatPanel({
     if (!messageText || sending) return;
 
     setSending(true);
+    setSendError("");
     setText("");
     try {
       const res = await fetch("/api/messages", {
@@ -74,14 +78,30 @@ export default function DefaultChatPanel({
       });
       if (!res.ok) {
         setText(messageText);
+        setSendError(
+          "Message failed to send. Check your connection and try again.",
+        );
         return;
       }
       const data = await res.json();
       if (data.message) {
         setMessages((prev) => [...prev, data.message]);
       }
+    } catch {
+      setText(messageText);
+      setSendError("Message failed to send. Check your connection and try again.");
     } finally {
       setSending(false);
+    }
+  };
+
+  const copyMessage = async (messageId: string, content: string) => {
+    try {
+      await navigator.clipboard.writeText(content);
+      setCopyFeedbackId(messageId);
+      setTimeout(() => setCopyFeedbackId(""), 1200);
+    } catch {
+      setSendError("Could not copy message. Please try again.");
     }
   };
 
@@ -98,9 +118,12 @@ export default function DefaultChatPanel({
             Loading messages...
           </p>
         ) : messages.length === 0 ? (
-          <p className="py-8 text-center text-sm text-on-surface-variant">
-            No messages yet. Start the conversation below.
-          </p>
+          <div className="py-8 text-center text-sm text-on-surface-variant space-y-3">
+            <p>No messages yet. Start the conversation below.</p>
+            <Link href="/marketplace" className="btn btn-outline btn-sm">
+              Find gigs in marketplace
+            </Link>
+          </div>
         ) : (
           messages.map((message) => {
             const mine = message.senderId === user?.id;
@@ -117,9 +140,18 @@ export default function DefaultChatPanel({
                   {mine ? "You" : message.senderName}
                 </p>
                 <p className="text-sm leading-relaxed break-words">{message.text}</p>
-                <p className="mt-1 text-[10px] opacity-75">
-                  {formatRelativeTime(message.createdAt)}
-                </p>
+                <div className="mt-1 flex items-center justify-between gap-2">
+                  <p className="text-[10px] opacity-75">
+                    {formatRelativeTime(message.createdAt)}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => copyMessage(message._id, message.text)}
+                    className="text-[10px] underline underline-offset-2 opacity-85 hover:opacity-100"
+                  >
+                    {copyFeedbackId === message._id ? "Copied" : "Copy"}
+                  </button>
+                </div>
               </div>
             );
           })
@@ -145,6 +177,11 @@ export default function DefaultChatPanel({
           {sending ? "Sending..." : "Send"}
         </button>
       </form>
+      {sendError && (
+        <p className="mt-2 text-xs text-danger">
+          {sendError} You can retry by pressing Send again.
+        </p>
+      )}
     </div>
   );
 }

@@ -33,6 +33,7 @@ export default function ChatPage() {
   const [activeConversationId, setActiveConversationId] = useState("");
   const [activeSkin, setActiveSkin] = useState<SkinId>("default");
   const [loading, setLoading] = useState(true);
+  const [conversationQuery, setConversationQuery] = useState("");
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
@@ -78,6 +79,18 @@ export default function ChatPage() {
       ) ?? null,
     [conversations, activeConversationId],
   );
+
+  const filteredConversations = useMemo(() => {
+    const query = conversationQuery.trim().toLowerCase();
+    if (!query) return conversations;
+    return conversations.filter((conversation) =>
+      conversation.gigTitle.toLowerCase().includes(query),
+    );
+  }, [conversations, conversationQuery]);
+
+  const selectedConversationLabel = activeConversation
+    ? activeConversation.gigTitle
+    : "None selected";
 
   const skinContent = useMemo(() => {
     if (!activeConversation) return null;
@@ -147,13 +160,32 @@ export default function ChatPage() {
             </p>
           </div>
 
+          <div className="mb-4 space-y-3">
+            <input
+              type="search"
+              value={conversationQuery}
+              onChange={(event) => setConversationQuery(event.target.value)}
+              className="kasi-input"
+              placeholder="Search conversations by gig title..."
+              aria-label="Search conversations"
+            />
+            <div className="flex flex-wrap gap-2 text-xs">
+              <span className="badge badge-primary">
+                {filteredConversations.length} shown
+              </span>
+              <span className="badge badge-secondary">
+                Selected: {selectedConversationLabel}
+              </span>
+            </div>
+          </div>
+
           {loading ? (
             <p className="py-8 text-center text-sm text-on-surface-variant">
               Loading conversations...
             </p>
           ) : (
             <ConversationList
-              conversations={conversations}
+              conversations={filteredConversations}
               activeConversationId={activeConversationId}
               onSelect={setActiveConversationId}
             />

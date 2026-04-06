@@ -123,6 +123,20 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <section className="border-b border-outline-variant/20 bg-surface-container-lowest">
+        <div className="container py-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="badge badge-info">Community Pulse</span>
+            <span className="badge badge-secondary">Jobs</span>
+            <span className="badge badge-secondary">Utilities</span>
+            <span className="badge badge-secondary">Safety updates</span>
+            <span className="text-xs text-on-surface-variant">
+              Live community coordination surface for township-first work and services.
+            </span>
+          </div>
+        </div>
+      </section>
+
       <section className="container pt-8">
         <div className="kasi-card">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-3">

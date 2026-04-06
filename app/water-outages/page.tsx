@@ -60,6 +60,12 @@ export default function WaterOutagePage() {
   const [alerts, setAlerts] = useState<WaterAlert[]>([]);
   const [alertSuburb, setAlertSuburb] = useState("");
   const [loadingAlerts, setLoadingAlerts] = useState(true);
+  const activeAlertFilterCount = [alertSuburb].filter(Boolean).length;
+
+  const clearAlertFilter = () => {
+    setLoadingAlerts(true);
+    setAlertSuburb("");
+  };
 
   useEffect(() => {
     const fetchStage = async () => {
@@ -154,8 +160,9 @@ export default function WaterOutagePage() {
           </h2>
           <div className="flex flex-col gap-4">
             <div>
-              <label className="label">Location / Suburb</label>
+              <label htmlFor="outage-suburb" className="label">Location / Suburb</label>
               <input
+                id="outage-suburb"
                 type="text"
                 className="kasi-input"
                 placeholder="e.g. Khayelitsha Site C"
@@ -165,8 +172,9 @@ export default function WaterOutagePage() {
               />
             </div>
             <div>
-              <label className="label">Issue Type</label>
+              <label htmlFor="outage-issue" className="label">Issue Type</label>
               <select
+                id="outage-issue"
                 className="kasi-input"
                 value={form.issue}
                 onChange={(e) => setForm({ ...form, issue: e.target.value })}
@@ -249,9 +257,30 @@ export default function WaterOutagePage() {
             className="kasi-input max-w-[180px]"
             placeholder="Filter by suburb"
             value={alertSuburb}
-            onChange={(e) => setAlertSuburb(e.target.value)}
+            onChange={(e) => {
+              setLoadingAlerts(true);
+              setAlertSuburb(e.target.value);
+            }}
           />
+          <button className="btn btn-outline btn-sm" onClick={clearAlertFilter}>
+            Clear filter
+          </button>
         </div>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {activeAlertFilterCount > 0 && (
+            <span className="badge badge-info">{activeAlertFilterCount} active filters</span>
+          )}
+          {alertSuburb && (
+            <span className="badge badge-secondary">Suburb: {alertSuburb}</span>
+          )}
+        </div>
+        <p className="sr-only" role="status" aria-live="polite">
+          {loadingAlerts
+            ? "Loading outage alerts"
+            : alerts.length === 0
+              ? "No outage alerts found"
+              : `${alerts.length} outage alerts loaded`}
+        </p>
         {loadingAlerts ? (
           <p className="text-on-surface-variant">Loading outage reports...</p>
         ) : alerts.length === 0 ? (
@@ -259,6 +288,11 @@ export default function WaterOutagePage() {
             <p className="text-on-surface-variant">
               No reported outages in this area.
             </p>
+            {alertSuburb && (
+              <button className="btn btn-outline btn-sm mt-3" onClick={clearAlertFilter}>
+                Reset filter
+              </button>
+            )}
           </div>
         ) : (
           <div className="flex flex-col gap-4">

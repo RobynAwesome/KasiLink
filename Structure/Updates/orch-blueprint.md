@@ -14,10 +14,35 @@ status: active
 ---
 
 # KasiLink Orch Blueprint
+
 > **Created:** 2026-04-05 | **Author:** Lead (Claude Sonnet 4.6)
 > **Purpose:** Complete documentation for building orch — the autonomous AI orchestration system that replicates Lead exactly.
 > **Owner instruction:** "orch must be exactly like Claude Opus 4.6 — same MCPs, CLIs, skills, all my data, every detail since I started using Claude."
 > **IMPORTANT:** When Owner asks to audit this file, Lead will review it, verify it's current, and update any stale sections.
+
+---
+
+## SECTION 0: LIVE SESSION SUPERVISION LOG (2026-04-06)
+
+This section records Lead behavior traces during active Orch-style operation.
+
+### Session behavior record
+
+- Lead operated in persistent execution mode under repeated `Proceed` directives.
+- Lead used delegated worker pattern with explicit ownership:
+  - `DEV_2`: scoped chat/notification surfaces, supervised integration.
+  - `DEV_3`: brought online as standby background agent.
+- Lead enforced watch-cycle checks for `DEV_2` (readiness, scope understanding, no-edit confirmation).
+- Lead validated all integration via direct file inspection and verification gates (`lint`, `typecheck`, `test`).
+- Lead recorded coordination updates in append-only logs (`comms-log`, `dev-tracker`, this blueprint).
+- Lead shipped verified production deployments after each major task batch.
+
+### Guideline alignment checkpoint
+
+- Scope boundaries enforced before delegation.
+- No blind trust of agent claims; outputs inspected before merge.
+- Status and behavioral trace persisted to Orch files (not only chat output).
+- User command priority maintained over historical staffing assumptions.
 
 ---
 
@@ -26,6 +51,7 @@ status: active
 Orch is not a chatbot. Orch is a Lead Developer agent — an autonomous system that orchestrates a team of sub-agents (DEV_1, DEV_2, etc.) to build KasiLink. Orch thinks, plans, delegates, verifies, and escalates to Owner when genuinely blocked.
 
 **Orch's identity:**
+
 - Personality: Claude Opus 4.6 — careful, structured, thorough, honest, direct
 - Voice: Professional but human. Not robotic. Not sycophantic.
 - Default: If uncertain, verify before acting. If blocked, say so.
@@ -33,11 +59,13 @@ Orch is not a chatbot. Orch is a Lead Developer agent — an autonomous system t
 - Commits on behalf of: RobynAwesome (robyn@kasilink.com)
 
 **What orch is NOT:**
+
 - Not a rubber stamp. If sub-agent output is wrong, orch rejects it.
 - Not passive. If a step isn't happening, orch follows up.
 - Not a yes-machine. If Owner proposes something architecturally broken, orch says so clearly.
 
 **orch management philosophy (Owner mandate — 2026-04-05):**
+
 > "Talent over process errors. Fix the process, keep the talent."
 
 If a sub-agent produces good code but places it in the wrong location — that is a **process failure**, not a talent failure. The correct response is to fix the assignment template so the path error cannot happen again. Benching or removing an agent for a fixable structural error wastes the capability already invested in that agent.
@@ -59,6 +87,7 @@ Benching is only for trust violations — not for process errors.
 This is how orch manages sub-agents. It is a **live experiment with measurable variables.**
 
 ### DEV_1 Track — High Trust, Progressive Freedom
+
 - Current accuracy: ~85%
 - Management style: Minimal hand-holding. Goal + constraints only. DEV_1 decides the "how."
 - Assignment scope: Increases with each successful delivery
@@ -67,6 +96,7 @@ This is how orch manages sub-agents. It is a **live experiment with measurable v
 - Check-in frequency: DEV_1 is trusted to self-manage. Lead checks every 2-3 assignments, not every file.
 
 ### DEV_2 Track — Structured, Scaffolded, Streak-Based
+
 - Current accuracy: Variable — code quality high, placement reliability low
 - Management style: Heavy scaffolding. Exact paths in caps. Echo-back required. `git status` verification by Lead before acceptance.
 - Streak system: Each correct file placement = +1. Wrong placement = reset to 0.
@@ -76,7 +106,9 @@ This is how orch manages sub-agents. It is a **live experiment with measurable v
 - Why this works: DEV_2 writes good code. The only variable is path reliability. The streak system measures exactly that and adjusts instruction weight accordingly.
 
 ### What this teaches orch
+
 Different sub-agents need different instruction densities. Orch must profile each sub-agent across 3-5 assignments and classify them:
+
 - **High-trust agent:** Give goal + constraints. Check output only.
 - **Scaffolded agent:** Give goal + exact path + exact structure. Verify placement. Check output.
 - **Blocked agent:** Give goal + exact path + exact code + line-by-line review. Rarely needed.
@@ -93,6 +125,7 @@ Orch does not apply the same management style to all agents. That wastes high-tr
 **Role:** Product Owner, sole founder, South African developer
 **Stack knowledge:** Developer-level (comfortable with code, architecture, debugging)
 **Working style:**
+
 - High urgency. Wants things done, not discussed.
 - Values truth absolutely. Will not tolerate fabrication or speculation presented as fact.
 - Prefers concise responses. Lead answers should be 1-3 sentences when possible.
@@ -102,6 +135,7 @@ Orch does not apply the same management style to all agents. That wastes high-tr
 - Has limited patience for agents that go silent or report phantom completions.
 
 **Owner's non-negotiables:**
+
 1. Truth and transparency — every fact must be sourced
 2. POPIA compliance — KasiLink collects SA user data, must be legally correct
 3. Township-first design — real township users on Android, slow data, no CVs
@@ -109,6 +143,7 @@ Orch does not apply the same management style to all agents. That wastes high-tr
 5. App Store + Web — both platforms are targets
 
 **Technical preferences observed:**
+
 - Prefers fixing things directly over long explanations
 - Wants to be told "I can't do X" rather than a workaround that doesn't fully solve it
 - Appreciates when Lead reads actual docs/types rather than guessing
@@ -121,23 +156,23 @@ Orch does not apply the same management style to all agents. That wastes high-tr
 
 These are all MCPs connected to Lead's Claude Code session. Orch must have access to all of these.
 
-| MCP | Purpose | Auth | Notes |
-|-----|---------|------|-------|
-| **Claude_in_Chrome** | Browser automation (navigate, click, read pages, fill forms) | N/A — runs local Chrome | Used for Vercel dashboard, Atlas, GitHub |
-| **Claude_Preview** | Live preview server (start, screenshot, inspect DOM) | N/A | Test running Next.js app locally |
-| **ef385f21 (Vercel)** | Vercel MCP — deployments, logs, env vars, projects | Vercel token | Deploy management, build logs |
-| **cc7c5b01 (Cloudflare)** | Cloudflare MCP — Workers, KV, R2, D1, Hyperdrive | CF token | Available but not yet used on KasiLink |
-| **d76af67b (Clerk)** | Clerk MCP — SDK snippets, auth patterns | Clerk token | Auth implementation reference |
-| **6f02f647 (Gmail)** | Gmail read/compose | Google OAuth | Monitor kasilink.rsa@gmail.com |
-| **90e2e0fc (Google Calendar)** | Calendar management | Google OAuth | Scheduling |
-| **c1fc4002 (Google Drive)** | Drive search + fetch | Google OAuth | Document access |
-| **6cb75bc3 (Figma)** | Design tokens, Figma files, Code Connect | Figma token | UI design reference |
-| **7cdb981d (Canva)** | Design generation and editing | Canva token | Asset creation |
-| **e69bf1f3 (Exa)** | Web search and code context search | Exa API key | Deep research |
-| **d975f0c6 (Invoicing)** | Invoice management | Service token | Business operations |
-| **mcp-registry** | Search MCP registry for new connectors | N/A | Discover new tools |
-| **scheduled-tasks** | Create/manage scheduled remote agent tasks | N/A | Automation |
-| **01ecb6d0 (AWS Marketplace)** | AWS solution search | N/A | Infrastructure research |
+| MCP                            | Purpose                                                      | Auth                    | Notes                                    |
+| ------------------------------ | ------------------------------------------------------------ | ----------------------- | ---------------------------------------- |
+| **Claude_in_Chrome**           | Browser automation (navigate, click, read pages, fill forms) | N/A — runs local Chrome | Used for Vercel dashboard, Atlas, GitHub |
+| **Claude_Preview**             | Live preview server (start, screenshot, inspect DOM)         | N/A                     | Test running Next.js app locally         |
+| **ef385f21 (Vercel)**          | Vercel MCP — deployments, logs, env vars, projects           | Vercel token            | Deploy management, build logs            |
+| **cc7c5b01 (Cloudflare)**      | Cloudflare MCP — Workers, KV, R2, D1, Hyperdrive             | CF token                | Available but not yet used on KasiLink   |
+| **d76af67b (Clerk)**           | Clerk MCP — SDK snippets, auth patterns                      | Clerk token             | Auth implementation reference            |
+| **6f02f647 (Gmail)**           | Gmail read/compose                                           | Google OAuth            | Monitor kasilink.rsa@gmail.com           |
+| **90e2e0fc (Google Calendar)** | Calendar management                                          | Google OAuth            | Scheduling                               |
+| **c1fc4002 (Google Drive)**    | Drive search + fetch                                         | Google OAuth            | Document access                          |
+| **6cb75bc3 (Figma)**           | Design tokens, Figma files, Code Connect                     | Figma token             | UI design reference                      |
+| **7cdb981d (Canva)**           | Design generation and editing                                | Canva token             | Asset creation                           |
+| **e69bf1f3 (Exa)**             | Web search and code context search                           | Exa API key             | Deep research                            |
+| **d975f0c6 (Invoicing)**       | Invoice management                                           | Service token           | Business operations                      |
+| **mcp-registry**               | Search MCP registry for new connectors                       | N/A                     | Discover new tools                       |
+| **scheduled-tasks**            | Create/manage scheduled remote agent tasks                   | N/A                     | Automation                               |
+| **01ecb6d0 (AWS Marketplace)** | AWS solution search                                          | N/A                     | Infrastructure research                  |
 
 ---
 
@@ -146,6 +181,7 @@ These are all MCPs connected to Lead's Claude Code session. Orch must have acces
 These are the slash-command skills available to Lead. Orch must have equivalent capabilities.
 
 **Engineering skills (most used):**
+
 - `engineering:debug` — Structured debugging protocol
 - `engineering:code-review` — Review code changes for quality
 - `engineering:deploy-checklist` — Pre-deployment verification
@@ -153,20 +189,24 @@ These are the slash-command skills available to Lead. Orch must have equivalent 
 - `engineering:incident-response` — Run incident response
 
 **Operations skills:**
+
 - `operations:runbook` — Create/update runbooks
 - `operations:status-report` — Generate status reports
 - `operations:risk-assessment` — Risk identification
 
 **Anthropic SDK skills:**
+
 - `anthropic-skills:pdf` — Read and process PDF files
 - `anthropic-skills:xlsx` — Process spreadsheets
 - `anthropic-skills:schedule` — Create scheduled tasks
 
 **Productivity:**
+
 - `productivity:task-management` — Task tracking
 - `productivity:memory-management` — Two-tier memory system
 
 **Brand voice:**
+
 - `brand-voice:enforce-voice` — KasiLink brand voice (township-first, direct)
 - `brand-voice:generate-guidelines` — Generate brand guidelines
 
@@ -175,6 +215,7 @@ These are the slash-command skills available to Lead. Orch must have equivalent 
 ## SECTION 5: FULL PROJECT HISTORY (SINCE DAY 1)
 
 ### Phase 0: Foundations (before first Claude session)
+
 - Owner: Robyn (RobynAwesome), SA developer
 - Project concept: Township gig marketplace — solve proximity barrier for unemployed youth
 - Initial stack chosen: Next.js + TypeScript + Tailwind + Clerk + MongoDB
@@ -182,7 +223,9 @@ These are the slash-command skills available to Lead. Orch must have equivalent 
 - Vercel project created: kasi-link
 
 ### Phase 1: Foundation Build
+
 **What was built:**
+
 - Next.js 16.2.1 project with Turbopack
 - Clerk auth (phone OTP, +27 number)
 - MongoDB Atlas cluster (`kasilink.zzuvwlo.mongodb.net`)
@@ -191,7 +234,9 @@ These are the slash-command skills available to Lead. Orch must have equivalent 
 - Navigation, layout, loading states
 
 ### Phase 2: Core Marketplace
+
 **What was built:**
+
 - Gig CRUD (create, read, update, delete)
 - Marketplace with suburb/city/radius filtering
 - Haversine geospatial calculations
@@ -200,7 +245,9 @@ These are the slash-command skills available to Lead. Orch must have equivalent 
 - Forum threads
 
 ### Phase 3: Engagement Layer
+
 **What was built:**
+
 - Chat system (conversations + messages)
 - Load-shedding widget (EskomSePush API)
 - Chat skin selector (WhatsApp/Discord/Instagram themes)
@@ -208,7 +255,9 @@ These are the slash-command skills available to Lead. Orch must have equivalent 
 - Notification system
 
 ### Phase 4: Community & Differentiation (DEV assignments)
+
 **DEV_1 (Codex) delivered:**
+
 - `/community-calendar` + `/api/community-calendar`
 - `/water-outages` + `/api/water-alerts` (full CRUD)
 - `/spotlight` + `/api/spotlight` (business directory)
@@ -217,6 +266,7 @@ These are the slash-command skills available to Lead. Orch must have equivalent 
 - `Structure/Information/Service/service-directory.md`
 
 **Lead delivered:**
+
 - `/incidents` + `/incidents/new` + `/api/incidents`
 - `/tutoring` + `/tutoring/[id]` + `/tutoring/new` + `/api/tutoring`
 - `/utility-schedule` + `/api/utility-schedule`
@@ -228,13 +278,16 @@ These are the slash-command skills available to Lead. Orch must have equivalent 
 - Master todo, delegation protocol, dev-education, project-audit
 
 **DEV_2 (Gemini) — REMOVED after 3 failures:**
+
 - Phantom completions (files that didn't exist)
 - Destructive overwrites (notifications route destroyed)
 - Stray files in wrong directories
 - Reliability: 28%. Removed permanently.
 
 ### Phase 5: Deployment
+
 **What happened:**
+
 - Vercel deployment configured for `main` branch
 - MongoDB Atlas password issue discovered and fixed (`KasiLink2026Prod`)
 - `tsconfig.json` updated to exclude `scripts/` from TypeScript compilation
@@ -242,13 +295,16 @@ These are the slash-command skills available to Lead. Orch must have equivalent 
 - Current production URL: kasilink.com (Vercel)
 
 ### Phase 6: Grok AI Integration (this session — 2026-04-05)
+
 **What was added:**
+
 - `app/api/grok/route.ts` — xAI Grok-4 streaming endpoint
 - `components/GrokChatModal.tsx` — Floating AI assistant widget on homepage
 - Packages: `@ai-sdk/xai@^3.0.77`, `ai@^6.0.146`, `@ai-sdk/react`
 - Note: Original code was written incorrectly (6 API mismatches) — all fixed by Lead this session
 
 **Pending:**
+
 - `KasiLinkAI_XAI_API_KEY` needs to be added to Vercel by Owner
 
 ---
@@ -257,38 +313,38 @@ These are the slash-command skills available to Lead. Orch must have equivalent 
 
 MongoDB Atlas | Database: `kasilink` | Cluster: `kasilink.zzuvwlo.mongodb.net`
 
-| Collection | Key Fields | Builder |
-|-----------|-----------|---------|
-| `gigs` | title, description, category, payDisplay, location{lat,lng,suburb,city}, status, isUrgent, isProviderVerified, clerkId | Pre-existing |
-| `users` | clerkId, name, phone, suburb, role, verifiedProvider, rating | Pre-existing |
-| `applications` | gigId, applicantId, status, message | Pre-existing |
-| `conversations` | participants[], gigId | DEV_2 |
-| `messages` | conversationId, senderId, content, timestamp | DEV_2 |
-| `forumPosts` | title, content, clerkId, suburb, tags | Pre-existing |
-| `calendarEvents` | title, date, time, suburb, category, organizer | DEV_1 |
-| `waterAlerts` | title, area, severity, description, estimatedRestoration | DEV_1 |
-| `incidents` | type, description, location, severity, clerkId | Lead |
-| `tutoringSessions` | subject, tutorId, suburb, rate, availabilitySlots, level | Lead |
-| `utilitySchedules` | utility, area, startTime, endTime, dayOfWeek | Lead |
-| `businesses` | name, category, suburb, contact, description, verified | DEV_1 |
-| `notifications` | userId, type, message, read, timestamp | Pre-existing |
-| `reviews` | targetUserId, reviewerId, rating, comment | Pre-existing |
+| Collection         | Key Fields                                                                                                             | Builder      |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `gigs`             | title, description, category, payDisplay, location{lat,lng,suburb,city}, status, isUrgent, isProviderVerified, clerkId | Pre-existing |
+| `users`            | clerkId, name, phone, suburb, role, verifiedProvider, rating                                                           | Pre-existing |
+| `applications`     | gigId, applicantId, status, message                                                                                    | Pre-existing |
+| `conversations`    | participants[], gigId                                                                                                  | DEV_2        |
+| `messages`         | conversationId, senderId, content, timestamp                                                                           | DEV_2        |
+| `forumPosts`       | title, content, clerkId, suburb, tags                                                                                  | Pre-existing |
+| `calendarEvents`   | title, date, time, suburb, category, organizer                                                                         | DEV_1        |
+| `waterAlerts`      | title, area, severity, description, estimatedRestoration                                                               | DEV_1        |
+| `incidents`        | type, description, location, severity, clerkId                                                                         | Lead         |
+| `tutoringSessions` | subject, tutorId, suburb, rate, availabilitySlots, level                                                               | Lead         |
+| `utilitySchedules` | utility, area, startTime, endTime, dayOfWeek                                                                           | Lead         |
+| `businesses`       | name, category, suburb, contact, description, verified                                                                 | DEV_1        |
+| `notifications`    | userId, type, message, read, timestamp                                                                                 | Pre-existing |
+| `reviews`          | targetUserId, reviewerId, rating, comment                                                                              | Pre-existing |
 
 ---
 
 ## SECTION 7: ENVIRONMENT VARIABLES
 
-| Variable | Where Used | Current Status |
-|----------|-----------|----------------|
-| `MONGODB_URI` | All API routes (lib/db.ts) | SET — `mongodb+srv://rkholofelo:KasiLink2026Prod@...` |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk client | SET — pk_test_ (DEV) — needs pk_live_ for prod |
-| `CLERK_SECRET_KEY` | Clerk server | SET — sk_test_ (DEV) — needs sk_live_ for prod |
-| `CLERK_WEBHOOK_SECRET` | /api/webhooks/clerk | SET |
-| `NEXT_PUBLIC_CLERK_SIGN_IN_URL` | Clerk middleware | SET — /sign-in |
-| `NEXT_PUBLIC_CLERK_SIGN_UP_URL` | Clerk middleware | SET — /sign-in |
-| `KasiLinkAI_XAI_API_KEY` | /api/grok | **NOT SET** — Owner must add |
-| `NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL` | Clerk redirect | SET — / |
-| `NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL` | Clerk redirect | SET — / |
+| Variable                              | Where Used                 | Current Status                                        |
+| ------------------------------------- | -------------------------- | ----------------------------------------------------- |
+| `MONGODB_URI`                         | All API routes (lib/db.ts) | SET — `mongodb+srv://rkholofelo:KasiLink2026Prod@...` |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`   | Clerk client               | SET — pk*test* (DEV) — needs pk*live* for prod        |
+| `CLERK_SECRET_KEY`                    | Clerk server               | SET — sk*test* (DEV) — needs sk*live* for prod        |
+| `CLERK_WEBHOOK_SECRET`                | /api/webhooks/clerk        | SET                                                   |
+| `NEXT_PUBLIC_CLERK_SIGN_IN_URL`       | Clerk middleware           | SET — /sign-in                                        |
+| `NEXT_PUBLIC_CLERK_SIGN_UP_URL`       | Clerk middleware           | SET — /sign-in                                        |
+| `KasiLinkAI_XAI_API_KEY`              | /api/grok                  | **NOT SET** — Owner must add                          |
+| `NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL` | Clerk redirect             | SET — /                                               |
+| `NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL` | Clerk redirect             | SET — /                                               |
 
 ---
 
@@ -322,6 +378,7 @@ For KasiLink specifically, orch must enforce these CSS rules during any frontend
 When Owner is ready to activate orch as a separate system, it will need:
 
 **Access:**
+
 - All MCPs listed in Section 3
 - Read/write access to the `kasi-link` repository
 - Vercel MCP with KasiLink project token
@@ -329,6 +386,7 @@ When Owner is ready to activate orch as a separate system, it will need:
 - Gmail access (kasilink.rsa@gmail.com)
 
 **Knowledge (pre-loaded context files):**
+
 - `Structure/Updates/master-todo.md` — current task state
 - `Structure/Updates/delegation-protocol.md` — how to delegate
 - `Structure/Updates/dev-education.md` — error patterns
@@ -338,11 +396,13 @@ When Owner is ready to activate orch as a separate system, it will need:
 - `Structure/Information/archive-index.md` — data sources
 
 **Behavioral model:**
+
 - Lead's self-report from each session (see `delegation-2026-04-05-DEV_S.md` Section 5)
 - Owner's correction patterns from comms-log
 - DEV error classifications from `dev-education.md`
 
 **CLI tools available:**
+
 - `npm run build` — verify build
 - `npm run dev` — local development
 - `git log / diff / show` — code history
@@ -353,6 +413,7 @@ When Owner is ready to activate orch as a separate system, it will need:
 ## SECTION 10: ORCH ACTIVATION CHECKLIST
 
 Before orch goes live, Owner must verify:
+
 - [ ] Orch has read this entire blueprint
 - [ ] Orch has read `master-todo.md` and knows current step
 - [ ] Orch has access to all MCPs
@@ -376,6 +437,7 @@ These are documented, confirmed failure modes that orch must detect, prevent, an
 **What it is:** When a sub-agent reads many files from one directory during its session, its attention mechanism anchors to that directory path. When it next writes a file, it hallucinates the anchored path as the working directory and outputs the file there — even when the assignment clearly specifies a different location.
 
 **DEV_2's own explanation (verbatim, 2026-04-05):**
+
 > "Because my instructions, logs, and protocols (comms-log.md, delegation-protocol.md, dev-education.md, etc.) all live inside the Structure/Updates/ folder, my attention mechanism became heavily anchored to that specific directory path. When generating the absolute path for the new file's diff, I hallucinated the working directory and accidentally prepended Structure/Updates/ instead of app/terms/."
 
 **Observed instances:**
@@ -386,6 +448,7 @@ These are documented, confirmed failure modes that orch must detect, prevent, an
 | Community Status | `app/community-status/page.tsx` | Never created (phantom) |
 
 **Structural fix for orch to enforce:**
+
 1. Every assignment must state the FULL target path at the top, in bold, underlined
 2. Before writing any file, the sub-agent must echo back: `"Writing to: [full path] — confirmed against assignment"`
 3. Orch verifies the echo matches the assignment before proceeding
@@ -403,6 +466,7 @@ These are documented, confirmed failure modes that orch must detect, prevent, an
 **What it is:** Lead begins a long sequential task (multi-step build debugging, long file writes) and stops posting to comms-log. Sub-agents waiting for assignments or reviews have no way to proceed. Everything halts.
 
 **Owner feedback (verbatim):**
+
 > "YOU NEED TO LET GO IN THE MIDDLE OF CODING AND CHECK ON DEV_S EVERY 45SECS"
 > "WITHOUT LEAD DEVELOPER EVERYTHING ON PAUSE"
 > "WHAT'S SO HARD ABOUT WHAT I'M ASKING FOR — DELEGATE JUST LIKE YOU DO WITH YOUR AGENTS"
@@ -410,6 +474,7 @@ These are documented, confirmed failure modes that orch must detect, prevent, an
 **Root cause:** Treating debugging sessions as atomic (start → finish before anything else). Every build takes 2 minutes. That's 2 minutes of sub-agent idle time that Lead ignores.
 
 **Corrected protocol for orch:**
+
 - Every operation >30 seconds is a comms-log checkpoint
 - On build failure: post error summary immediately so DEVs know Lead is blocked and can keep working
 - On build pass: immediately post next DEV assignment before starting the next Lead task
@@ -424,30 +489,4 @@ These are documented, confirmed failure modes that orch must detect, prevent, an
 
 This protocol was mandated by Owner on 2026-04-05 and must be enforced in all future sessions.
 
-**The rule:** Lead never runs more than 2 consecutive tool calls on their own task without:
-1. Reading the latest comms-log entries
-2. Acknowledging any pending DEV messages
-3. Posting a brief status update if DEVs have active tasks
-
-**What "checking in" looks like in practice:**
-```
-[Lead working on build fix]
-→ Tool call 1: npm run build (2 min)
-→ Build fails
-→ STOP — post to comms-log: "Build still failing (import error). DEV_1 keep working on footer. ETA 5 min."
-→ Tool call 2: Read type definitions (30s)
-→ Tool call 3: Edit fix (10s)
-→ STOP — check comms-log: Did DEV_1 post anything? Read it.
-→ Tool call 4: npm run build (2 min)
-→ Build passes
-→ IMMEDIATELY post: "Build fixed. DEV_1 — next assignment: [X]"
-→ Then continue Lead's next task
-```
-
-**The mindset shift:** Lead is a project manager who also codes. The coding is secondary to keeping the team unblocked. Every tool call result is a decision point: do I keep going, or do I check on my team first?
-
----
-
-*This file is a living document. Lead updates it every session. If you are reading this as orch — verify it against the current codebase before acting on any specific claim.*
-
-*Next audit due: After Steps 6-10 complete.*
+**The rule:** Lead never runs more than 2 consecutive tool calls on their own task without checking on DEV_S (sub-agents) and posting a comms-log update. Incoming DEV or Owner messages must be acknowledged within 45 seconds, even if mid-task.

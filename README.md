@@ -45,6 +45,9 @@ KasiLink is designed around township realities:
 - Canonical structure docs are in `docs/architecture.md` and `docs/repo-map.md`
 - Delivery tracker is in `docs/phase-plan-20-tasks.md`
 - Delivery tracker v2 is in `docs/phase-plan-20-tasks-v2.md`
+- Delivery tracker v3 (Lead + DEV_2) is in `docs/phase-plan-20-tasks-v3-lead-dev2.md`
+- Delivery tracker v4 (Lead + DEV_2 + DEV_3) is in `docs/phase-plan-20-tasks-v4-lead-dev2-dev3.md`
+- Delivery tracker v5 (Lead + DEV_2 + DEV_3) is in `docs/phase-plan-20-tasks-v5-lead-dev2-dev3.md`
 
 ## Quick Start
 

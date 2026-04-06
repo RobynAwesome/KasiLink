@@ -48,12 +48,14 @@ function ForumInner() {
   const [category, setCategory] = useState(
     searchParams.get("category") ?? "all",
   );
+  const [sortBy, setSortBy] = useState(searchParams.get("sort") ?? "newest");
 
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
   const [newCategory, setNewCategory] = useState("general");
   const [postError, setPostError] = useState("");
   const [isPosting, setIsPosting] = useState(false);
+  const activeFilterCount = [query, category !== "all" ? category : ""].filter(Boolean).length;
 
   const fetchPosts = useCallback(async () => {
     setLoading(true);
@@ -84,6 +86,7 @@ function ForumInner() {
     const params = new URLSearchParams();
     if (query) params.set("q", query);
     if (category && category !== "all") params.set("category", category);
+    if (sortBy && sortBy !== "newest") params.set("sort", sortBy);
     params.set("page", "1");
     router.replace(`/forum?${params.toString()}`, { scroll: false });
     setPage(1);
@@ -92,9 +95,16 @@ function ForumInner() {
   const clearFilters = () => {
     setQuery("");
     setCategory("all");
+    setSortBy("newest");
     setPage(1);
     router.replace("/forum", { scroll: false });
   };
+
+  const sortedPosts = [...posts].sort((a, b) => {
+    const aTime = new Date(a.createdAt).getTime();
+    const bTime = new Date(b.createdAt).getTime();
+    return sortBy === "oldest" ? aTime - bTime : bTime - aTime;
+  });
 
   const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -218,6 +228,32 @@ function ForumInner() {
               Clear
             </button>
           </div>
+          <div className="mb-4 max-w-[220px]">
+            <label htmlFor="forum-sort" className="label">Sort threads</label>
+            <select
+              id="forum-sort"
+              className="kasi-input"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+            </select>
+          </div>
+          <div className="mb-4 flex flex-wrap gap-2">
+            {activeFilterCount > 0 && (
+              <span className="badge badge-info">{activeFilterCount} active filters</span>
+            )}
+            {sortBy !== "newest" && (
+              <span className="badge badge-info">Sort: {sortBy}</span>
+            )}
+            {query && <span className="badge badge-secondary">Search: {query}</span>}
+            {category !== "all" && (
+              <span className="badge badge-secondary">
+                Topic: {category.replace("-", " ")}
+              </span>
+            )}
+          </div>
 
           <p className="sr-only" role="status" aria-live="polite">
             {loading ? "Loading threads" : `${posts.length} threads loaded`}
@@ -233,7 +269,7 @@ function ForumInner() {
             </div>
           ) : (
             <div className="flex flex-col gap-4 mb-8">
-              {posts.map((post) => (
+              {sortedPosts.map((post) => (
                 <article key={post._id} className="kasi-card">
                   <div className="flex justify-between items-start mb-2">
                     <span className="badge badge-secondary capitalize">
@@ -320,6 +356,9 @@ function ForumInner() {
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                 />
+                <p className="mt-1 text-[11px] text-outline">
+                  {newTitle.trim().length}/150 characters
+                </p>
               </div>
               <div>
                 <label htmlFor="forum-message" className="label">Message</label>
@@ -332,11 +371,19 @@ function ForumInner() {
                   value={newContent}
                   onChange={(e) => setNewContent(e.target.value)}
                 ></textarea>
+                <p className="mt-1 text-[11px] text-outline">
+                  {newContent.trim().length}/2000 characters (minimum 20)
+                </p>
               </div>
               <button
                 type="submit"
                 className="btn btn-primary w-full"
-                disabled={isPosting || !isSignedIn}
+                disabled={
+                  isPosting ||
+                  !isSignedIn ||
+                  newTitle.trim().length < 5 ||
+                  newContent.trim().length < 20
+                }
               >
                 {isPosting
                   ? "Posting..."

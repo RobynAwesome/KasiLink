@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUser, SignInButton, UserButton } from "@clerk/nextjs";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ThemeToggle } from "@/components/ThemeProvider";
+import { formatRelativeTime } from "@/lib/format";
 
 // Icons as inline SVG to avoid extra deps
 const BriefcaseIcon = () => (
@@ -174,7 +175,31 @@ export default function Navbar() {
   const [showNotifs, setShowNotifs] = useState(false);
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [notificationsLoading, setNotificationsLoading] = useState(true);
+  const [notificationsError, setNotificationsError] = useState("");
   const notificationsRef = useRef<HTMLDivElement>(null);
+
+  const refreshNotifications = useCallback(async () => {
+    if (!isLoaded || !isSignedIn) return;
+    setNotificationsLoading(true);
+    setNotificationsError("");
+    try {
+      const res = await fetch("/api/notifications");
+      if (!res.ok) {
+        throw new Error("Failed to load notifications.");
+      }
+      const data = await res.json();
+      const nextNotifications = data.notifications ?? [];
+      setNotifications(nextNotifications);
+      setUnreadCount(
+        nextNotifications.filter((n: AppNotification) => !n.isRead).length,
+      );
+    } catch {
+      setNotificationsError("Failed to load notifications.");
+    } finally {
+      setNotificationsLoading(false);
+    }
+  }, [isLoaded, isSignedIn]);
 
   // Scroll shadow effect
   useEffect(() => {
@@ -185,18 +210,8 @@ export default function Navbar() {
 
   // Fetch notifications
   useEffect(() => {
-    if (!isLoaded || !isSignedIn) return;
-    fetch("/api/notifications")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.notifications) {
-          setNotifications(data.notifications);
-          setUnreadCount(
-            data.notifications.filter((n: AppNotification) => !n.isRead).length,
-          );
-        }
-      });
-  }, [isLoaded, isSignedIn]);
+    void refreshNotifications();
+  }, [refreshNotifications]);
 
   const handleToggleNotifs = async () => {
     const newState = !showNotifs;
@@ -325,12 +340,38 @@ export default function Navbar() {
                     {showNotifs && (
                       <div
                         id="notifications-menu"
+                        role="menu"
+                        aria-label="Notifications"
                         className="absolute right-0 mt-2 w-72 max-h-[400px] overflow-y-auto bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-lg z-50 flex flex-col py-2 animate-in fade-in slide-in-from-top-2 duration-200"
                       >
                         <div className="px-4 py-2 border-b border-outline-variant/30 mb-1">
-                          <h3 className="font-bold text-sm">Notifications</h3>
+                          <div className="flex items-center justify-between gap-2">
+                            <h3 className="font-bold text-sm">Notifications</h3>
+                            <button
+                              type="button"
+                              onClick={() => void refreshNotifications()}
+                              className="text-[11px] text-primary hover:underline"
+                            >
+                              Refresh
+                            </button>
+                          </div>
                         </div>
-                        {notifications.length === 0 ? (
+                        {notificationsLoading ? (
+                          <div className="px-4 py-6 text-center text-sm text-on-surface-variant">
+                            Loading notifications...
+                          </div>
+                        ) : notificationsError ? (
+                          <div className="px-4 py-6 text-center text-sm text-danger">
+                            <p>{notificationsError}</p>
+                            <button
+                              type="button"
+                              onClick={() => void refreshNotifications()}
+                              className="mt-3 btn btn-outline btn-sm"
+                            >
+                              Retry
+                            </button>
+                          </div>
+                        ) : notifications.length === 0 ? (
                           <div className="px-4 py-6 text-center text-sm text-on-surface-variant">
                             No new notifications.
                           </div>
@@ -340,16 +381,20 @@ export default function Navbar() {
                               key={n._id}
                               href={n.link || "#"}
                               onClick={() => setShowNotifs(false)}
+                              role="menuitem"
                               className="px-4 py-3 hover:bg-surface-variant/50 transition-colors flex flex-col gap-1 border-b border-outline-variant/10 last:border-0"
                             >
-                              <span className="text-sm font-bold text-on-background leading-tight">
+                              <span className="text-sm font-bold text-on-background leading-tight flex items-center gap-2">
                                 {n.title}
+                                {!n.isRead && (
+                                  <span className="inline-block h-2 w-2 rounded-full bg-primary" />
+                                )}
                               </span>
                               <span className="text-xs text-on-surface-variant leading-snug">
                                 {n.message}
                               </span>
                               <span className="text-[10px] text-outline mt-1">
-                                {new Date(n.createdAt).toLocaleDateString()}
+                                {formatRelativeTime(n.createdAt)}
                               </span>
                             </Link>
                           ))

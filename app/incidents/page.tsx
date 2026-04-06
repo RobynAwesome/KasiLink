@@ -43,6 +43,13 @@ export default function IncidentsPage() {
   const [loading, setLoading] = useState(true);
   const [suburb, setSuburb] = useState("");
   const [type, setType] = useState("");
+  const activeFilterCount = [suburb, type].filter(Boolean).length;
+
+  const clearFilters = () => {
+    setLoading(true);
+    setSuburb("");
+    setType("");
+  };
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -92,13 +99,41 @@ export default function IncidentsPage() {
             <option key={v} value={v}>{l}</option>
           ))}
         </select>
+        <button className="btn btn-outline btn-sm" onClick={clearFilters}>
+          Clear filters
+        </button>
       </div>
+
+      <div className="flex flex-wrap gap-2 mb-6">
+        {activeFilterCount > 0 && (
+          <span className="badge badge-info">{activeFilterCount} active filters</span>
+        )}
+        {suburb && <span className="badge badge-secondary">Suburb: {suburb}</span>}
+        {type && (
+          <span className="badge badge-secondary">
+            Type: {TYPE_LABELS[type] ?? type}
+          </span>
+        )}
+      </div>
+
+      <p className="sr-only" role="status" aria-live="polite">
+        {loading
+          ? "Loading incidents"
+          : incidents.length === 0
+            ? "No incidents found"
+            : `${incidents.length} incidents loaded`}
+      </p>
 
       {loading ? (
         <p className="text-on-surface-variant text-center py-8">Loading incidents...</p>
       ) : incidents.length === 0 ? (
         <div className="kasi-card text-center">
           <p className="text-on-surface-variant mb-3">No active incidents in this area.</p>
+          {activeFilterCount > 0 && (
+            <button className="btn btn-outline btn-sm mb-3" onClick={clearFilters}>
+              Reset filters
+            </button>
+          )}
           <Link href="/incidents/new" className="btn btn-primary btn-sm">Report One</Link>
         </div>
       ) : (

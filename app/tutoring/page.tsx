@@ -27,6 +27,13 @@ export default function TutoringPage() {
   const [loading, setLoading] = useState(true);
   const [subject, setSubject] = useState("");
   const [suburb, setSuburb] = useState("");
+  const activeFilterCount = [subject, suburb].filter(Boolean).length;
+
+  const clearFilters = () => {
+    setLoading(true);
+    setSubject("");
+    setSuburb("");
+  };
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -91,13 +98,37 @@ export default function TutoringPage() {
             setSuburb(e.target.value);
           }}
         />
+        <button className="btn btn-outline btn-sm" onClick={clearFilters}>
+          Clear filters
+        </button>
       </div>
+
+      <div className="flex flex-wrap gap-2 mb-6">
+        {activeFilterCount > 0 && (
+          <span className="badge badge-info">{activeFilterCount} active filters</span>
+        )}
+        {subject && <span className="badge badge-secondary">Subject: {subject}</span>}
+        {suburb && <span className="badge badge-secondary">Suburb: {suburb}</span>}
+      </div>
+
+      <p className="sr-only" role="status" aria-live="polite">
+        {loading
+          ? "Loading tutoring sessions"
+          : sessions.length === 0
+            ? "No tutoring sessions found"
+            : `${sessions.length} tutoring sessions loaded`}
+      </p>
 
       {loading ? (
         <p className="text-on-surface-variant text-center py-8">Loading sessions...</p>
       ) : sessions.length === 0 ? (
         <div className="kasi-card text-center">
           <p className="text-on-surface-variant mb-3">No tutoring sessions available right now.</p>
+          {activeFilterCount > 0 && (
+            <button className="btn btn-outline btn-sm mb-3" onClick={clearFilters}>
+              Reset filters
+            </button>
+          )}
           <Link href="/tutoring/new" className="btn btn-primary btn-sm">
             Offer Your Skills
           </Link>
