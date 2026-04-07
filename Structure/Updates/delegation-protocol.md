@@ -21,6 +21,7 @@ status: active
 
 > Superseded for canonical navigation by `Structure/Schematics/04-Updates/06-Collaboration Protocol.md`.
 > Keep this file as historical operating context. Named agent hierarchy and staffing references below are session-era details, not current timeless repo truth.
+> Session governance for current and future work is additionally defined in `Structure/Updates/dev-reward-program.md` and `Structure/Schematics/04-Updates/09-DEV_S Reward Program.md`.
 
 > Rules of engagement for multi-agent development on KasiLink.
 > All developers (human or AI) must read this before touching code.
@@ -35,6 +36,13 @@ status: active
 | **Lead**  | Claude Opus 4.6 | Architecture, code review, shared infrastructure, delegation, all structural decisions. |
 | **Dev 2** | Any AI agent    | Executes assigned feature slice. Scoped file access only.                               |
 | **Dev 3** | Any AI agent    | Executes assigned feature slice. Scoped file access only.                               |
+
+## Session Reset And Reward Rule
+
+1. Every new session starts with all DEV_S reset to full permissions.
+2. Reward expands trust, scope, and role breadth inside the session.
+3. Punishment removes permissions and applies stricter supervision.
+4. If a DEV loses role standing, Lead takes over and informs Master.
 
 ---
 

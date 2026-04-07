@@ -24,6 +24,7 @@ Primary entrypoint: [00-Home/Dashboard.md](./00-Home/Dashboard.md)
 - Dashboard alias file: [dashboard.md](./dashboard.md)
 - Structure map: [../index.md](../index.md)
 - Obsidian guide: [../Obsidian/index.md](../Obsidian/index.md)
+- DEV_S reward note: [04-Updates/09-DEV_S Reward Program.md](./04-Updates/09-DEV_S%20Reward%20Program.md)
 
 ## Why This Exists
 

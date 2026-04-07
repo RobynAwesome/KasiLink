@@ -31,12 +31,14 @@ Use this note as the Schematics-facing entry into the existing execution stack.
 6. [[Collaboration Protocol]] - Durable delegation and review rules.
 7. [[Truth Register]] - Verified corrections where legacy notes drift from the repo.
 8. [[Implementation Gaps]] - Current real implementation gaps after normalization.
+9. [[DEV_S Reward Program]] - Session reset, role reward, permission loss, and Lead takeover rules.
 
 ## Active Next-Task Pack
 
 - Current 10-task tranche: [[Execution Note]]
 - QA and regression source notes: [[Issue Hub]]
 - Remaining hardening constraints: [[Implementation Gaps]]
+- Team governance and role control: [[DEV_S Reward Program]]
 
 ## Canonical Coordination Notes
 

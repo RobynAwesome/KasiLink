@@ -34,6 +34,7 @@ status: active
 | CRITICAL | [[Execution Map]] | Current delivery path |
 | CRITICAL | [[System Map]] | Architecture and file ownership |
 | HIGH | [[Coordination Hub]] | Live planning and status |
+| HIGH | [[DEV_S Reward Program]] | Session reset, trust, and supervision policy |
 | HIGH | [[AI Editor Rules]] | Orchestration and guardrails |
 
 ## 01 - Mission
@@ -54,6 +55,7 @@ status: active
 - [[Execution Note]] - Current execution priorities and hardening direction.
 - [[Operating Rules]] - Canonical operating and placement rules.
 - [[Collaboration Protocol]] - Delegation and review standard.
+- [[DEV_S Reward Program]] - Reward, permission, and supervision model for DEV_S.
 - [[Truth Register]] - Normalized corrections to stale legacy claims.
 - [[Implementation Gaps]] - Real remaining implementation gaps after the truth pass.
 - [[Billing Model]] - Billing, pricing, and provider strategy snapshot.

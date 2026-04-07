@@ -24,7 +24,8 @@ This note mirrors the durable parts of `Structure/Updates/delegation-protocol.md
 2. Shared infrastructure changes need tighter review than isolated feature work.
 3. Conflicts over the same file should be escalated before edits happen.
 4. Task status, decisions, and blockers should be recorded in the project’s coordination notes rather than buried in ad hoc chat.
-5. Legacy communication hierarchy rules are historical unless reaffirmed in the current workflow.
+5. Every session should begin with DEV_S reset to full permissions before reward or punishment is re-earned.
+6. If DEV_S permissions are revoked, Lead takes over the work and informs Master.
 
 ## What Still Matters From The Legacy Protocol
 
@@ -44,5 +45,6 @@ This note mirrors the durable parts of `Structure/Updates/delegation-protocol.md
 - Schematics Index: [[Schematics Index]]
 - Dashboard: [[Dashboard]]
 - Coordination hub: [[Coordination Hub]]
+- Reward policy: [[DEV_S Reward Program]]
 - Legacy delegation source: [../../Updates/delegation-protocol.md](../../Updates/delegation-protocol.md)
 - Live task board: [../../Updates/task-board.md](../../Updates/task-board.md)
