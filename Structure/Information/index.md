@@ -1,7 +1,7 @@
 ---
 title: KasiLink Information Library
 created: 2026-04-05
-updated: 2026-04-05
+updated: 2026-04-11
 author: Codex
 tags:
   - information
@@ -27,6 +27,14 @@ status: active
 - FAQ content for users.
 - Service directories and issue references.
 - Archive indexes that explain what each source is for.
+
+## April 11 Audit
+
+- Strength: the raw source base is real and materially useful for a township-first product.
+- Strength: `FAQ/`, `Service/`, and `About SA/` now contain more extracted content than the earlier archive notes implied.
+- Gap: there is still no clear source-to-surface map showing which routes or copy blocks depend on which notes.
+- Gap: several PDFs are cataloged at a high level but not distilled into specific, app-ready facts with citation discipline.
+- Gap: this folder is not yet driving metadata, onboarding copy, trust messaging, or investor-style explanation as strongly as it should.
 
 ## Best Fit
 
@@ -57,3 +65,9 @@ status: active
 - [FAQ/](FAQ/) - user question content.
 - [Issues/](Issues/) - issue and pain-point notes.
 - [Service/](Service/) - service directory content.
+
+## Operating Rule
+
+- PDFs are raw source material, not user-facing copy.
+- Every major claim used in product copy should land first in a markdown extraction note.
+- If a route needs factual or civic wording, prefer linking it to a note in this folder instead of writing from memory.
