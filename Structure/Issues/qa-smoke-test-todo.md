@@ -1,7 +1,7 @@
 ---
 title: qa-smoke-test-todo
 created: 2026-04-05
-updated: 2026-04-05
+updated: 2026-04-10
 author: Codex
 tags:
   - structure
@@ -17,8 +17,8 @@ status: active
 
 > **Author:** Codex
 > **Created:** 2026-04-05 01:10
-> **Updated:** 2026-04-05 01:10
-> **Last Edited By:** Codex | 2026-04-05 01:35
+> **Updated:** 2026-04-10
+> **Last Edited By:** Lead Dev | 2026-04-10
 > **Source:** `Structure/Updates/master-todo.md`
 > **Purpose:** Track the production smoke test and mobile checks before wider sharing.
 > **Implementation note:** This file mirrors the master TODO smoke-test matrix and is meant to be updated as each page is verified.
@@ -26,25 +26,31 @@ status: active
 
 ## TODO
 
-| Route | Status | Timestamp | Notes |
+| Route | Status | Last verified | Notes |
 |---|---|---|---|
-| `/` (Home) | 🟢 Passed | 2026-04-05 01:20 | Loads, stats, gig cards render |
-| `/sign-in` | 🟢 Passed | 2026-04-05 01:22 | Phone OTP flow works with `+27` |
-| `/marketplace` | 🟢 Passed | 2026-04-05 01:24 | Gigs list, filters, geo sorting, empty-state CTA present |
-| `/gigs/new` | 🟢 Passed | 2026-04-05 01:24 | Auth-gated, form submits, gig appears in marketplace |
-| `/chat` | 🟢 Passed | 2026-04-05 01:24 | Conversations load, skin selector works |
-| `/forum` | 🟢 Passed | 2026-04-05 01:24 | Threads list, can create post, submit handler clean |
-| `/community-calendar` | 🟢 Passed | 2026-04-05 01:26 | Events load |
-| `/water-outages` | 🟢 Passed | 2026-04-05 01:26 | Alerts display, load-shedding widget |
-| `/incidents` | 🟢 Passed | 2026-04-05 01:26 | List loads, can report new incidents, loading pattern correct |
-| `/tutoring` | 🟢 Passed | 2026-04-05 01:26 | Sessions list, create form, loading pattern correct |
-| `/utility-schedule` | 🟢 Passed | 2026-04-05 01:32 | Schedules grouped by day |
-| `/spotlight` | 🟢 Passed | 2026-04-05 01:28 | Business cards render |
-| `/community-status` | 🟢 Passed | 2026-04-05 01:28 | Dashboard aggregates data |
-| `/my-water-reports` | 🟢 Passed | 2026-04-05 01:28 | Auth-gated, personal reports |
-| `/verified` | 🟢 Passed | 2026-04-05 01:30 | Provider directory loads |
-| `/profile` | 🟢 Passed | 2026-04-05 01:30 | User data displays |
-| `/privacy` | 🟢 Passed | 2026-04-05 01:30 | Static content renders |
+| `/` (Home) | 🟢 Passed | 2026-04-05 | Loads, stats, gig cards render |
+| `/sign-in` | 🟢 Passed | 2026-04-05 | Phone OTP flow works with `+27` |
+| `/marketplace` | 🟢 Passed | 2026-04-10 | Gigs list, filters, geo sorting, empty-state CTA present; 44px touch targets enforced |
+| `/gigs/new` | 🟢 Passed | 2026-04-05 | Auth-gated, form submits, gig appears in marketplace |
+| `/chat` | 🟢 Passed | 2026-04-10 | Conversations load, skin selector works; polling interval halved, URL sync loop fixed |
+| `/forum` | 🟢 Passed | 2026-04-10 | Threads list, create post, submit handler refactored (postError/postStatus merged) |
+| `/community-calendar` | 🟢 Passed | 2026-04-05 | Events load |
+| `/community-calendar/new` | 🟢 Passed | 2026-04-10 | Auth-gated, validation regression tests added |
+| `/water-outages` | 🟢 Passed | 2026-04-05 | Alerts display, load-shedding widget |
+| `/incidents` | 🟢 Passed | 2026-04-05 | List loads, can report new incidents |
+| `/incidents/new` | 🟢 Passed | 2026-04-10 | Auth-gated, design system hero applied |
+| `/tutoring` | 🟢 Passed | 2026-04-05 | Sessions list, create form |
+| `/tutoring/new` | 🟢 Passed | 2026-04-10 | Auth-gated, design system hero applied |
+| `/utility-schedule` | 🟢 Passed | 2026-04-05 | Schedules grouped by day |
+| `/spotlight` | 🟢 Passed | 2026-04-05 | Business cards render |
+| `/spotlight/new` | 🟢 Passed | 2026-04-10 | Auth-gated, validation regression tests added |
+| `/community-status` | 🟢 Passed | 2026-04-10 | Live API counts (water alerts no longer static) |
+| `/my-water-reports` | 🟢 Passed | 2026-04-05 | Auth-gated, personal reports |
+| `/verified` | 🟢 Passed | 2026-04-05 | Provider directory loads |
+| `/verified/[id]` | 🟢 Passed | 2026-04-10 | Provider detail with star ratings, review cards |
+| `/profile` | 🟢 Passed | 2026-04-05 | User data displays |
+| `/privacy` | 🟢 Passed | 2026-04-05 | Static content renders |
+| `/resources` | 🟢 Passed | 2026-04-10 | New page: SA verified stats, FAQ sections, government sources |
 
 ## Implementation
 
@@ -128,15 +134,15 @@ Add any route-specific bugs or regressions here as they are found.
 
 ### `/chat`
 - Worked: conversations load, skins switch, and the page now respects the assigned chat-skin integration.
-- Did not work: the page is doing both list selection and rendering logic in one component.
-- Opinion: correct and usable, but it will benefit from smaller subcomponents.
-- Improvement: split the conversation list from the active chat pane.
+- Fixed 2026-04-10: polling interval halved to 10s; activeConversationId moved to ref so conversation switching no longer restarts the interval; URL sync loop guarded by writingUrl ref.
+- Opinion: correct and performant.
+- Improvement: split the conversation list from the active chat pane into separate components for future maintainability.
 
 ### `/forum`
 - Worked: thread loading, posting, filtering, and pagination are present.
-- Did not work: there is a syntax/indentation issue in the `handlePost` block that should be cleaned for maintainability.
-- Opinion: the forum is functionally solid, but it needs a cleanup pass to be less fragile.
-- Improvement: tighten the submit handler and add form validation feedback before posting.
+- Fixed 2026-04-10: `handlePost` refactored — redundant dual-state (postError + postStatus) merged; success state added; role="alert" on error; role="status" on success.
+- Opinion: the forum submit path is now clean and maintainable.
+- Improvement: consider extracting the inline post form into its own component for future a/b testing.
 
 ### `/community-calendar`
 - Worked: events load and filters are simple.
@@ -176,9 +182,9 @@ Add any route-specific bugs or regressions here as they are found.
 
 ### `/community-status`
 - Worked: dashboard aggregates load-shedding and incidents into a single operational view.
-- Did not work: water alerts are still set to `0` in the current implementation.
-- Opinion: useful overview, but incomplete as a real community status source.
-- Improvement: wire water alert counts into the data source rather than leaving them static.
+- Fixed 2026-04-10: water alerts now come from live `GET /api/water-alerts` with `total` field — no longer static zero.
+- Opinion: useful overview, now complete as a real community status source.
+- Improvement: add auto-refresh indicator so users know when data last loaded.
 
 ### `/my-water-reports`
 - Worked: auth gate, user-specific reporting list, and status display all work together.
