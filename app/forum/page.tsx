@@ -59,7 +59,7 @@ function ForumInner() {
   const [newContent, setNewContent] = useState("");
   const [newCategory, setNewCategory] = useState("general");
   const [postError, setPostError] = useState("");
-  const [postStatus, setPostStatus] = useState("");
+  const [postSuccess, setPostSuccess] = useState(false);
   const [isPosting, setIsPosting] = useState(false);
   const activeFilterCount = [query, category !== "all" ? category : ""].filter(Boolean).length;
 
@@ -113,22 +113,18 @@ function ForumInner() {
   const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
     setPostError("");
-    setPostStatus("");
+    setPostSuccess(false);
+
     if (!isSignedIn) {
       setPostError("You must be signed in to post.");
-      setPostStatus("You must be signed in to post.");
       return;
     }
-
     if (newTitle.trim().length < 5) {
       setPostError("Title must be at least 5 characters.");
-      setPostStatus("Title must be at least 5 characters.");
       return;
     }
-
     if (newContent.trim().length < 20) {
       setPostError("Message must be at least 20 characters.");
-      setPostStatus("Message must be at least 20 characters.");
       return;
     }
 
@@ -137,11 +133,7 @@ function ForumInner() {
       const res = await fetch("/api/forum", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: newTitle,
-          content: newContent,
-          category: newCategory,
-        }),
+        body: JSON.stringify({ title: newTitle, content: newContent, category: newCategory }),
       });
 
       if (!res.ok) {
@@ -152,16 +144,13 @@ function ForumInner() {
       setNewTitle("");
       setNewContent("");
       setNewCategory("general");
-      setPostStatus("Thread posted successfully.");
+      setPostSuccess(true);
       const params = new URLSearchParams(searchParams.toString());
       params.set("page", "1");
       router.replace(`/forum?${params.toString()}`, { scroll: false });
       fetchPosts();
     } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : "Failed to create post";
-      setPostError(message);
-      setPostStatus(`Posting failed: ${message}`);
+      setPostError(err instanceof Error ? err.message : "Failed to create post");
     } finally {
       setIsPosting(false);
     }
@@ -302,7 +291,7 @@ function ForumInner() {
             {loading ? "Loading threads" : `${posts.length} threads loaded`}
           </p>
           <p className="sr-only" role="status" aria-live="polite">
-            {postStatus}
+            {postSuccess ? "Thread posted successfully." : postError ? `Posting failed: ${postError}` : ""}
           </p>
 
           {loading ? (
@@ -382,8 +371,13 @@ function ForumInner() {
             </h3>
             <form onSubmit={handlePost} className="flex flex-col gap-4">
               {postError && (
-                <div className="text-danger text-sm font-semibold">
+                <div className="text-danger text-sm font-semibold" role="alert">
                   {postError}
+                </div>
+              )}
+              {postSuccess && (
+                <div className="text-success text-sm font-semibold" role="status">
+                  Thread posted successfully.
                 </div>
               )}
               <div>

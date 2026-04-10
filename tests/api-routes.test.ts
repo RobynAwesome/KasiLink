@@ -68,7 +68,8 @@ vi.mock("@/features/gigs/service", () => ({
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function makeRequest(method: string, url: string, body?: unknown): NextRequest {
-  const init: RequestInit = { method };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const init: any = { method };
   if (body !== undefined) {
     init.body = JSON.stringify(body);
     init.headers = { "content-type": "application/json" };
