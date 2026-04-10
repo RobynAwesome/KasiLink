@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { Eyebrow, MetricGrid, SectionHeading } from "@/components/ui/PagePrimitives";
+import { SUBURBS, inferCity, coordsForSuburb } from "@/lib/suburbs";
 
 const CATEGORIES = [
   { value: "car_wash", label: "Car Wash" },
@@ -21,37 +22,6 @@ const CATEGORIES = [
   { value: "other", label: "Other" },
 ];
 
-// Suburb → [longitude, latitude] (GeoJSON order: lng first)
-const SUBURB_COORDS: Record<string, [number, number]> = {
-  "Khayelitsha":      [18.6840, -34.0350],
-  "Mitchells Plain":  [18.6181, -34.0534],
-  "Gugulethu":        [18.5784, -33.9898],
-  "Langa":            [18.5324, -33.9583],
-  "Nyanga":           [18.5937, -34.0095],
-  "Philippi":         [18.6000, -34.0000],
-  "Delft":            [18.6400, -33.9800],
-  "Mfuleni":          [18.7100, -34.0100],
-  "Crossroads":       [18.5700, -33.9900],
-  "Soweto":           [27.8585, -26.2678],
-  "Alexandra":        [28.0913, -26.1035],
-  "Tembisa":          [28.2267, -25.9975],
-  "Cape Town CBD":    [18.4232, -33.9249],
-  "Bellville":        [18.6333, -33.9000],
-  "Johannesburg CBD": [28.0473, -26.2041],
-};
-
-const SUBURBS = Object.keys(SUBURB_COORDS);
-
-function inferCity(suburb: string) {
-  if (
-    suburb.includes("Cape Town") ||
-    ["Khayelitsha", "Mitchells Plain", "Gugulethu", "Langa", "Nyanga", "Philippi", "Delft", "Mfuleni", "Crossroads", "Bellville"].includes(suburb)
-  ) {
-    return "Cape Town";
-  }
-
-  return "Johannesburg";
-}
 
 export default function PostGigPage() {
   const router = useRouter();
@@ -127,7 +97,7 @@ export default function PostGigPage() {
             : [],
           location: {
             type: "Point",
-            coordinates: SUBURB_COORDS[form.suburb] ?? [28.0473, -26.2041],
+            coordinates: coordsForSuburb(form.suburb),
             suburb: form.suburb,
             city: inferCity(form.suburb),
           },
