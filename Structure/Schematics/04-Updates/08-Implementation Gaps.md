@@ -1,7 +1,7 @@
 ---
 title: Implementation Gaps
 created: 2026-04-06
-updated: 2026-04-06
+updated: 2026-04-11
 author: Codex
 aliases:
   - Implementation Gaps
@@ -21,21 +21,35 @@ status: active
 
 This note tracks the current implementation gaps that still matter after the Schematics truth pass.
 
-## Current Status
+## Current Status (2026-04-11)
 
 | Area | Status | Notes |
 | --- | --- | --- |
-| Logger | Resolved this pass | [../../../lib/logger.ts](../../../lib/logger.ts) now exists and is wired into community-calendar, water-alerts, and spotlight API routes |
-| Test coverage | Open | `tests/jobs.test.ts` exists, but there is no broad route/API safety net yet |
-| Missing API surfaces | Historical only | Legacy notes refer to `app/api/community-status/route.ts`, `app/api/community-events/route.ts`, and `app/api/business-spotlight/route.ts`, but those names are consolidation history rather than current route owners |
-| Missing create flows | Resolved this pass | [../../../app/spotlight/new/page.tsx](../../../app/spotlight/new/page.tsx) and [../../../app/community-calendar/new/page.tsx](../../../app/community-calendar/new/page.tsx) now back the live CTAs |
-| Route placement cleanup | Open | `app/auth/route.ts` should remain documented as a compatibility alias until the webhook surface is fully consolidated under `app/api/**/route.ts` |
+| Logger | ✅ Resolved | `lib/logger.ts` wired into community-calendar, water-alerts, spotlight routes |
+| Test coverage | ✅ Substantially resolved | 10 test files, 139 tests: validation, geo, format, auth, API routes (gigs, applications, forum, water-alerts, incidents, community-calendar, spotlight, load-shedding, tutoring), USSD, suburb utils |
+| Missing API surfaces | ✅ Historical only | Legacy route names retired |
+| Missing create flows | ✅ Resolved | spotlight/new + community-calendar/new restored and regression-tested |
+| Route placement cleanup | ✅ Documented | `app/auth/route.ts` documented with removal TODO |
+| Suburb/city extraction | ✅ Resolved | `lib/suburbs.ts` created, gigs/new uses it |
+| PWA manifest | ✅ Fixed | theme-color, split any/maskable icons, cache v2, /Icons path corrected |
+| Chat polling | ✅ Fixed | interval not restarted on conversation switch; URL sync loop guarded |
+| Forum submit path | ✅ Fixed | dual-state removed, role="alert"/role="status" added |
+| Touch targets | ✅ Fixed | .btn and .chip-toggle have min-height: 2.75rem (44px) |
+| App Store metadata | ✅ Ready | `Structure/Schematics/08-AppStore/app-store-metadata.md` — owner action pending |
+| Profile loading | ✅ Improved | skeleton cards replace text spinner |
+| Sign-in phone hint | ✅ Added | +27/0xx format helper visible before Clerk form |
 
-## Active Gaps Only
+## Remaining Open Items
 
-- Add meaningful API and route coverage around critical surfaces, not just isolated tests.
-- Backfill route coverage for the restored `spotlight/new` and `community-calendar/new` flows.
-- Retire or rewrite any legacy notes that still imply `community-status`, `community-events`, or `business-spotlight` are active route owners.
+| Item | Blocker | Owner |
+| --- | --- | --- |
+| EskomSePush API key in Vercel | Requires API subscription + Vercel dashboard access | Owner |
+| Clerk production keys (pk_live_/sk_live_) | Requires Clerk dashboard access | Owner |
+| KasiLinkAI_XAI_API_KEY in Vercel | Requires xAI API key | Owner |
+| App Store developer accounts | Google Play ($25) + Apple ($99/year) | Owner |
+| 512×512 master icon art | Graphic design work needed | Owner/Designer |
+| Africa's Talking USSD number | AT account + USSD short code registration | Owner |
+| Production smoke test on kasilink.com | Manual device testing | Owner |
 
 ## Canonical Sources
 
