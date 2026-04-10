@@ -2,6 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import {
+  EmptyStateCard,
+  Eyebrow,
+  MetricGrid,
+  SectionHeading,
+} from "@/components/ui/PagePrimitives";
 
 interface CommunityEvent {
   _id: string;
@@ -22,17 +28,30 @@ const TYPE_LABELS: Record<CommunityEvent["type"], string> = {
   other: "Other",
 };
 
+const TYPE_BADGE: Record<CommunityEvent["type"], string> = {
+  job_fair: "badge-success",
+  market: "badge-primary",
+  meeting: "badge-secondary",
+  awareness: "badge-info",
+  social: "badge-secondary",
+  other: "badge-secondary",
+};
+
 export default function CommunityCalendarPage() {
   const [events, setEvents] = useState<CommunityEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [suburb, setSuburb] = useState("");
   const [type, setType] = useState("all");
 
+  const activeFilterCount = [suburb, type !== "all" ? type : ""].filter(
+    Boolean,
+  ).length;
+
   useEffect(() => {
+    setLoading(true);
     const params = new URLSearchParams();
     if (suburb) params.set("suburb", suburb);
     if (type && type !== "all") params.set("type", type);
-
     fetch(`/api/community-calendar?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => setEvents(data.events ?? []))
@@ -40,85 +59,228 @@ export default function CommunityCalendarPage() {
       .finally(() => setLoading(false));
   }, [suburb, type]);
 
-  const filteredSuburbs = useMemo(
-    () => ["All", ...new Set(events.map((event) => event.suburb))],
+  const suburbs = useMemo(
+    () => [...new Set(events.map((e) => e.suburb))].filter(Boolean),
     [events],
   );
 
+  const jobFairCount = events.filter((e) => e.type === "job_fair").length;
+
   return (
-    <div className="container mx-auto max-w-5xl px-4 py-8">
-      <div className="mb-8 flex items-start justify-between gap-4">
-        <div>
-          <h1 className="font-headline text-3xl font-bold">Community Calendar</h1>
-          <p className="text-on-surface-variant">
-            Local events, meetups, and opportunities near you.
-          </p>
-        </div>
-        <Link href="/community-calendar/new" className="btn btn-primary btn-sm">
-          Add Event
-        </Link>
-      </div>
-
-      <div className="mb-6 flex flex-wrap gap-3">
-        <select
-          className="kasi-input max-w-[220px]"
-          value={suburb}
-          onChange={(e) => setSuburb(e.target.value)}
-        >
-          <option value="">All suburbs</option>
-          {filteredSuburbs
-            .filter((value) => value !== "All")
-            .map((value) => (
-              <option key={value} value={value}>
-                {value}
-              </option>
-            ))}
-        </select>
-        <select
-          className="kasi-input max-w-[220px]"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-        >
-          <option value="all">All types</option>
-          <option value="job_fair">Job Fair</option>
-          <option value="market">Market</option>
-          <option value="meeting">Meeting</option>
-          <option value="awareness">Awareness</option>
-          <option value="social">Social</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-
-      {loading ? (
-        <div className="kasi-card py-10 text-center text-on-surface-variant">
-          Loading events...
-        </div>
-      ) : events.length === 0 ? (
-        <div className="kasi-card py-10 text-center text-on-surface-variant">
-          No upcoming events in this area. Be the first to add one.
-        </div>
-      ) : (
-        <div className="grid gap-4">
-          {events.map((event) => (
-            <div key={event._id} className="kasi-card">
-              <div className="mb-2 flex items-start justify-between gap-3">
-                <div>
-                  <span className="badge badge-primary mb-1 text-xs">
-                    {TYPE_LABELS[event.type]}
-                  </span>
-                  <h2 className="text-lg font-bold">{event.title}</h2>
-                </div>
-                <div className="shrink-0 text-right text-sm text-on-surface-variant">
-                  <p>{new Date(event.date).toLocaleDateString()}</p>
-                  <p>{event.time}</p>
-                </div>
+    <div className="pb-12">
+      <section className="container page-shell">
+        <div className="page-hero animate-fade-in">
+          <div className="page-hero-grid">
+            <div className="page-hero-copy">
+              <Eyebrow>Community calendar</Eyebrow>
+              <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
+                Local events, job fairs, and community meetups.
+              </h1>
+              <p className="page-hero-description">
+                Job fairs, markets, awareness events, and neighbourhood
+                meetings — all in one place. Add your own event so people close
+                to home can find it without hunting across platforms.
+              </p>
+              <div className="page-hero-actions">
+                <Link
+                  href="/community-calendar/new"
+                  className="btn btn-primary btn-lg"
+                >
+                  Add an event
+                </Link>
+                <Link href="/forum" className="btn btn-outline btn-lg">
+                  Community forum
+                </Link>
               </div>
-              <p className="text-sm text-on-surface-variant">{event.description}</p>
-              <p className="mt-2 text-xs text-outline">{event.suburb}</p>
             </div>
-          ))}
+
+            <aside className="page-hero-aside">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
+                Calendar stats
+              </p>
+              <MetricGrid
+                className="mt-4"
+                items={[
+                  {
+                    label: "Upcoming events",
+                    value: loading ? "—" : events.length,
+                    helper: "Community-submitted listings",
+                  },
+                  {
+                    label: "Job fairs",
+                    value: loading ? "—" : jobFairCount,
+                    helper: "Employment-focused events",
+                  },
+                  {
+                    label: "Free to list",
+                    value: "Yes",
+                    helper: "No cost to add your event",
+                  },
+                ]}
+              />
+            </aside>
+          </div>
         </div>
-      )}
+      </section>
+
+      <section className="container pb-8">
+        <div className="filter-shell">
+          <SectionHeading
+            eyebrow={<Eyebrow tone="neutral">Filter events</Eyebrow>}
+            title="Narrow by suburb or event type"
+            description="Find what is happening close to home or focus on the type of event that matters to you."
+          />
+
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="form-group">
+              <label htmlFor="cal-suburb" className="label">
+                Suburb
+              </label>
+              <select
+                id="cal-suburb"
+                className="kasi-input"
+                value={suburb}
+                onChange={(e) => setSuburb(e.target.value)}
+              >
+                <option value="">All suburbs</option>
+                {suburbs.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="cal-type" className="label">
+                Event type
+              </label>
+              <select
+                id="cal-type"
+                className="kasi-input"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+              >
+                <option value="all">All types</option>
+                {Object.entries(TYPE_LABELS).map(([v, l]) => (
+                  <option key={v} value={v}>
+                    {l}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group flex items-end">
+              <button
+                className="btn btn-outline w-full"
+                onClick={() => {
+                  setSuburb("");
+                  setType("all");
+                }}
+                disabled={activeFilterCount === 0}
+              >
+                Clear filters
+              </button>
+            </div>
+          </div>
+
+          {activeFilterCount > 0 && (
+            <div className="flex flex-wrap gap-2">
+              <span className="badge badge-info">
+                {activeFilterCount} active filter
+                {activeFilterCount !== 1 ? "s" : ""}
+              </span>
+              {suburb && (
+                <span className="badge badge-secondary">
+                  Suburb: {suburb}
+                </span>
+              )}
+              {type !== "all" && (
+                <span className="badge badge-primary">
+                  Type: {TYPE_LABELS[type as CommunityEvent["type"]] ?? type}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="container pb-12">
+        <p className="sr-only" role="status" aria-live="polite">
+          {loading
+            ? "Loading events"
+            : `${events.length} events loaded`}
+        </p>
+
+        {loading ? (
+          <div className="grid gap-4 md:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="kasi-card skeleton h-36" />
+            ))}
+          </div>
+        ) : events.length === 0 ? (
+          <EmptyStateCard
+            title="No events in this area yet"
+            description="Be the first to add a local event — job fairs, markets, community meetings, and awareness campaigns all belong here."
+            action={
+              <Link href="/community-calendar/new" className="btn btn-primary">
+                Add an event
+              </Link>
+            }
+            secondary={
+              activeFilterCount > 0 ? (
+                <button
+                  className="btn btn-outline"
+                  onClick={() => {
+                    setSuburb("");
+                    setType("all");
+                  }}
+                >
+                  Reset filters
+                </button>
+              ) : undefined
+            }
+          />
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2">
+            {events.map((event, index) => (
+              <article
+                key={event._id}
+                className="kasi-card animate-slide-up flex h-full flex-col"
+                style={{ animationDelay: `${index * 40}ms` }}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <span
+                      className={`badge ${TYPE_BADGE[event.type] ?? "badge-secondary"} mb-2`}
+                    >
+                      {TYPE_LABELS[event.type]}
+                    </span>
+                    <h3 className="text-lg font-bold leading-tight">
+                      {event.title}
+                    </h3>
+                  </div>
+                  <div className="shrink-0 text-right">
+                    <p className="text-sm font-semibold text-on-background">
+                      {new Date(event.date).toLocaleDateString("en-ZA", {
+                        day: "numeric",
+                        month: "short",
+                      })}
+                    </p>
+                    <p className="text-xs text-outline">{event.time}</p>
+                  </div>
+                </div>
+
+                <p className="mt-3 text-sm leading-7 text-on-surface-variant">
+                  {event.description}
+                </p>
+
+                <p className="mt-auto pt-4 text-[11px] uppercase tracking-[0.16em] text-outline">
+                  {event.suburb}
+                </p>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

@@ -2,6 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import {
+  EmptyStateCard,
+  Eyebrow,
+  MetricGrid,
+  SectionHeading,
+} from "@/components/ui/PagePrimitives";
 
 interface Incident {
   _id: string;
@@ -22,7 +28,7 @@ const TYPE_LABELS: Record<string, string> = {
   other: "Other",
 };
 
-const SEVERITY_CLASSES: Record<string, string> = {
+const SEVERITY_BADGE: Record<string, string> = {
   high: "badge-danger",
   medium: "badge-warning",
   low: "badge-success",
@@ -47,10 +53,10 @@ export default function IncidentsPage() {
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "severity">(
     "newest",
   );
+
   const activeFilterCount = [suburb, type, severity].filter(Boolean).length;
 
   const clearFilters = () => {
-    setLoading(true);
     setSuburb("");
     setType("");
     setSeverity("");
@@ -58,6 +64,7 @@ export default function IncidentsPage() {
   };
 
   useEffect(() => {
+    setLoading(true);
     const params = new URLSearchParams();
     if (suburb) params.set("suburb", suburb);
     if (type) params.set("type", type);
@@ -70,178 +77,261 @@ export default function IncidentsPage() {
 
   const visibleIncidents = useMemo(() => {
     const filtered = severity
-      ? incidents.filter((incident) => incident.severity === severity)
+      ? incidents.filter((i) => i.severity === severity)
       : incidents;
-
-    const severityWeight: Record<Incident["severity"], number> = {
+    const weight: Record<Incident["severity"], number> = {
       high: 3,
       medium: 2,
       low: 1,
     };
-
-    const sorted = [...filtered].sort((a, b) => {
-      if (sortBy === "oldest") {
-        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-      }
-      if (sortBy === "severity") {
-        return severityWeight[b.severity] - severityWeight[a.severity];
-      }
+    return [...filtered].sort((a, b) => {
+      if (sortBy === "oldest")
+        return (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+      if (sortBy === "severity") return weight[b.severity] - weight[a.severity];
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
-
-    return sorted;
   }, [incidents, severity, sortBy]);
 
-  const totalCount = incidents.length;
-  const highSeverityCount = incidents.filter(
-    (incident) => incident.severity === "high",
-  ).length;
-  const filteredCount = visibleIncidents.length;
+  const highCount = incidents.filter((i) => i.severity === "high").length;
 
   return (
-    <div className="container max-w-screen-md pt-8 pb-12">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="font-headline text-3xl font-bold">Community Incidents</h1>
-          <p className="text-on-surface-variant text-sm mt-1">
-            Safety alerts, utility outages, and road issues reported by the community.
-          </p>
-        </div>
-        <Link href="/incidents/new" className="btn btn-primary btn-sm">
-          Report Incident
-        </Link>
-      </div>
-
-      <div className="flex gap-3 mb-6 flex-wrap">
-        <input
-          className="kasi-input max-w-[180px]"
-          placeholder="Filter by suburb"
-          value={suburb}
-          onChange={(e) => {
-            setLoading(true);
-            setSuburb(e.target.value);
-          }}
-        />
-        <select
-          className="kasi-input max-w-[200px]"
-          value={type}
-          onChange={(e) => {
-            setLoading(true);
-            setType(e.target.value);
-          }}
-        >
-          <option value="">All types</option>
-          {Object.entries(TYPE_LABELS).map(([v, l]) => (
-            <option key={v} value={v}>{l}</option>
-          ))}
-        </select>
-        <select
-          className="kasi-input max-w-[180px]"
-          value={severity}
-          onChange={(e) => setSeverity(e.target.value as "" | "high" | "medium" | "low")}
-        >
-          <option value="">All severity</option>
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
-        <select
-          className="kasi-input max-w-[200px]"
-          value={sortBy}
-          onChange={(e) =>
-            setSortBy(e.target.value as "newest" | "oldest" | "severity")
-          }
-        >
-          <option value="newest">Newest first</option>
-          <option value="oldest">Oldest first</option>
-          <option value="severity">Highest severity first</option>
-        </select>
-        <button className="btn btn-outline btn-sm" onClick={clearFilters}>
-          Clear filters
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-        <div className="kasi-card bg-surface-container-low text-center">
-          <p className="text-xs uppercase tracking-wider text-outline mb-1">Total</p>
-          <p className="text-lg font-bold">{totalCount}</p>
-        </div>
-        <div className="kasi-card bg-surface-container-low text-center">
-          <p className="text-xs uppercase tracking-wider text-outline mb-1">High Severity</p>
-          <p className="text-lg font-bold text-danger">{highSeverityCount}</p>
-        </div>
-        <div className="kasi-card bg-surface-container-low text-center">
-          <p className="text-xs uppercase tracking-wider text-outline mb-1">Filtered</p>
-          <p className="text-lg font-bold">{filteredCount}</p>
-        </div>
-      </div>
-
-      <div className="flex flex-wrap gap-2 mb-6">
-        {activeFilterCount > 0 && (
-          <span className="badge badge-info">{activeFilterCount} active filters</span>
-        )}
-        {suburb && <span className="badge badge-secondary">Suburb: {suburb}</span>}
-        {type && (
-          <span className="badge badge-secondary">
-            Type: {TYPE_LABELS[type] ?? type}
-          </span>
-        )}
-        {severity && (
-          <span className={`badge ${SEVERITY_CLASSES[severity] ?? "badge-secondary"}`}>
-            Severity: {severity}
-          </span>
-        )}
-      </div>
-
-      <p className="sr-only" role="status" aria-live="polite">
-        {loading
-          ? "Loading incidents"
-          : visibleIncidents.length === 0
-            ? "No incidents found"
-            : `${visibleIncidents.length} incidents loaded`}
-      </p>
-
-      {loading ? (
-        <p className="text-on-surface-variant text-center py-8">Loading incidents...</p>
-      ) : visibleIncidents.length === 0 ? (
-        <div className="kasi-card text-center">
-          <p className="text-on-surface-variant mb-3">No active incidents in this area.</p>
-          {activeFilterCount > 0 && (
-            <button className="btn btn-outline btn-sm mb-3" onClick={clearFilters}>
-              Reset filters
-            </button>
-          )}
-          <Link href="/incidents/new" className="btn btn-primary btn-sm">Report One</Link>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-4">
-          {visibleIncidents.map((incident) => (
-            <div key={incident._id} className="kasi-card">
-              <div className="flex items-start justify-between gap-3 mb-2">
-                <div>
-                  <span className="text-xs text-on-surface-variant font-medium uppercase tracking-wide">
-                    {TYPE_LABELS[incident.type] ?? incident.type}
-                  </span>
-                  <h2 className="font-bold text-lg">{incident.title}</h2>
-                </div>
-                <span className={`badge ${SEVERITY_CLASSES[incident.severity] ?? "badge-success"} shrink-0`}>
-                  {incident.severity}
-                </span>
-              </div>
-              <p className="text-sm text-on-surface-variant mb-3 line-clamp-3">
-                {incident.description}
+    <div className="pb-12">
+      <section className="container page-shell">
+        <div className="page-hero animate-fade-in">
+          <div className="page-hero-grid">
+            <div className="page-hero-copy">
+              <Eyebrow>Incidents</Eyebrow>
+              <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
+                Community safety alerts and local incidents.
+              </h1>
+              <p className="page-hero-description">
+                Safety concerns, road issues, utility outages, and local
+                disruptions reported by the community. Check before you travel
+                or accept a gig in an unfamiliar area.
               </p>
-              <div className="flex gap-3 text-xs text-outline flex-wrap">
-                <span>{incident.suburb}</span>
-                <span>·</span>
-                <span>Reported by {incident.reporterName}</span>
-                <span>·</span>
-                <span>{timeAgo(incident.createdAt)}</span>
+              <div className="page-hero-actions">
+                <Link href="/incidents/new" className="btn btn-primary btn-lg">
+                  Report an incident
+                </Link>
+                <Link
+                  href="/community-status"
+                  className="btn btn-outline btn-lg"
+                >
+                  Community status
+                </Link>
               </div>
             </div>
-          ))}
+
+            <aside className="page-hero-aside">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
+                Current snapshot
+              </p>
+              <MetricGrid
+                className="mt-4"
+                items={[
+                  {
+                    label: "Total incidents",
+                    value: loading ? "—" : incidents.length,
+                    helper: "Open reports in the system",
+                  },
+                  {
+                    label: "High severity",
+                    value: loading ? "—" : highCount,
+                    helper: "Requires immediate attention",
+                  },
+                  {
+                    label: "Showing",
+                    value: loading ? "—" : visibleIncidents.length,
+                    helper: "After current filters",
+                  },
+                ]}
+              />
+            </aside>
+          </div>
         </div>
-      )}
+      </section>
+
+      <section className="container pb-8">
+        <div className="filter-shell">
+          <SectionHeading
+            eyebrow={<Eyebrow tone="neutral">Filter incidents</Eyebrow>}
+            title="Narrow by suburb, type, and severity"
+            description="Sort by newest or highest severity to see what matters most first."
+          />
+
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="form-group">
+              <label htmlFor="incident-suburb" className="label">
+                Suburb
+              </label>
+              <input
+                id="incident-suburb"
+                className="kasi-input"
+                placeholder="e.g. Soweto"
+                value={suburb}
+                onChange={(e) => setSuburb(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="incident-type" className="label">
+                Type
+              </label>
+              <select
+                id="incident-type"
+                className="kasi-input"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+              >
+                <option value="">All types</option>
+                {Object.entries(TYPE_LABELS).map(([v, l]) => (
+                  <option key={v} value={v}>
+                    {l}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="incident-severity" className="label">
+                Severity
+              </label>
+              <select
+                id="incident-severity"
+                className="kasi-input"
+                value={severity}
+                onChange={(e) =>
+                  setSeverity(e.target.value as "" | "high" | "medium" | "low")
+                }
+              >
+                <option value="">All severity</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="incident-sort" className="label">
+                Sort by
+              </label>
+              <select
+                id="incident-sort"
+                className="kasi-input"
+                value={sortBy}
+                onChange={(e) =>
+                  setSortBy(
+                    e.target.value as "newest" | "oldest" | "severity",
+                  )
+                }
+              >
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="severity">Highest severity first</option>
+              </select>
+            </div>
+          </div>
+
+          {activeFilterCount > 0 && (
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="badge badge-info">
+                {activeFilterCount} active filter
+                {activeFilterCount !== 1 ? "s" : ""}
+              </span>
+              {suburb && (
+                <span className="badge badge-secondary">
+                  Suburb: {suburb}
+                </span>
+              )}
+              {type && (
+                <span className="badge badge-secondary">
+                  Type: {TYPE_LABELS[type] ?? type}
+                </span>
+              )}
+              {severity && (
+                <span
+                  className={`badge ${SEVERITY_BADGE[severity] ?? "badge-secondary"}`}
+                >
+                  Severity: {severity}
+                </span>
+              )}
+              <button
+                className="btn btn-outline btn-sm"
+                onClick={clearFilters}
+              >
+                Clear all
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="container pb-12">
+        <p className="sr-only" role="status" aria-live="polite">
+          {loading
+            ? "Loading incidents"
+            : `${visibleIncidents.length} incidents loaded`}
+        </p>
+
+        {loading ? (
+          <div className="flex flex-col gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="kasi-card skeleton h-28" />
+            ))}
+          </div>
+        ) : visibleIncidents.length === 0 ? (
+          <EmptyStateCard
+            title="No incidents found"
+            description="No active reports in this area. Report one if you see a safety concern or service disruption."
+            action={
+              <Link href="/incidents/new" className="btn btn-primary">
+                Report an incident
+              </Link>
+            }
+            secondary={
+              activeFilterCount > 0 ? (
+                <button className="btn btn-outline" onClick={clearFilters}>
+                  Reset filters
+                </button>
+              ) : undefined
+            }
+          />
+        ) : (
+          <div className="flex flex-col gap-4">
+            {visibleIncidents.map((incident, index) => (
+              <article
+                key={incident._id}
+                className="kasi-card animate-slide-up"
+                style={{ animationDelay: `${index * 40}ms` }}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="mb-1 flex flex-wrap gap-2">
+                      <span className="badge badge-secondary capitalize">
+                        {TYPE_LABELS[incident.type] ?? incident.type}
+                      </span>
+                    </div>
+                    <h3 className="font-bold text-on-background">
+                      {incident.title}
+                    </h3>
+                  </div>
+                  <span
+                    className={`badge shrink-0 capitalize ${SEVERITY_BADGE[incident.severity] ?? "badge-secondary"}`}
+                  >
+                    {incident.severity}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm leading-7 text-on-surface-variant line-clamp-3">
+                  {incident.description}
+                </p>
+                <p className="mt-3 text-[11px] uppercase tracking-[0.16em] text-outline">
+                  {incident.suburb} · Reported by {incident.reporterName} ·{" "}
+                  {timeAgo(incident.createdAt)}
+                </p>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

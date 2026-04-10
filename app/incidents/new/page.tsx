@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
+import { Eyebrow, SectionHeading } from "@/components/ui/PagePrimitives";
 
 const INCIDENT_TYPES = [
   { value: "safety", label: "Safety Concern" },
@@ -34,6 +36,9 @@ export default function ReportIncidentPage() {
 
   const set = (field: string, value: string) =>
     setForm((f) => ({ ...f, [field]: value }));
+
+  const fieldClass = (name: keyof typeof form) =>
+    `kasi-input ${errors[name] ? "border-error" : ""}`;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -76,70 +81,165 @@ export default function ReportIncidentPage() {
   }
 
   return (
-    <div className="container max-w-screen-sm pt-8 pb-12">
-      <h1 className="font-headline text-3xl font-bold mb-2">Report an Incident</h1>
-      <p className="text-on-surface-variant text-sm mb-8">
-        Alert the community about safety issues, outages, or road problems.
-      </p>
+    <div className="pb-12">
+      <section className="container page-shell">
+        <div className="page-hero animate-fade-in">
+          <div className="page-hero-grid">
+            <div className="page-hero-copy">
+              <Eyebrow tone="danger">Report incident</Eyebrow>
+              <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
+                Alert the community about safety or service issues.
+              </h1>
+              <p className="page-hero-description">
+                Safety concerns, road problems, and utility outages affect
+                everyone close by. A clear, direct report helps neighbours
+                plan around it and gives responders something to act on.
+              </p>
+              <div className="page-hero-actions">
+                <Link href="/incidents" className="btn btn-outline btn-lg">
+                  View all incidents
+                </Link>
+              </div>
+            </div>
 
-      {errors.general && (
-        <div className="alert alert-danger mb-5">{errors.general}</div>
-      )}
-
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        <div className="form-group">
-          <label className="label" htmlFor="type">Incident Type *</label>
-          <select id="type" className={`kasi-input ${errors.type ? "border-error" : ""}`}
-            value={form.type} onChange={(e) => set("type", e.target.value)}>
-            <option value="">Select type...</option>
-            {INCIDENT_TYPES.map((t) => (
-              <option key={t.value} value={t.value}>{t.label}</option>
-            ))}
-          </select>
-          {errors.type && <span className="error-text">{errors.type}</span>}
+            <aside className="page-hero-aside">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
+                Reporting guide
+              </p>
+              <div className="mt-4 space-y-3">
+                <div className="kasi-card">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-outline mb-1">
+                    Be specific
+                  </p>
+                  <p className="text-sm text-on-surface-variant">
+                    Name the street, section, or block. Vague reports are
+                    harder to act on.
+                  </p>
+                </div>
+                <div className="kasi-card">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-outline mb-1">
+                    Set severity honestly
+                  </p>
+                  <p className="text-sm text-on-surface-variant">
+                    High means dangerous or widespread. Low means a nuisance
+                    that can wait.
+                  </p>
+                </div>
+              </div>
+            </aside>
+          </div>
         </div>
+      </section>
 
-        <div className="form-group">
-          <label className="label" htmlFor="suburb">Suburb / Township *</label>
-          <select id="suburb" className={`kasi-input ${errors.suburb ? "border-error" : ""}`}
-            value={form.suburb} onChange={(e) => set("suburb", e.target.value)}>
-            <option value="">Select suburb...</option>
-            {SUBURBS.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>
-          {errors.suburb && <span className="error-text">{errors.suburb}</span>}
+      <section className="container pb-12">
+        <div className="form-shell">
+          <div className="kasi-card">
+            <SectionHeading
+              eyebrow={<Eyebrow tone="neutral">Incident form</Eyebrow>}
+              title="Describe what is happening and where"
+              description="Be direct. State the location, what you have seen, and how serious it is."
+            />
+
+            {errors.general && (
+              <div className="alert alert-danger mb-5">{errors.general}</div>
+            )}
+
+            <form onSubmit={handleSubmit} className="form-grid">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="form-group">
+                  <label className="label" htmlFor="type">Incident type *</label>
+                  <select
+                    id="type"
+                    className={fieldClass("type")}
+                    value={form.type}
+                    onChange={(e) => set("type", e.target.value)}
+                  >
+                    <option value="">Select type…</option>
+                    {INCIDENT_TYPES.map((t) => (
+                      <option key={t.value} value={t.value}>{t.label}</option>
+                    ))}
+                  </select>
+                  {errors.type && <span className="error-text">{errors.type}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label className="label" htmlFor="suburb">Suburb / township *</label>
+                  <select
+                    id="suburb"
+                    className={fieldClass("suburb")}
+                    value={form.suburb}
+                    onChange={(e) => set("suburb", e.target.value)}
+                  >
+                    <option value="">Select suburb…</option>
+                    {SUBURBS.map((s) => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                  {errors.suburb && <span className="error-text">{errors.suburb}</span>}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="label" htmlFor="title">Title *</label>
+                <input
+                  id="title"
+                  className={fieldClass("title")}
+                  placeholder="e.g. Water off in Section B since 6am"
+                  value={form.title}
+                  onChange={(e) => set("title", e.target.value)}
+                />
+                {errors.title && <span className="error-text">{errors.title}</span>}
+              </div>
+
+              <div className="form-group">
+                <label className="label" htmlFor="description">Description *</label>
+                <textarea
+                  id="description"
+                  rows={4}
+                  className={fieldClass("description")}
+                  placeholder="Describe what is happening, where exactly, and how people are affected."
+                  value={form.description}
+                  onChange={(e) => set("description", e.target.value)}
+                />
+                {errors.description && <span className="error-text">{errors.description}</span>}
+              </div>
+
+              <div className="form-group">
+                <label className="label" htmlFor="severity">Severity</label>
+                <select
+                  id="severity"
+                  className="kasi-input"
+                  value={form.severity}
+                  onChange={(e) => set("severity", e.target.value)}
+                >
+                  <option value="low">Low — Minor issue, not urgent</option>
+                  <option value="medium">Medium — Affects daily life</option>
+                  <option value="high">High — Dangerous or widespread</option>
+                </select>
+              </div>
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="mt-2 btn btn-primary btn-lg"
+              >
+                {submitting ? "Submitting…" : "Submit report"}
+              </button>
+            </form>
+          </div>
+
+          <aside className="form-sidebar">
+            <div className="surface-band">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
+                After you report
+              </p>
+              <div className="mt-3 space-y-3 text-sm text-on-surface-variant">
+                <p>Your report becomes visible on the incidents board immediately.</p>
+                <p>Other community members can confirm or add context to the same issue.</p>
+                <p>Emergency contacts: Eskom 0860 037 566 · SAPS 10111 · Joburg Water 011 688 1400</p>
+              </div>
+            </div>
+          </aside>
         </div>
-
-        <div className="form-group">
-          <label className="label" htmlFor="title">Title *</label>
-          <input id="title" className={`kasi-input ${errors.title ? "border-error" : ""}`}
-            placeholder="e.g. Water off in Section B since 6am"
-            value={form.title} onChange={(e) => set("title", e.target.value)} />
-          {errors.title && <span className="error-text">{errors.title}</span>}
-        </div>
-
-        <div className="form-group">
-          <label className="label" htmlFor="description">Description *</label>
-          <textarea id="description" rows={4}
-            className={`kasi-input ${errors.description ? "border-error" : ""}`}
-            placeholder="Describe what is happening, where exactly, and how people are affected."
-            value={form.description} onChange={(e) => set("description", e.target.value)} />
-          {errors.description && <span className="error-text">{errors.description}</span>}
-        </div>
-
-        <div className="form-group">
-          <label className="label" htmlFor="severity">Severity</label>
-          <select id="severity" className="kasi-input"
-            value={form.severity} onChange={(e) => set("severity", e.target.value)}>
-            <option value="low">Low — Minor issue, not urgent</option>
-            <option value="medium">Medium — Affects daily life</option>
-            <option value="high">High — Dangerous or widespread</option>
-          </select>
-        </div>
-
-        <button type="submit" disabled={submitting} className="btn btn-primary btn-lg mt-2">
-          {submitting ? "Submitting..." : "Submit Report"}
-        </button>
-      </form>
+      </section>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Eyebrow, MetricGrid, SectionHeading } from "@/components/ui/PagePrimitives";
 
 interface StatusData {
   powerStage: number;
@@ -10,6 +11,22 @@ interface StatusData {
   activeIncidents: number;
   lastUpdated: string;
 }
+
+const STAGE_COLOR: Record<number, string> = {
+  0: "text-success",
+  1: "text-success",
+  2: "text-warning",
+  3: "text-warning",
+  4: "text-error",
+  5: "text-error",
+  6: "text-error",
+};
+
+const EMERGENCY_CONTACTS = [
+  { name: "Eskom Helpline", number: "0860 037 566", icon: "⚡" },
+  { name: "Joburg Water", number: "011 688 1400", icon: "💧" },
+  { name: "SAPS Emergency", number: "10111", icon: "🚔" },
+];
 
 export default function CommunityStatusPage() {
   const [data, setData] = useState<StatusData | null>(null);
@@ -29,7 +46,10 @@ export default function CommunityStatusPage() {
           powerStatus: lsRes?.status ?? "Status unavailable",
           waterAlerts: waterRes?.total ?? waterRes?.alerts?.length ?? 0,
           activeIncidents: incRes?.total ?? 0,
-          lastUpdated: new Date().toLocaleTimeString("en-ZA", { hour: "2-digit", minute: "2-digit" }),
+          lastUpdated: new Date().toLocaleTimeString("en-ZA", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
         });
       } catch {
         setData(null);
@@ -37,161 +57,197 @@ export default function CommunityStatusPage() {
         setLoading(false);
       }
     }
-    load();
-    const interval = setInterval(load, 300000);
+
+    void load();
+    const interval = setInterval(load, 300_000);
     return () => clearInterval(interval);
   }, []);
 
-  if (loading) {
-    return (
-      <div className="container max-w-screen-lg pt-8 pb-12">
-        <p className="text-on-surface-variant text-center py-12">Loading community status...</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="container max-w-screen-lg pt-8 pb-12">
-      <div className="mb-8">
-        <h1 className="font-headline text-4xl font-extrabold tracking-tight">Community Status</h1>
-        <p className="text-on-surface-variant font-medium mt-1">
-          Live updates for your local neighborhood
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-        {/* Power Status — Large Card */}
-        <div className="md:col-span-8 kasi-card relative overflow-hidden">
-          <div className="flex justify-between items-start">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant bg-surface-container px-2 py-1 rounded">
-                Utility Status
-              </span>
-              <h2 className="text-3xl font-extrabold mt-4">Current Power Status</h2>
-              <p className={`text-xl font-medium flex items-center gap-2 mt-2 ${
-                (data?.powerStage ?? 0) > 0 ? "text-error" : "text-success"
-              }`}>
-                ⚡ {data?.powerStage && data.powerStage > 0
-                  ? `Load-shedding Stage ${data.powerStage}`
-                  : "No load-shedding"}
+    <div className="pb-12">
+      <section className="container page-shell">
+        <div className="page-hero animate-fade-in">
+          <div className="page-hero-grid">
+            <div className="page-hero-copy">
+              <Eyebrow>Community status</Eyebrow>
+              <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
+                Live utility and safety signals for your neighbourhood.
+              </h1>
+              <p className="page-hero-description">
+                Power stage, water alerts, and active incidents in one place.
+                Check conditions before you accept a gig, plan a job, or leave home.
               </p>
-              <p className="text-on-surface-variant mt-4 max-w-sm">
-                {data?.powerStatus ?? "Status unavailable"}
+              <div className="page-hero-actions">
+                <Link href="/utility-schedule" className="btn btn-primary btn-lg">
+                  View utility schedule
+                </Link>
+                <Link href="/incidents/new" className="btn btn-outline btn-lg">
+                  Report an incident
+                </Link>
+              </div>
+            </div>
+
+            <aside className="page-hero-aside">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
+                Live signals
               </p>
-            </div>
-            {(data?.powerStage ?? 0) >= 4 && (
-              <div className="bg-error/10 text-error px-4 py-2 rounded-full font-bold text-sm">
-                High Alert
-              </div>
-            )}
-          </div>
-          <div className="mt-6 flex items-center gap-2 text-sm text-outline">
-            🕐 Updated {data?.lastUpdated}
-          </div>
-        </div>
-
-        {/* Quick Stats — Side Card */}
-        <div className="md:col-span-4 kasi-card bg-primary/5 flex flex-col justify-between">
-          <div>
-            <h3 className="text-xl font-bold mt-2">Quick Stats</h3>
-            <p className="mt-1 text-[11px] uppercase tracking-wider text-outline">
-              Source: live utility and incident feeds
-            </p>
-            <div className="mt-4 space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-on-surface-variant">Active Incidents</span>
-                <span className="font-bold">{data?.activeIncidents ?? 0}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-on-surface-variant">Water Alerts</span>
-                <span className="font-bold">{data?.waterAlerts ?? 0}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-on-surface-variant">Power Stage</span>
-                <span className="font-bold">{data?.powerStage ?? 0}</span>
-              </div>
-            </div>
-          </div>
-          <div className="mt-4 pt-4 border-t border-outline-variant/30">
-            <div className="flex justify-between text-sm font-bold">
-              <span>Community Safety</span>
-              <span>{(data?.activeIncidents ?? 0) < 3 ? "94%" : "72%"}</span>
-            </div>
-            <div className="w-full bg-surface-container h-2 rounded-full mt-2">
-              <div
-                className="bg-primary h-full rounded-full transition-all"
-                style={{ width: (data?.activeIncidents ?? 0) < 3 ? "94%" : "72%" }}
-              />
-            </div>
+              {loading ? (
+                <div className="mt-4 space-y-3">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="kasi-card skeleton h-16" />
+                  ))}
+                </div>
+              ) : (
+                <MetricGrid
+                  className="mt-4"
+                  items={[
+                    {
+                      label: "Power stage",
+                      value: data?.powerStage === 0 ? "None" : `Stage ${data?.powerStage}`,
+                      helper: data?.powerStage === 0 ? "No active load-shedding" : "Load-shedding active",
+                    },
+                    {
+                      label: "Water alerts",
+                      value: data?.waterAlerts ?? 0,
+                      helper: "Active outage or pressure reports",
+                    },
+                    {
+                      label: "Incidents",
+                      value: data?.activeIncidents ?? 0,
+                      helper: "Community-reported safety issues",
+                    },
+                  ]}
+                />
+              )}
+            </aside>
           </div>
         </div>
+      </section>
 
-        {/* Water Alerts */}
-        <div className="md:col-span-6 kasi-card">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-lg">
-              💧
-            </div>
-            <div>
-              <h3 className="font-bold text-xl">Water Alerts</h3>
-              <p className="text-on-surface-variant text-sm">Recent water issues</p>
-            </div>
-          </div>
-          <p className="text-on-surface-variant mb-4">
-            Check the water outages page for the latest updates on pipe bursts, low pressure, and scheduled maintenance.
-          </p>
-          <Link href="/water-outages" className="btn btn-primary btn-sm">
-            View Water Alerts
-          </Link>
-        </div>
-
-        {/* Safety Incidents */}
-        <div className="md:col-span-6 kasi-card">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center text-lg">
-              🚨
-            </div>
-            <div>
-              <h3 className="font-bold text-xl">Safety Incidents</h3>
-              <p className="text-on-surface-variant text-sm">{data?.activeIncidents ?? 0} active</p>
-            </div>
-          </div>
-          <p className="text-on-surface-variant mb-4">
-            Community-reported safety concerns, road issues, and other incidents in your area.
-          </p>
-          <Link href="/incidents" className="btn btn-primary btn-sm">
-            View Incidents
-          </Link>
-        </div>
-
-        {/* Utility Schedule Link */}
-        <div className="md:col-span-12 kasi-card bg-on-background text-background relative overflow-hidden">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div>
-              <h3 className="text-xl font-extrabold">Utility Schedule</h3>
-              <p className="text-sm opacity-80">See all upcoming power and water outages in a timeline view.</p>
-            </div>
-            <Link href="/utility-schedule" className="btn btn-primary btn-sm shrink-0">
-              View Schedule
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Service Providers */}
-      <section className="mt-10">
-        <h3 className="font-headline font-bold text-lg mb-4">Emergency Contacts</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {[
-            { name: "Eskom Helpline", number: "0860 037 566", icon: "⚡" },
-            { name: "Joburg Water", number: "011 688 1400", icon: "💧" },
-            { name: "SAPS Emergency", number: "10111", icon: "🚔" },
-          ].map((c) => (
-            <div key={c.name} className="kasi-card flex items-center gap-3">
-              <span className="text-xl">{c.icon}</span>
+      <section className="container pb-8">
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="kasi-card">
+            <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="font-bold text-sm">{c.name}</p>
-                <a href={`tel:${c.number.replace(/\s/g, "")}`} className="text-primary text-sm font-mono">
+                <Eyebrow tone="neutral">Eskom / power</Eyebrow>
+                <h2 className="mt-3 text-2xl font-bold">
+                  {loading
+                    ? "Loading..."
+                    : data?.powerStage === 0
+                    ? "No load-shedding"
+                    : `Load-shedding Stage ${data?.powerStage}`}
+                </h2>
+                <p
+                  className={`mt-1 text-sm font-semibold ${
+                    STAGE_COLOR[data?.powerStage ?? 0] ?? "text-success"
+                  }`}
+                >
+                  {loading ? "Checking..." : (data?.powerStatus ?? "Status unavailable")}
+                </p>
+              </div>
+              {!loading && (data?.powerStage ?? 0) >= 4 && (
+                <span className="badge badge-danger shrink-0">High alert</span>
+              )}
+              {!loading && (data?.powerStage ?? 0) === 0 && (
+                <span className="badge badge-success shrink-0">No active cuts</span>
+              )}
+            </div>
+            <p className="mt-4 text-[11px] uppercase tracking-[0.16em] text-outline">
+              Updated {data?.lastUpdated ?? "—"}
+            </p>
+            <div className="mt-4 border-t border-outline-variant/30 pt-4">
+              <Link href="/utility-schedule" className="text-sm font-semibold text-primary">
+                View full schedule →
+              </Link>
+            </div>
+          </div>
+
+          <div className="kasi-card">
+            <Eyebrow tone="neutral">Water</Eyebrow>
+            <h2 className="mt-3 text-2xl font-bold">
+              {loading
+                ? "Loading..."
+                : `${data?.waterAlerts ?? 0} active alert${data?.waterAlerts !== 1 ? "s" : ""}`}
+            </h2>
+            <p className="mt-1 text-sm text-on-surface-variant">
+              Pipe bursts, low pressure, and scheduled maintenance reports from
+              the community.
+            </p>
+            <div className="mt-4 border-t border-outline-variant/30 pt-4">
+              <Link href="/water-outages" className="text-sm font-semibold text-primary">
+                View water outages →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="container pb-10">
+        <SectionHeading
+          eyebrow={<Eyebrow tone="neutral">Incidents</Eyebrow>}
+          title="Safety and community incidents"
+          description="Community-reported concerns in your area. Check before you travel or take a gig."
+          action={
+            <Link href="/incidents/new" className="btn btn-outline btn-sm">
+              Report an incident
+            </Link>
+          }
+        />
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="kasi-card">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-outline">
+              Active
+            </p>
+            <p className="mt-3 text-3xl font-black text-on-background">
+              {loading ? "—" : (data?.activeIncidents ?? 0)}
+            </p>
+            <p className="mt-1 text-sm text-on-surface-variant">
+              Reported incidents currently open in the system.
+            </p>
+            <div className="mt-4 border-t border-outline-variant/30 pt-4">
+              <Link href="/incidents" className="text-sm font-semibold text-primary">
+                Browse all incidents →
+              </Link>
+            </div>
+          </div>
+          <div className="kasi-card">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-outline">
+              Report
+            </p>
+            <p className="mt-3 text-lg font-bold">
+              Seen something the community should know?
+            </p>
+            <p className="mt-2 text-sm leading-7 text-on-surface-variant">
+              Post a safety note, road block, or service disruption so others
+              can plan around it.
+            </p>
+            <div className="mt-4">
+              <Link href="/incidents/new" className="btn btn-primary btn-sm">
+                Submit incident
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="container pb-12">
+        <SectionHeading
+          eyebrow={<Eyebrow tone="neutral">Emergency contacts</Eyebrow>}
+          title="Key numbers for service failures"
+          description="Call these directly when utility disruptions or safety issues cannot wait."
+        />
+        <div className="grid gap-4 sm:grid-cols-3">
+          {EMERGENCY_CONTACTS.map((c) => (
+            <div key={c.name} className="kasi-card flex items-center gap-4">
+              <span className="text-2xl" aria-hidden="true">
+                {c.icon}
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-bold">{c.name}</p>
+                <a
+                  href={`tel:${c.number.replace(/\s/g, "")}`}
+                  className="font-mono text-sm text-primary hover:underline"
+                >
                   {c.number}
                 </a>
               </div>

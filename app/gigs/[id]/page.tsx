@@ -3,6 +3,8 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
+import { Eyebrow } from "@/components/ui/PagePrimitives";
+import { formatRelativeTime } from "@/lib/format";
 
 interface Gig {
   _id: string;
@@ -33,7 +35,6 @@ export default function GigDetailsPage({
   const [message, setMessage] = useState("");
   const [appStatus, setAppStatus] = useState<string | null>(null);
 
-  // Review States
   const [rating, setRating] = useState(5);
   const [reviewComment, setReviewComment] = useState("");
   const [submittingReview, setSubmittingReview] = useState(false);
@@ -54,10 +55,7 @@ export default function GigDetailsPage({
       const res = await fetch("/api/applications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          gigId: id,
-          message: message || "I am interested in this gig.",
-        }),
+        body: JSON.stringify({ gigId: id, message: message || "I am interested in this gig." }),
       });
       if (res.ok) setAppStatus("Success! Application submitted.");
       else setAppStatus("Failed to apply. You may have already applied.");
@@ -76,16 +74,11 @@ export default function GigDetailsPage({
       const res = await fetch("/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          gigId: id,
-          providerId: gig.providerId,
-          rating,
-          comment: reviewComment,
-        }),
+        body: JSON.stringify({ gigId: id, providerId: gig.providerId, rating, comment: reviewComment }),
       });
       const data = await res.json();
       if (res.ok) {
-        setReviewStatus("Success! Your review has been posted.");
+        setReviewStatus("Review posted successfully.");
         setReviewComment("");
       } else {
         setReviewStatus(data.error || "Failed to submit review.");
@@ -97,139 +90,196 @@ export default function GigDetailsPage({
     }
   }
 
-  if (loading)
+  if (loading) {
     return (
-      <div className="container pt-8 pb-12 text-center text-on-surface-variant">
-        Loading gig details...
+      <div className="pb-12">
+        <section className="container page-shell">
+          <div className="space-y-4">
+            <div className="kasi-card skeleton h-10 w-48" />
+            <div className="kasi-card skeleton h-64" />
+          </div>
+        </section>
       </div>
     );
-  if (!gig)
+  }
+
+  if (!gig) {
     return (
-      <div className="container pt-8 pb-12 text-center text-on-surface-variant">
-        Gig not found.
+      <div className="container pt-8 pb-12 text-center">
+        <p className="text-on-surface-variant mb-4">Gig not found.</p>
+        <Link href="/marketplace" className="btn btn-primary">Back to marketplace</Link>
       </div>
     );
+  }
 
   return (
-    <div className="container pt-8 pb-12 max-w-2xl mx-auto">
-      <Link
-        href="/marketplace"
-        className="text-sm text-primary hover:underline mb-6 inline-block"
-      >
-        ← Back to Gigs
-      </Link>
-
-      <div className="kasi-card">
-        <div className="flex gap-2 mb-3">
-          {gig.isUrgent && <span className="badge badge-danger">Urgent</span>}
-          <span className="badge badge-primary">
-            {gig.category.replace("_", " ")}
-          </span>
+    <div className="pb-12">
+      <section className="container page-shell">
+        <div className="mb-6">
+          <Link href="/marketplace" className="text-sm text-primary hover:underline">
+            ← Back to marketplace
+          </Link>
         </div>
 
-        <h1 className="font-headline text-3xl font-bold mb-2">{gig.title}</h1>
-        <p className="text-on-surface-variant text-sm mb-6">
-          Posted by {gig.providerName} {gig.isProviderVerified && "✓"} ·{" "}
-          {gig.location?.suburb}
-        </p>
+        <div className="page-hero animate-fade-in">
+          <div className="page-hero-grid">
+            <div className="page-hero-copy">
+              <div className="flex flex-wrap gap-2 mb-3">
+                <Eyebrow>{gig.category.replace("_", " ")}</Eyebrow>
+                {gig.isUrgent && <span className="badge badge-danger">Urgent</span>}
+                {gig.isProviderVerified && <span className="badge badge-success">Verified provider</span>}
+              </div>
+              <h1 className="page-hero-title mt-2 font-headline font-black text-on-background">
+                {gig.title}
+              </h1>
+              <p className="mt-2 text-sm text-outline">
+                Posted by {gig.providerName} · {gig.location?.suburb}, {gig.location?.city} · {formatRelativeTime(gig.createdAt)}
+              </p>
+              <p className="page-hero-description mt-4">{gig.description}</p>
+            </div>
 
-        <div className="bg-surface-container-low p-4 rounded-xl border border-outline-variant/30 mb-6 flex justify-between items-center flex-wrap gap-4">
-          <div>
-            <p className="text-xs text-outline mb-1">Pay</p>
-            <p className="font-bold text-xl text-primary">{gig.payDisplay}</p>
-          </div>
-          <div className="text-right">
-            <p className="text-xs text-outline mb-1">Applicants</p>
-            <p className="font-bold text-xl">
-              {gig.applicationCount} / {gig.slots}
-            </p>
+            <aside className="page-hero-aside">
+              <div className="kasi-card">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-outline">Pay</p>
+                <p className="mt-2 text-3xl font-black text-primary">{gig.payDisplay}</p>
+                <div className="mt-4 border-t border-outline-variant/30 pt-4 flex justify-between text-sm">
+                  <div>
+                    <p className="text-outline text-xs uppercase tracking-wide">Applied</p>
+                    <p className="font-bold text-on-background">{gig.applicationCount}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-outline text-xs uppercase tracking-wide">Slots</p>
+                    <p className="font-bold text-on-background">{gig.slots}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-outline text-xs uppercase tracking-wide">Open</p>
+                    <p className={`font-bold ${gig.slots - gig.applicationCount > 0 ? "text-success" : "text-danger"}`}>
+                      {Math.max(0, gig.slots - gig.applicationCount)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </aside>
           </div>
         </div>
+      </section>
 
-        <div className="mb-8 whitespace-pre-wrap text-on-background">
-          {gig.description}
-        </div>
+      <section className="container pb-12">
+        <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+          {/* Apply form */}
+          <div className="kasi-card">
+            {!isLoaded || !isSignedIn ? (
+              <div className="text-center py-8">
+                <p className="text-on-surface-variant mb-4">Sign in to apply for this gig.</p>
+                <Link href="/sign-in" className="btn btn-primary">Sign in</Link>
+              </div>
+            ) : appStatus ? (
+              <div className={`alert ${appStatus.includes("Success") ? "alert-success" : "alert-danger"}`}>
+                {appStatus}
+              </div>
+            ) : (
+              <>
+                <h2 className="font-headline text-xl font-bold mb-4">Apply for this gig</h2>
+                <form onSubmit={handleApply} className="flex flex-col gap-4">
+                  <div className="form-group">
+                    <label className="label" htmlFor="apply-message">Why are you a good fit?</label>
+                    <textarea
+                      id="apply-message"
+                      className="kasi-input"
+                      rows={3}
+                      placeholder="Optional — but a direct message increases your chances."
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-lg"
+                    disabled={applying}
+                  >
+                    {applying ? "Submitting…" : "Submit application"}
+                  </button>
+                </form>
+              </>
+            )}
 
-        {!isLoaded || !isSignedIn ? (
-          <div className="alert text-center">
-            <p className="mb-3">Please sign in to apply for this gig.</p>
-            <Link href="/sign-in" className="btn btn-primary">
-              Sign In
-            </Link>
-          </div>
-        ) : appStatus ? (
-          <div
-            className={`alert ${appStatus.includes("Success") ? "alert-success" : "alert-danger"}`}
-          >
-            {appStatus}
-          </div>
-        ) : (
-          <form
-            onSubmit={handleApply}
-            className="border-t border-outline-variant/30 pt-6 mt-4"
-          >
-            <h3 className="font-bold mb-3">Apply for this gig</h3>
-            <textarea
-              className="kasi-input mb-3"
-              rows={3}
-              placeholder="Why are you a good fit? (Optional)"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            <button
-              type="submit"
-              className="btn btn-primary w-full"
-              disabled={applying}
-            >
-              {applying ? "Submitting..." : "Submit Application"}
-            </button>
-          </form>
-        )}
-
-        {isLoaded && isSignedIn && (
-          <form
-            onSubmit={handleReviewSubmit}
-            className="border-t border-outline-variant/30 pt-6 mt-8"
-          >
-            <h3 className="font-bold mb-3">Rate this Provider</h3>
-            {reviewStatus && (
-              <div
-                className={`alert mb-3 ${reviewStatus.includes("Success") ? "alert-success" : "alert-danger"}`}
-              >
-                {reviewStatus}
+            {isLoaded && isSignedIn && (
+              <div className="mt-8 border-t border-outline-variant/30 pt-6">
+                <h3 className="font-bold mb-4">Rate this provider</h3>
+                {reviewStatus && (
+                  <div className={`alert mb-4 ${reviewStatus.includes("Success") || reviewStatus.includes("posted") ? "alert-success" : "alert-danger"}`}>
+                    {reviewStatus}
+                  </div>
+                )}
+                <form onSubmit={handleReviewSubmit} className="flex flex-col gap-4">
+                  <div className="form-group">
+                    <label className="label" htmlFor="rating">Rating</label>
+                    <select
+                      id="rating"
+                      className="kasi-input"
+                      value={rating}
+                      onChange={(e) => setRating(Number(e.target.value))}
+                    >
+                      {[5, 4, 3, 2, 1].map((num) => (
+                        <option key={num} value={num}>{num} star{num !== 1 ? "s" : ""}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="label" htmlFor="review-comment">Experience</label>
+                    <textarea
+                      id="review-comment"
+                      className="kasi-input"
+                      rows={2}
+                      placeholder="How was working with this provider?"
+                      value={reviewComment}
+                      onChange={(e) => setReviewComment(e.target.value)}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="btn btn-outline"
+                    disabled={submittingReview}
+                  >
+                    {submittingReview ? "Submitting…" : "Submit review"}
+                  </button>
+                </form>
               </div>
             )}
-            <div className="flex items-center gap-3 mb-3">
-              <label className="text-sm font-medium">Rating:</label>
-              <select
-                className="kasi-input py-1 px-3 w-auto"
-                value={rating}
-                onChange={(e) => setRating(Number(e.target.value))}
-              >
-                {[5, 4, 3, 2, 1].map((num) => (
-                  <option key={num} value={num}>
-                    {num} Stars
-                  </option>
-                ))}
-              </select>
+          </div>
+
+          {/* Sidebar */}
+          <aside className="flex flex-col gap-4">
+            <div className="surface-band">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline mb-3">
+                About the provider
+              </p>
+              <p className="font-semibold text-on-background">{gig.providerName}</p>
+              {gig.isProviderVerified && (
+                <span className="badge badge-success mt-2 inline-block">Verified</span>
+              )}
+              <p className="mt-3 text-sm text-on-surface-variant">
+                {gig.location?.suburb}, {gig.location?.city}
+              </p>
             </div>
-            <textarea
-              className="kasi-input mb-3"
-              rows={2}
-              placeholder="How was your experience?"
-              value={reviewComment}
-              onChange={(e) => setReviewComment(e.target.value)}
-            />
-            <button
-              type="submit"
-              className="btn btn-outline w-full"
-              disabled={submittingReview}
-            >
-              {submittingReview ? "Submitting..." : "Submit Review"}
-            </button>
-          </form>
-        )}
-      </div>
+
+            <div className="surface-band">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline mb-3">
+                Before you apply
+              </p>
+              <div className="space-y-2 text-sm text-on-surface-variant">
+                <p>Read the description in full — especially location and timing.</p>
+                <p>Only apply if you can genuinely commit to the gig.</p>
+                <p>Check verified status as a trust signal before meeting in person.</p>
+              </div>
+            </div>
+
+            <Link href="/marketplace" className="btn btn-outline text-center">
+              ← More gigs nearby
+            </Link>
+          </aside>
+        </div>
+      </section>
     </div>
   );
 }

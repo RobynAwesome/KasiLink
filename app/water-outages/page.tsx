@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
-interface Outage {
-  id: number;
-  suburb: string;
-  status: "dry" | "low_pressure" | "restored";
-  reportedAt: string;
-  reports: number;
-}
+import Link from "next/link";
+import {
+  EmptyStateCard,
+  Eyebrow,
+  MetricGrid,
+  SectionHeading,
+} from "@/components/ui/PagePrimitives";
 
 interface WaterAlert {
   _id: string;
@@ -29,43 +28,14 @@ function timeAgo(iso: string) {
 }
 
 export default function WaterOutagePage() {
-  const [outages, setOutages] = useState<Outage[]>([
-    {
-      id: 1,
-      suburb: "Khayelitsha Zone 2",
-      status: "dry",
-      reportedAt: "10 mins ago",
-      reports: 14,
-    },
-    {
-      id: 2,
-      suburb: "Soweto (Orlando West)",
-      status: "low_pressure",
-      reportedAt: "1 hour ago",
-      reports: 5,
-    },
-    {
-      id: 3,
-      suburb: "Tembisa",
-      status: "restored",
-      reportedAt: "2 hours ago",
-      reports: 0,
-    },
-  ]);
-
-  const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ suburb: "", issue: "dry" });
   const [loadStage, setLoadStage] = useState<number>(0);
   const [loadStatus, setLoadStatus] = useState<string>("Checking...");
   const [alerts, setAlerts] = useState<WaterAlert[]>([]);
   const [alertSuburb, setAlertSuburb] = useState("");
   const [loadingAlerts, setLoadingAlerts] = useState(true);
-  const activeAlertFilterCount = [alertSuburb].filter(Boolean).length;
-
-  const clearAlertFilter = () => {
-    setLoadingAlerts(true);
-    setAlertSuburb("");
-  };
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({ suburb: "", issue: "dry" });
+  const [reportStatus, setReportStatus] = useState("");
 
   useEffect(() => {
     const fetchStage = async () => {
@@ -80,12 +50,13 @@ export default function WaterOutagePage() {
         setLoadStatus("Status unavailable");
       }
     };
-    fetchStage();
-    const id = setInterval(fetchStage, 5 * 60 * 1000);
+    void fetchStage();
+    const id = setInterval(fetchStage, 300_000);
     return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
+    setLoadingAlerts(true);
     const params = new URLSearchParams();
     if (alertSuburb) params.set("suburb", alertSuburb);
     fetch(`/api/water-alerts?${params.toString()}`)
@@ -98,217 +69,264 @@ export default function WaterOutagePage() {
   const handleReport = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.suburb) return;
-
-    setOutages([
-      {
-        id: Date.now(),
-        suburb: form.suburb,
-        status: form.issue as "dry" | "low_pressure",
-        reportedAt: "Just now",
-        reports: 1,
-      },
-      ...outages,
-    ]);
-
+    setReportStatus(
+      `Outage reported for ${form.suburb}. Thank you for helping the community.`,
+    );
     setForm({ suburb: "", issue: "dry" });
     setShowForm(false);
   };
 
   return (
-    <div className="container pt-8 pb-12 max-w-3xl mx-auto">
-      <div
-        className={`kasi-card mb-6 border-2 ${loadStage > 0 ? "border-error bg-error-container/20" : "border-primary bg-primary-container/20"}`}
-      >
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">{loadStage > 0 ? "⚡" : "✅"}</span>
-          <div>
-            <p className="font-bold text-lg">{loadStatus}</p>
-            <p className="text-sm text-on-surface-variant">
-              Live Eskom status — updates every 5 minutes
-            </p>
-          </div>
-        </div>
-      </div>
+    <div className="pb-12">
+      <section className="container page-shell">
+        <div className="page-hero animate-fade-in">
+          <div className="page-hero-grid">
+            <div className="page-hero-copy">
+              <Eyebrow tone="danger">Water alerts</Eyebrow>
+              <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
+                Water outages and community pressure reports.
+              </h1>
+              <p className="page-hero-description">
+                Pipe bursts, dry taps, and low pressure affect dignity, health,
+                and work. Community alerts help residents see problems early and
+                plan around them together.
+              </p>
+              <div className="page-hero-actions">
+                <button
+                  className="btn btn-primary btn-lg"
+                  onClick={() => setShowForm((v) => !v)}
+                >
+                  {showForm ? "Cancel report" : "Report dry tap"}
+                </button>
+                <Link href="/community-status" className="btn btn-outline btn-lg">
+                  Full community status
+                </Link>
+              </div>
+            </div>
 
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-          <span className="inline-block mb-2 px-3 py-1 rounded-full bg-danger/20 text-danger font-semibold text-xs tracking-wider uppercase">
-            Live Tracker
-          </span>
-          <h1 className="font-headline text-3xl font-bold mb-2">
-            Water Outage Alerts
-          </h1>
-          <p className="text-on-surface-variant text-sm">
-            Community-reported dry taps and low pressure zones.
-          </p>
-        </div>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="btn btn-danger"
-        >
-          {showForm ? "Cancel" : "Report Dry Tap"}
-        </button>
-      </div>
-
-      {showForm && (
-        <form
-          onSubmit={handleReport}
-          className="kasi-card mb-8 animate-in fade-in slide-in-from-top-4 border-danger/50 bg-danger/5"
-        >
-          <h2 className="font-bold text-lg mb-4 text-danger">
-            Report an Outage
-          </h2>
-          <div className="flex flex-col gap-4">
-            <div>
-              <label htmlFor="outage-suburb" className="label">Location / Suburb</label>
-              <input
-                id="outage-suburb"
-                type="text"
-                className="kasi-input"
-                placeholder="e.g. Khayelitsha Site C"
-                value={form.suburb}
-                onChange={(e) => setForm({ ...form, suburb: e.target.value })}
-                required
+            <aside className="page-hero-aside">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
+                Power context
+              </p>
+              <MetricGrid
+                className="mt-4"
+                items={[
+                  {
+                    label: "Load-shedding stage",
+                    value: loadStage === 0 ? "None" : `Stage ${loadStage}`,
+                    helper: loadStage === 0 ? "No active cuts" : "Active load-shedding",
+                  },
+                  {
+                    label: "Power status",
+                    value: loadStage === 0 ? "Normal" : "Disrupted",
+                    helper: loadStatus,
+                  },
+                  {
+                    label: "Water alerts",
+                    value: loadingAlerts ? "—" : alerts.length,
+                    helper: "Community-reported outages",
+                  },
+                ]}
               />
-            </div>
-            <div>
-              <label htmlFor="outage-issue" className="label">Issue Type</label>
-              <select
-                id="outage-issue"
-                className="kasi-input"
-                value={form.issue}
-                onChange={(e) => setForm({ ...form, issue: e.target.value })}
-              >
-                <option value="dry">Completely Dry Taps</option>
-                <option value="low_pressure">Very Low Pressure</option>
-              </select>
-            </div>
-            <button type="submit" className="btn btn-danger self-end mt-2">
-              Submit Report
-            </button>
+            </aside>
           </div>
-        </form>
+        </div>
+      </section>
+
+      {reportStatus && (
+        <div className="container pb-4">
+          <div className="alert alert-success" role="status">
+            {reportStatus}
+          </div>
+        </div>
       )}
 
-      <div className="flex flex-col gap-3">
-        {outages.map((outage) => (
-          <div
-            key={outage.id}
-            className="kasi-card flex flex-col md:flex-row md:items-center justify-between gap-4"
+      {showForm && (
+        <section className="container pb-6">
+          <form
+            onSubmit={handleReport}
+            className="kasi-card animate-fade-in border-error/40"
           >
-            <div className="flex items-start gap-4">
-              <div className="text-3xl shrink-0 mt-1">
-                {outage.status === "dry"
-                  ? "Dry"
-                  : outage.status === "low_pressure"
-                    ? "Low"
-                    : "OK"}
+            <SectionHeading
+              eyebrow={<Eyebrow tone="danger">Report an outage</Eyebrow>}
+              title="Help your neighbourhood plan around disruptions"
+              description="Add your suburb and the type of problem so others can see what is happening nearby."
+            />
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="form-group">
+                <label htmlFor="outage-suburb" className="label">
+                  Location / suburb
+                </label>
+                <input
+                  id="outage-suburb"
+                  type="text"
+                  className="kasi-input"
+                  placeholder="e.g. Khayelitsha Site C"
+                  value={form.suburb}
+                  onChange={(e) => setForm({ ...form, suburb: e.target.value })}
+                  required
+                />
               </div>
-              <div>
-                <h3 className="font-bold text-lg text-on-background">
-                  {outage.suburb}
-                </h3>
-                <div className="flex items-center gap-2 mt-1">
-                  <span
-                    className={`text-xs px-2 py-0.5 rounded-full font-bold ${
-                      outage.status === "dry"
-                        ? "bg-danger text-on-danger"
-                        : outage.status === "low_pressure"
-                          ? "bg-warning text-black"
-                          : "bg-success text-on-success"
-                    }`}
-                  >
-                    {outage.status === "dry"
-                      ? "Dry Taps"
-                      : outage.status === "low_pressure"
-                        ? "Low Pressure"
-                        : "Restored"}
-                  </span>
-                  <span className="text-xs text-outline">
-                    {outage.reportedAt}
-                  </span>
-                </div>
+              <div className="form-group">
+                <label htmlFor="outage-issue" className="label">
+                  Issue type
+                </label>
+                <select
+                  id="outage-issue"
+                  className="kasi-input"
+                  value={form.issue}
+                  onChange={(e) => setForm({ ...form, issue: e.target.value })}
+                >
+                  <option value="dry">Completely dry taps</option>
+                  <option value="low_pressure">Very low pressure</option>
+                  <option value="pipe_burst">Pipe burst</option>
+                  <option value="maintenance">Scheduled maintenance</option>
+                </select>
               </div>
             </div>
+            <div className="mt-4 flex gap-3">
+              <button type="submit" className="btn btn-primary">
+                Submit report
+              </button>
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={() => setShowForm(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </section>
+      )}
 
-            {outage.status !== "restored" && (
-              <div className="flex items-center gap-2 md:self-end bg-surface-variant px-3 py-2 rounded-lg shrink-0">
-                <span className="text-sm font-bold text-danger">
-                  {outage.reports}
-                </span>
-                <span className="text-xs text-on-surface-variant">reports</span>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* Scheduled Outages Section */}
-      <section className="mt-10">
-        <h2 className="font-headline text-2xl font-bold mb-4">
-          Scheduled Outages
-        </h2>
-        <p className="text-on-surface-variant text-sm mb-4">
-          Water and electricity outages reported by the community. Filter by
-          suburb to see your area.
-        </p>
-        <div className="flex gap-3 mb-4 flex-wrap">
-          <input
-            className="kasi-input max-w-[180px]"
-            placeholder="Filter by suburb"
-            value={alertSuburb}
-            onChange={(e) => {
-              setLoadingAlerts(true);
-              setAlertSuburb(e.target.value);
-            }}
+      <section className="container pb-10">
+        <div className="filter-shell">
+          <SectionHeading
+            eyebrow={<Eyebrow tone="neutral">Filter alerts</Eyebrow>}
+            title="Community water outage reports"
+            description="Filter by suburb to see what is happening close to home."
           />
-          <button className="btn btn-outline btn-sm" onClick={clearAlertFilter}>
-            Clear filter
-          </button>
-        </div>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {activeAlertFilterCount > 0 && (
-            <span className="badge badge-info">{activeAlertFilterCount} active filters</span>
-          )}
+          <div className="flex flex-wrap gap-3">
+            <input
+              className="kasi-input max-w-[220px]"
+              placeholder="Filter by suburb"
+              value={alertSuburb}
+              onChange={(e) => setAlertSuburb(e.target.value)}
+              aria-label="Filter by suburb"
+            />
+            <button
+              className="btn btn-outline"
+              onClick={() => setAlertSuburb("")}
+              disabled={!alertSuburb}
+            >
+              Clear
+            </button>
+          </div>
           {alertSuburb && (
-            <span className="badge badge-secondary">Suburb: {alertSuburb}</span>
+            <div className="flex gap-2">
+              <span className="badge badge-secondary">Suburb: {alertSuburb}</span>
+            </div>
           )}
         </div>
+      </section>
+
+      <section className="container pb-12">
         <p className="sr-only" role="status" aria-live="polite">
           {loadingAlerts
-            ? "Loading outage alerts"
-            : alerts.length === 0
-              ? "No outage alerts found"
-              : `${alerts.length} outage alerts loaded`}
+            ? "Loading water alerts"
+            : `${alerts.length} water alerts loaded`}
         </p>
+
         {loadingAlerts ? (
-          <p className="text-on-surface-variant">Loading outage reports...</p>
-        ) : alerts.length === 0 ? (
-          <div className="kasi-card text-center">
-            <p className="text-on-surface-variant">
-              No reported outages in this area.
-            </p>
-            {alertSuburb && (
-              <button className="btn btn-outline btn-sm mt-3" onClick={clearAlertFilter}>
-                Reset filter
-              </button>
-            )}
+          <div className="flex flex-col gap-4">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="kasi-card skeleton h-24" />
+            ))}
           </div>
+        ) : alerts.length === 0 ? (
+          <EmptyStateCard
+            title="No water alerts in this area"
+            description="No reported outages right now. Report a dry tap if your area is affected so others can see it."
+            action={
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setAlertSuburb("");
+                  setShowForm(true);
+                }}
+              >
+                Report an outage
+              </button>
+            }
+            secondary={
+              alertSuburb ? (
+                <button
+                  className="btn btn-outline"
+                  onClick={() => setAlertSuburb("")}
+                >
+                  Remove suburb filter
+                </button>
+              ) : undefined
+            }
+          />
         ) : (
           <div className="flex flex-col gap-4">
             {alerts.map((alert) => (
-              <div key={alert._id} className="kasi-card border-l-4 border-error">
-                <h3 className="font-bold">{alert.title}</h3>
-                <p className="text-sm text-on-surface-variant mt-1">
-                  {alert.description}
-                </p>
-                <p className="text-xs text-outline mt-2">
+              <article
+                key={alert._id}
+                className="kasi-card border-l-4 border-error/60"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-on-background">{alert.title}</h3>
+                    <p className="mt-1 text-sm leading-7 text-on-surface-variant">
+                      {alert.description}
+                    </p>
+                  </div>
+                  <span className="badge badge-danger shrink-0">Alert</span>
+                </div>
+                <p className="mt-3 text-[11px] uppercase tracking-[0.16em] text-outline">
                   {alert.suburb} · {timeAgo(alert.createdAt)}
                 </p>
-              </div>
+              </article>
             ))}
           </div>
         )}
+      </section>
+
+      <section className="container pb-12">
+        <div className="surface-band">
+          <SectionHeading
+            eyebrow={<Eyebrow tone="neutral">Context</Eyebrow>}
+            title="Why water alerts matter for local work"
+            description="Water outages affect dignity, health, and the ability to work. Knowing what is happening in your area helps you plan around disruptions before they cost you time or money."
+            align="center"
+          />
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              {
+                title: "Who is responsible?",
+                body: "Municipalities deliver water and sanitation services. Contact your local municipality first when you have a service interruption.",
+              },
+              {
+                title: "Free basic water",
+                body: "Government provides free basic services to poor households where available. If you are not receiving this, contact your ward councillor.",
+              },
+              {
+                title: "Report and coordinate",
+                body: "Community alerts help others avoid unsafe or disrupted areas. The forum is also a good place to share real-time water and safety updates.",
+              },
+            ].map((item) => (
+              <article key={item.title} className="kasi-card h-full">
+                <h3 className="text-base font-bold">{item.title}</h3>
+                <p className="mt-2 text-sm leading-7 text-on-surface-variant">
+                  {item.body}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
       </section>
     </div>
   );

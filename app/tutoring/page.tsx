@@ -2,6 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import {
+  EmptyStateCard,
+  Eyebrow,
+  MetricGrid,
+  SectionHeading,
+} from "@/components/ui/PagePrimitives";
 
 interface Session {
   _id: string;
@@ -17,24 +23,51 @@ interface Session {
 }
 
 const SUBJECTS = [
-  "Mathematics", "Physical Science", "English", "Accounting",
-  "Life Sciences", "Geography", "History", "Business Studies",
-  "IsiXhosa", "IsiZulu", "Afrikaans",
+  "Mathematics",
+  "Physical Science",
+  "English",
+  "Accounting",
+  "Life Sciences",
+  "Geography",
+  "History",
+  "Business Studies",
+  "IsiXhosa",
+  "IsiZulu",
+  "Afrikaans",
 ];
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-ZA", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+}
+
+function formatTime(iso: string) {
+  return new Date(iso).toLocaleTimeString("en-ZA", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
 export default function TutoringPage() {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
   const [subject, setSubject] = useState("");
   const [suburb, setSuburb] = useState("");
-  const [locationFilter, setLocationFilter] = useState<"all" | "online" | "physical">(
-    "all",
-  );
+  const [locationFilter, setLocationFilter] = useState<
+    "all" | "online" | "physical"
+  >("all");
   const [sortBy, setSortBy] = useState<"soonest" | "latest">("soonest");
-  const activeFilterCount = [subject, suburb, locationFilter !== "all" ? locationFilter : ""].filter(Boolean).length;
+
+  const activeFilterCount = [
+    subject,
+    suburb,
+    locationFilter !== "all" ? locationFilter : "",
+  ].filter(Boolean).length;
 
   const clearFilters = () => {
-    setLoading(true);
     setSubject("");
     setSuburb("");
     setLocationFilter("all");
@@ -42,6 +75,7 @@ export default function TutoringPage() {
   };
 
   useEffect(() => {
+    setLoading(true);
     const params = new URLSearchParams();
     if (subject) params.set("subject", subject);
     if (suburb) params.set("suburb", suburb);
@@ -56,184 +90,300 @@ export default function TutoringPage() {
     const filtered =
       locationFilter === "all"
         ? sessions
-        : sessions.filter((session) => session.location === locationFilter);
-
-    const sorted = [...filtered].sort((a, b) => {
+        : sessions.filter((s) => s.location === locationFilter);
+    return [...filtered].sort((a, b) => {
       const aTime = new Date(a.date).getTime();
       const bTime = new Date(b.date).getTime();
       return sortBy === "latest" ? bTime - aTime : aTime - bTime;
     });
-
-    return sorted;
   }, [sessions, locationFilter, sortBy]);
 
-  const totalSessions = sessions.length;
-  const onlineCount = sessions.filter((session) => session.location === "online").length;
-  const filteredCount = visibleSessions.length;
-
-  function formatDate(iso: string) {
-    return new Date(iso).toLocaleDateString("en-ZA", {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-    });
-  }
-
-  function formatTime(iso: string) {
-    return new Date(iso).toLocaleTimeString("en-ZA", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  }
+  const onlineCount = sessions.filter((s) => s.location === "online").length;
 
   return (
-    <div className="container max-w-screen-md pt-8 pb-12">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="font-headline text-3xl font-bold">Find a Tutor</h1>
-          <p className="text-on-surface-variant text-sm mt-1">
-            Browse available tutoring sessions in your area.
+    <div className="pb-12">
+      <section className="container page-shell">
+        <div className="page-hero animate-fade-in">
+          <div className="page-hero-grid">
+            <div className="page-hero-copy">
+              <Eyebrow>Tutoring</Eyebrow>
+              <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
+                Skills and tutoring sessions, close to home.
+              </h1>
+              <p className="page-hero-description">
+                KasiLink connects learners with local tutors across all major
+                subjects. Skills development is the pathway from informal gigs
+                to sustained earning — this feature supports both.
+              </p>
+              <div className="page-hero-actions">
+                <Link href="/tutoring/new" className="btn btn-primary btn-lg">
+                  Offer tutoring
+                </Link>
+                <Link href="/marketplace" className="btn btn-outline btn-lg">
+                  Browse gigs
+                </Link>
+              </div>
+            </div>
+
+            <aside className="page-hero-aside">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
+                Session stats
+              </p>
+              <MetricGrid
+                className="mt-4"
+                items={[
+                  {
+                    label: "Available sessions",
+                    value: loading ? "—" : sessions.length,
+                    helper: "Across all subjects and locations",
+                  },
+                  {
+                    label: "Online sessions",
+                    value: loading ? "—" : onlineCount,
+                    helper: "No travel required",
+                  },
+                  {
+                    label: "PYEI participants",
+                    value: "156K+",
+                    helper: "SA youth in employment programmes",
+                  },
+                ]}
+              />
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section className="container pb-8">
+        <div className="filter-shell">
+          <SectionHeading
+            eyebrow={<Eyebrow tone="neutral">Find a session</Eyebrow>}
+            title="Filter by subject, location, and suburb"
+            description="Narrow to what you need — or browse everything available in your area."
+          />
+
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="form-group">
+              <label htmlFor="tutoring-subject" className="label">
+                Subject
+              </label>
+              <select
+                id="tutoring-subject"
+                className="kasi-input"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+              >
+                <option value="">All subjects</option>
+                {SUBJECTS.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="tutoring-suburb" className="label">
+                Suburb
+              </label>
+              <input
+                id="tutoring-suburb"
+                className="kasi-input"
+                placeholder="e.g. Soweto"
+                value={suburb}
+                onChange={(e) => setSuburb(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="tutoring-location" className="label">
+                Location type
+              </label>
+              <select
+                id="tutoring-location"
+                className="kasi-input"
+                value={locationFilter}
+                onChange={(e) =>
+                  setLocationFilter(
+                    e.target.value as "all" | "online" | "physical",
+                  )
+                }
+              >
+                <option value="all">All locations</option>
+                <option value="online">Online only</option>
+                <option value="physical">In-person only</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="tutoring-sort" className="label">
+                Sort by
+              </label>
+              <select
+                id="tutoring-sort"
+                className="kasi-input"
+                value={sortBy}
+                onChange={(e) =>
+                  setSortBy(e.target.value as "soonest" | "latest")
+                }
+              >
+                <option value="soonest">Soonest first</option>
+                <option value="latest">Latest first</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {activeFilterCount > 0 && (
+              <>
+                <span className="badge badge-info">
+                  {activeFilterCount} active filter
+                  {activeFilterCount !== 1 ? "s" : ""}
+                </span>
+                {subject && (
+                  <span className="badge badge-secondary">
+                    Subject: {subject}
+                  </span>
+                )}
+                {suburb && (
+                  <span className="badge badge-secondary">
+                    Suburb: {suburb}
+                  </span>
+                )}
+                {locationFilter !== "all" && (
+                  <span className="badge badge-secondary">
+                    Location: {locationFilter}
+                  </span>
+                )}
+                <button
+                  className="btn btn-outline btn-sm"
+                  onClick={clearFilters}
+                >
+                  Clear all
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="container pb-12">
+        <p className="sr-only" role="status" aria-live="polite">
+          {loading
+            ? "Loading tutoring sessions"
+            : `${visibleSessions.length} sessions loaded`}
+        </p>
+
+        {loading ? (
+          <div className="flex flex-col gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="kasi-card skeleton h-28" />
+            ))}
+          </div>
+        ) : visibleSessions.length === 0 ? (
+          <EmptyStateCard
+            title="No sessions available"
+            description="No tutoring sessions match your filters right now. Be the first to offer your skills."
+            action={
+              <Link href="/tutoring/new" className="btn btn-primary">
+                Offer tutoring
+              </Link>
+            }
+            secondary={
+              activeFilterCount > 0 ? (
+                <button className="btn btn-outline" onClick={clearFilters}>
+                  Reset filters
+                </button>
+              ) : undefined
+            }
+          />
+        ) : (
+          <div className="flex flex-col gap-4">
+            {visibleSessions.map((s, index) => (
+              <Link
+                key={s._id}
+                href={`/tutoring/${s._id}`}
+                className="kasi-card animate-slide-up no-underline"
+                style={{ animationDelay: `${index * 40}ms` }}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="mb-2 flex flex-wrap gap-2">
+                      <span className="badge badge-primary">{s.subject}</span>
+                      <span className="badge badge-secondary">{s.grade}</span>
+                      {s.location === "online" ? (
+                        <span className="badge badge-info">Online</span>
+                      ) : (
+                        <span className="badge badge-secondary">
+                          {s.suburb}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="text-lg font-bold text-on-background">
+                      {s.subject} — {s.grade}
+                    </h3>
+                    <p className="mt-1 text-sm text-on-surface-variant">
+                      with {s.tutorName}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-3 flex flex-wrap gap-4 border-t border-outline-variant/25 pt-3 text-xs text-outline">
+                  <span>{formatDate(s.date)}</span>
+                  <span>·</span>
+                  <span>{formatTime(s.date)}</span>
+                  <span>·</span>
+                  <span>{s.duration} min</span>
+                  {s.reference && (
+                    <>
+                      <span>·</span>
+                      <span>Ref: {s.reference}</span>
+                    </>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className="container pb-12">
+        <div className="surface-band">
+          <SectionHeading
+            eyebrow={<Eyebrow tone="neutral">Youth skills context</Eyebrow>}
+            title="Skills development as the pathway to sustained earning"
+            description="Government programmes like PYEI and Higher Health create the pathway from informal gigs to formal work. Tutoring on KasiLink supports that journey."
+            align="center"
+          />
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              {
+                label: "PYEI participants",
+                value: "156,587",
+                helper: "Young people in workplace experience (2020–2024)",
+              },
+              {
+                label: "NSF digital skills fund",
+                value: "R800M",
+                helper: "Allocated 2025 to close the AI and digital skills gap",
+              },
+              {
+                label: "Higher Health reach",
+                value: "250K",
+                helper: "Target for civic skills programme in the next 2 years",
+              },
+            ].map((item) => (
+              <article key={item.label} className="metric-card text-center">
+                <p className="metric-label">{item.label}</p>
+                <p className="metric-value">{item.value}</p>
+                <p className="metric-helper">{item.helper}</p>
+              </article>
+            ))}
+          </div>
+          <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-on-surface-variant">
+            KasiLink is not a jobs board — it is a pathway platform. Users may
+            start with informal gigs while building skills through PYEI or
+            Higher Health. This tutoring feature bridges immediate income and
+            longer-term skills.
           </p>
         </div>
-        <Link href="/tutoring/new" className="btn btn-primary btn-sm">
-          Offer Tutoring
-        </Link>
-      </div>
-
-      <div className="flex gap-3 mb-6 flex-wrap">
-        <select
-          className="kasi-input max-w-[200px]"
-          value={subject}
-          onChange={(e) => {
-            setLoading(true);
-            setSubject(e.target.value);
-          }}
-        >
-          <option value="">All subjects</option>
-          {SUBJECTS.map((s) => (
-            <option key={s} value={s}>{s}</option>
-          ))}
-        </select>
-        <input
-          className="kasi-input max-w-[180px]"
-          placeholder="Filter by suburb"
-          value={suburb}
-          onChange={(e) => {
-            setLoading(true);
-            setSuburb(e.target.value);
-          }}
-        />
-        <select
-          className="kasi-input max-w-[180px]"
-          value={locationFilter}
-          onChange={(e) =>
-            setLocationFilter(e.target.value as "all" | "online" | "physical")
-          }
-        >
-          <option value="all">All locations</option>
-          <option value="online">Online</option>
-          <option value="physical">Physical</option>
-        </select>
-        <select
-          className="kasi-input max-w-[180px]"
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as "soonest" | "latest")}
-        >
-          <option value="soonest">Soonest first</option>
-          <option value="latest">Latest first</option>
-        </select>
-        <button className="btn btn-outline btn-sm" onClick={clearFilters}>
-          Clear filters
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-        <div className="kasi-card bg-surface-container-low text-center">
-          <p className="text-xs uppercase tracking-wider text-outline mb-1">Total Sessions</p>
-          <p className="text-lg font-bold">{totalSessions}</p>
-        </div>
-        <div className="kasi-card bg-surface-container-low text-center">
-          <p className="text-xs uppercase tracking-wider text-outline mb-1">Online</p>
-          <p className="text-lg font-bold">{onlineCount}</p>
-        </div>
-        <div className="kasi-card bg-surface-container-low text-center">
-          <p className="text-xs uppercase tracking-wider text-outline mb-1">Filtered</p>
-          <p className="text-lg font-bold">{filteredCount}</p>
-        </div>
-      </div>
-
-      <div className="flex flex-wrap gap-2 mb-6">
-        {activeFilterCount > 0 && (
-          <span className="badge badge-info">{activeFilterCount} active filters</span>
-        )}
-        {subject && <span className="badge badge-secondary">Subject: {subject}</span>}
-        {suburb && <span className="badge badge-secondary">Suburb: {suburb}</span>}
-        {locationFilter !== "all" && (
-          <span className="badge badge-secondary">
-            Location: {locationFilter}
-          </span>
-        )}
-        <span className="badge badge-info">Sort: {sortBy}</span>
-      </div>
-
-      <p className="sr-only" role="status" aria-live="polite">
-        {loading
-          ? "Loading tutoring sessions"
-          : visibleSessions.length === 0
-            ? "No tutoring sessions found"
-            : `${visibleSessions.length} tutoring sessions loaded`}
-      </p>
-
-      {loading ? (
-        <p className="text-on-surface-variant text-center py-8">Loading sessions...</p>
-      ) : visibleSessions.length === 0 ? (
-        <div className="kasi-card text-center">
-          <p className="text-on-surface-variant mb-3">No tutoring sessions available right now.</p>
-          {activeFilterCount > 0 && (
-            <button className="btn btn-outline btn-sm mb-3" onClick={clearFilters}>
-              Reset filters
-            </button>
-          )}
-          <Link href="/tutoring/new" className="btn btn-primary btn-sm">
-            Offer Your Skills
-          </Link>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-4">
-          {visibleSessions.map((s) => (
-            <Link key={s._id} href={`/tutoring/${s._id}`} className="kasi-card hover:border-primary/50 transition-colors no-underline">
-              <div className="flex items-start justify-between gap-3 mb-2">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                      {s.subject}
-                    </span>
-                    <span className="bg-surface-container text-on-surface-variant text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                      {s.grade}
-                    </span>
-                  </div>
-                  <h2 className="font-bold text-lg text-on-surface">
-                    {s.subject} — {s.grade}
-                  </h2>
-                  <p className="text-sm text-on-surface-variant">with {s.tutorName}</p>
-                </div>
-                <span className="text-xs text-on-surface-variant shrink-0 bg-surface-container px-2 py-1 rounded">
-                  {s.location === "online" ? "Online" : s.suburb}
-                </span>
-              </div>
-              <div className="flex gap-4 text-xs text-outline flex-wrap mt-3">
-                <span>{formatDate(s.date)}</span>
-                <span>·</span>
-                <span>{formatTime(s.date)}</span>
-                <span>·</span>
-                <span>{s.duration} min</span>
-                <span>·</span>
-                <span>Ref: {s.reference}</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      )}
+      </section>
     </div>
   );
 }

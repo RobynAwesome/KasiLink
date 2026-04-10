@@ -16,9 +16,9 @@ export default async function HomePage() {
   const gigs = await getRecentGigs();
 
   const heroStats = [
-    { label: "Average travel radius", value: "5 km", helper: "Keep transport costs low" },
-    { label: "Community trust signal", value: "Verified", helper: "Providers and reviews surface early" },
-    { label: "Access model", value: "Phone-first", helper: "Built for quick mobile use" },
+    { label: "SA unemployment", value: "31.4%", helper: "Proximity and speed reduce the gap" },
+    { label: "Youth without work", value: "57%", helper: "The core reality this app is built around" },
+    { label: "CV required", value: "0", helper: "Local ability and speed come first" },
   ];
 
   const signalCards = [
@@ -81,14 +81,16 @@ export default async function HomePage() {
         <div className="page-hero animate-fade-in">
           <div className="page-hero-grid">
             <div className="page-hero-copy">
-              <Eyebrow>Township-first work network</Eyebrow>
+              <Eyebrow>South Africa&apos;s Township Platform</Eyebrow>
               <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
-                Local gigs, trusted people, and live community context.
+                Local gigs.{" "}
+                <span className="text-primary">Near you.</span>{" "}
+                Right now.
               </h1>
               <p className="page-hero-description">
-                KasiLink is built around neighbourhood distance, community trust,
-                and the daily reality of water and power disruption. Find work,
-                post urgent jobs, and coordinate without the usual admin drag.
+                KasiLink is a township-first work network built around proximity,
+                trust, and real-time local conditions. Find work, post urgent
+                jobs, and coordinate without the usual distance and admin overhead.
               </p>
               <div className="page-hero-actions">
                 <Link href="/marketplace" className="btn btn-primary btn-lg">
@@ -110,8 +112,8 @@ export default async function HomePage() {
                   Work should start closer to home.
                 </p>
                 <p className="mt-2 text-sm leading-7 text-on-surface-variant">
-                  The product UI prioritizes quick scanning, strong actions, and
-                  trust cues before decorative complexity.
+                  SA is in recovery — but township residents need tools that
+                  meet them where they are now. No CV. No commute. Just nearby work.
                 </p>
               </div>
             </aside>
@@ -124,8 +126,8 @@ export default async function HomePage() {
           items={[
             { label: "SA unemployment", value: "31.4%", helper: "Proof that proximity matters" },
             { label: "Youth without work", value: "57%", helper: "A core reality the app is built around" },
-            { label: "CV required", value: "0", helper: "Focus on local ability and speed" },
-            { label: "Primary mode", value: "Mobile", helper: "Fast access on lower-end devices" },
+            { label: "Average gig distance", value: "5 km", helper: "Keep transport costs and time low" },
+            { label: "CV required", value: "0", helper: "Local ability and speed come first" },
           ]}
         />
       </section>
