@@ -109,8 +109,9 @@ export default function ProfilePage() {
           </div>
 
           {loading ? (
-            <div className="text-center p-10 text-on-surface-variant">
-              Loading your activity…
+            <div className="grid grid-cols-1 gap-8">
+              <div className="kasi-card skeleton h-48" aria-hidden="true" />
+              <div className="kasi-card skeleton h-48" aria-hidden="true" />
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-8">
@@ -150,13 +151,13 @@ export default function ProfilePage() {
           </div>
 
           <div className="kasi-card">
-            <h3 className="font-bold mb-3">Status Snapshot</h3>
-            <MetricGrid
-              items={[
-                { label: "Applications", value: applications.length },
-                { label: "Posted gigs", value: postedGigs.length },
-              ]}
-            />
+            <h3 className="font-bold mb-3">Your trust status</h3>
+            <div className="space-y-2 text-sm text-on-surface-variant">
+              <p>Build your reputation by completing gigs, getting reviews, and keeping your profile up to date.</p>
+              <Link href="/verified" className="inline-block mt-2 text-sm font-semibold text-primary">
+                View verified providers →
+              </Link>
+            </div>
           </div>
         </aside>
       </div>
