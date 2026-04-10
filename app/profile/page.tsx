@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ApplicationsSection from "@/components/profile/ApplicationsSection";
 import PostedGigsSection from "@/components/profile/PostedGigsSection";
+import { Eyebrow, MetricGrid } from "@/components/ui/PagePrimitives";
 
 interface Application {
   _id: string;
@@ -51,7 +52,31 @@ export default function ProfilePage() {
   if (!isLoaded || !isSignedIn) return null;
 
   return (
-    <div className="container pt-8 pb-12">
+    <div className="container page-shell">
+      <section className="page-hero animate-fade-in mb-8">
+        <div className="page-hero-grid">
+          <div className="page-hero-copy">
+            <Eyebrow>My profile</Eyebrow>
+            <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
+              Track your work loop from one dashboard.
+            </h1>
+            <p className="page-hero-description">
+              Follow your applications, manage posted gigs, and keep your
+              reputation moving in the same direction as your neighbourhood work.
+            </p>
+          </div>
+          <aside className="page-hero-aside">
+            <MetricGrid
+              items={[
+                { label: "Applications", value: applications.length, helper: "Submitted as a seeker" },
+                { label: "Posted gigs", value: postedGigs.length, helper: "Created from your side of the marketplace" },
+                { label: "Account", value: "Active", helper: "Ready for new work or new posts" },
+              ]}
+            />
+          </aside>
+        </div>
+      </section>
+
       <div className="grid grid-cols-1 xl:grid-cols-[1.25fr_0.75fr] gap-8">
         <div>
           <div className="kasi-card mb-8 flex flex-wrap items-center gap-5">
@@ -66,9 +91,9 @@ export default function ProfilePage() {
               </div>
             )}
             <div className="flex-1">
-              <h1 className="mb-1">
+              <h2 className="mb-1 text-2xl font-bold">
                 {user.fullName ?? user.username ?? "Your Profile"}
-              </h1>
+              </h2>
               <p className="text-on-surface-variant text-sm">
                 {user.primaryPhoneNumber?.phoneNumber ??
                   user.primaryEmailAddress?.emailAddress ??
@@ -126,20 +151,12 @@ export default function ProfilePage() {
 
           <div className="kasi-card">
             <h3 className="font-bold mb-3">Status Snapshot</h3>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-xl bg-surface-container-low p-3">
-                <div className="text-xs text-outline mb-1">Applications</div>
-                <div className="text-2xl font-headline font-bold">
-                  {applications.length}
-                </div>
-              </div>
-              <div className="rounded-xl bg-surface-container-low p-3">
-                <div className="text-xs text-outline mb-1">Posted gigs</div>
-                <div className="text-2xl font-headline font-bold">
-                  {postedGigs.length}
-                </div>
-              </div>
-            </div>
+            <MetricGrid
+              items={[
+                { label: "Applications", value: applications.length },
+                { label: "Posted gigs", value: postedGigs.length },
+              ]}
+            />
           </div>
         </aside>
       </div>

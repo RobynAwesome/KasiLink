@@ -1,0 +1,9 @@
+{
+  "alwaysUpdateLinks": true,
+  "attachmentFolderPath": "Structure/Details/clarifying-pictures",
+  "newLinkFormat": "relative",
+  "readableLineLength": false,
+  "showInlineTitle": false,
+  "strictLineBreaks": false,
+  "useMarkdownLinks": true
+}

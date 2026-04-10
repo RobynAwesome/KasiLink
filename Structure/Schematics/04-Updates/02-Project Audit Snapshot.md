@@ -3,6 +3,8 @@ title: Project Audit Snapshot
 created: 2026-04-06
 updated: 2026-04-06
 author: Codex
+aliases:
+  - Project Audit Snapshot
 tags:
   - updates
   - audit

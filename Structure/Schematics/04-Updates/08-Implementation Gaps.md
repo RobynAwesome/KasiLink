@@ -3,6 +3,8 @@ title: Implementation Gaps
 created: 2026-04-06
 updated: 2026-04-06
 author: Codex
+aliases:
+  - Implementation Gaps
 tags:
   - updates
   - gaps
@@ -23,10 +25,10 @@ This note tracks the current implementation gaps that still matter after the Sch
 
 | Area | Status | Notes |
 | --- | --- | --- |
-| Logger | Resolved this pass | [../../lib/logger.ts](../../lib/logger.ts) now exists and is wired into community-calendar, water-alerts, and spotlight API routes |
+| Logger | Resolved this pass | [../../../lib/logger.ts](../../../lib/logger.ts) now exists and is wired into community-calendar, water-alerts, and spotlight API routes |
 | Test coverage | Open | `tests/jobs.test.ts` exists, but there is no broad route/API safety net yet |
 | Missing API surfaces | Historical only | Legacy notes refer to `app/api/community-status/route.ts`, `app/api/community-events/route.ts`, and `app/api/business-spotlight/route.ts`, but those names are consolidation history rather than current route owners |
-| Missing create flows | Resolved this pass | [../../app/spotlight/new/page.tsx](../../app/spotlight/new/page.tsx) and [../../app/community-calendar/new/page.tsx](../../app/community-calendar/new/page.tsx) now back the live CTAs |
+| Missing create flows | Resolved this pass | [../../../app/spotlight/new/page.tsx](../../../app/spotlight/new/page.tsx) and [../../../app/community-calendar/new/page.tsx](../../../app/community-calendar/new/page.tsx) now back the live CTAs |
 | Route placement cleanup | Open | `app/auth/route.ts` should remain documented as a compatibility alias until the webhook surface is fully consolidated under `app/api/**/route.ts` |
 
 ## Active Gaps Only

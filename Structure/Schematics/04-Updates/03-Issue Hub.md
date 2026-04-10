@@ -3,6 +3,8 @@ title: Issue Hub
 created: 2026-04-06
 updated: 2026-04-06
 author: Codex
+aliases:
+  - Issue Hub
 tags:
   - updates
   - issues

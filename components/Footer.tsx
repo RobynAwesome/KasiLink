@@ -40,25 +40,57 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-outline-variant/30 bg-surface-container-low pt-10 pb-6 mt-auto border-t">
+    <footer className="mt-auto border-t border-outline-variant/30 bg-surface-container-low pt-12 pb-24 md:pb-6">
       <div className="container">
+        <div className="mb-8 grid gap-4 md:grid-cols-[1.2fr_0.8fr]">
+          <div className="surface-band">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
+              Built For Real Neighbourhood Work
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <span className="badge badge-primary">Nearby gigs</span>
+              <span className="badge badge-secondary">Community trust</span>
+              <span className="badge badge-info">Utility-aware planning</span>
+            </div>
+          </div>
+          <div className="surface-band">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
+              Fast Routes
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link href="/marketplace" className="btn btn-outline btn-sm">
+                Browse gigs
+              </Link>
+              <Link href="/gigs/new" className="btn btn-primary btn-sm">
+                Post work
+              </Link>
+            </div>
+          </div>
+        </div>
+
         {/* Top row */}
         <div className="gap-8 mb-8 grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
             <Link
               href="/"
-              className="gap-2 mb-3 inline-flex items-center no-underline"
+              className="mb-3 inline-flex items-center gap-3 no-underline"
             >
-              <span className="w-7 h-7 rounded-md bg-primary text-on-primary flex items-center justify-center">
+              <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary text-on-primary shadow-[0_10px_24px_rgba(69,149,192,0.35)]">
                 <ZapIcon />
               </span>
-              <span className="font-bold text-lg text-on-background tracking-tight">
-                Kasi<span className="text-primary">Link</span>
+              <span>
+                <span className="block text-lg font-black tracking-tight text-on-background">
+                  Kasi<span className="text-primary">Link</span>
+                </span>
+                <span className="block text-[10px] uppercase tracking-[0.22em] text-outline">
+                  South Africa
+                </span>
               </span>
             </Link>
             <p className="text-sm text-on-surface-variant max-w-[28rem] leading-[1.65]">
               Connecting township job seekers with nearby gigs and
-              opportunities. Built for South Africa, powered by community.
+              opportunities. Built for South Africa, powered by community, and
+              tuned for trust, speed, and local conditions.
             </p>
           </div>
 
@@ -98,7 +130,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom row */}
-        <div className="border-outline-variant/30 pt-5 gap-3 flex flex-wrap items-center justify-between border-t">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-outline-variant/30 pt-5">
           <p className="text-xs text-outline">
             © {year} KasiLink. Made in South Africa.
           </p>

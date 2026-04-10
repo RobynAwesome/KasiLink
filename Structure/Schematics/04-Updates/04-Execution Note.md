@@ -3,6 +3,8 @@ title: Execution Note
 created: 2026-04-06
 updated: 2026-04-06
 author: Codex
+aliases:
+  - Execution Note
 tags:
   - updates
   - execution
@@ -68,6 +70,7 @@ This note mirrors the highest-value execution logic from `Structure/Updates/mast
 
 - The next 10 tasks should prefer validation, testing, route hardening, and data-truth cleanup over net-new feature sprawl.
 - Any task promoted into active execution should be mirrored into the legacy `Structure/Updates/` layer only if operational tracking is needed.
+- The dedicated visual-system track now starts in [[UI UX Rollout]] so page polish follows one ordered plan.
 
 ## Canonical Sources
 

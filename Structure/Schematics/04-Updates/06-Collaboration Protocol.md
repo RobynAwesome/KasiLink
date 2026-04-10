@@ -3,6 +3,8 @@ title: Collaboration Protocol
 created: 2026-04-06
 updated: 2026-04-06
 author: Codex
+aliases:
+  - Collaboration Protocol
 tags:
   - updates
   - collaboration

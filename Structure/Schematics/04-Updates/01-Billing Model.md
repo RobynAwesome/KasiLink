@@ -3,6 +3,8 @@ title: Billing Model
 created: 2026-04-06
 updated: 2026-04-06
 author: Codex
+aliases:
+  - Billing Model
 tags:
   - updates
   - billing

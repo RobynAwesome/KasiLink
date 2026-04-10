@@ -21,6 +21,15 @@ status: active
 
 > Use this note to mirror the repo into Obsidian as a second brain.
 
+## Open The Repo Directly
+
+You can open `C:\Users\rkhol\kasi-link` itself as an Obsidian vault.
+
+- The repo now carries a minimal `.obsidian/` setup for link behavior and templates.
+- Use `Structure/index.md` for the broad map.
+- Use `Structure/Schematics/index.md` as the stable vault root.
+- Use `Structure/Schematics/00-Home/Dashboard.md` as the day-to-day home note.
+
 ## Vault Goal
 
 Keep the repo-backed knowledge base readable in Obsidian without duplicating content or losing the structure you already built in `Structure/`.
@@ -70,6 +79,8 @@ KasiLink Vault/
 - Use `[[Schematics Index]]` as the stable root note inside the vault.
 - Use `[[Dashboard]]` as the canonical home note for active reading and navigation.
 - Treat `dashboard.md` as an alias file, not a second home note.
+- Keep templates in `Structure/Obsidian/Templates/`.
+- Prefer repo-safe relative markdown links for new cross-file links when you are not intentionally creating a wiki-link alias.
 
 ## What to Link
 

@@ -5,6 +5,11 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { formatRelativeTime } from "@/lib/format";
+import {
+  EmptyStateCard,
+  Eyebrow,
+  SectionHeading,
+} from "@/components/ui/PagePrimitives";
 
 const discussionTopics = [
   {
@@ -163,21 +168,43 @@ function ForumInner() {
   };
 
   return (
-    <div className="container pt-8 pb-12 max-w-5xl mx-auto">
-      <section className="mb-8 text-center">
-        <span className="inline-block mb-3 px-3 py-1 rounded-full bg-primary-container text-primary text-xs font-semibold tracking-wider uppercase">
-          Community
-        </span>
-        <h1 className="font-headline text-3xl md:text-4xl font-bold mb-3">
-          KasiLink Community
-        </h1>
-        <p className="text-on-surface-variant text-base max-w-2xl mx-auto">
-          A shared space for neighbours, job seekers, and providers to swap
-          advice, opportunities, and local updates.
-        </p>
+    <div className="container page-shell max-w-6xl">
+      <section className="page-hero animate-fade-in">
+        <div className="page-hero-grid">
+          <div className="page-hero-copy">
+            <Eyebrow>Community forum</Eyebrow>
+            <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
+              Local advice, alerts, and work context in one shared space.
+            </h1>
+            <p className="page-hero-description">
+              This is where the product gains neighbourhood memory: scam
+              warnings, practical hustle tips, referrals, and the small details
+              people need before they take a gig.
+            </p>
+          </div>
+          <aside className="page-hero-aside">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
+              Best use
+            </p>
+            <div className="mt-4 space-y-3">
+              <div className="surface-band">
+                <p className="text-sm text-on-surface-variant">
+                  Use the board to surface safety checks, local demand, and
+                  lessons that make work easier for the next person.
+                </p>
+              </div>
+              <div className="surface-band">
+                <p className="text-sm text-on-surface-variant">
+                  Keep posts direct, useful, and tied to real places or real
+                  work situations.
+                </p>
+              </div>
+            </div>
+          </aside>
+        </div>
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <section className="grid grid-cols-1 gap-4 py-8 md:grid-cols-3">
         {discussionTopics.map((topic) => (
           <article key={topic.title} className="kasi-card">
             <h2 className="font-bold text-lg mb-2">{topic.title}</h2>
@@ -188,11 +215,11 @@ function ForumInner() {
         ))}
       </section>
 
-      <section className="kasi-card text-center mb-8 border-primary/20">
-        <h2 className="font-headline text-2xl font-bold mb-3">
+      <section className="kasi-card mb-8 border-primary/20 text-center">
+        <h2 className="mb-3 font-headline text-2xl font-bold">
           Trusted Community Space
         </h2>
-        <p className="text-on-surface-variant max-w-2xl mx-auto mb-6">
+        <p className="mx-auto mb-6 max-w-2xl text-on-surface-variant">
           Review safety notes and find trusted individuals before taking on a
           gig.
         </p>
@@ -208,58 +235,67 @@ function ForumInner() {
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8">
         <div>
-          <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <input
-              type="search"
-              placeholder="Search threads..."
-              className="kasi-input flex-1"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && applyFilters()}
+          <div className="filter-shell mb-6">
+            <SectionHeading
+              eyebrow={<Eyebrow tone="neutral">Search threads</Eyebrow>}
+              title="Scan the board by topic or message"
+              description="Search the conversation without losing the forum's quick, practical feel."
             />
-            <select
-              className="kasi-input"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <option value="all">All Topics</option>
-              <option value="general">General</option>
-              <option value="safety">Safety Alerts</option>
-              <option value="load-shedding">Load-Shedding</option>
-              <option value="success_stories">Success Stories</option>
-            </select>
-            <button className="btn btn-primary" onClick={applyFilters}>
-              Search
-            </button>
-            <button className="btn btn-outline" onClick={clearFilters}>
-              Clear
-            </button>
-          </div>
-          <div className="mb-4 max-w-[220px]">
-            <label htmlFor="forum-sort" className="label">Sort threads</label>
-            <select
-              id="forum-sort"
-              className="kasi-input"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="newest">Newest first</option>
-              <option value="oldest">Oldest first</option>
-            </select>
-          </div>
-          <div className="mb-4 flex flex-wrap gap-2">
-            {activeFilterCount > 0 && (
-              <span className="badge badge-info">{activeFilterCount} active filters</span>
-            )}
-            {sortBy !== "newest" && (
-              <span className="badge badge-info">Sort: {sortBy}</span>
-            )}
-            {query && <span className="badge badge-secondary">Search: {query}</span>}
-            {category !== "all" && (
-              <span className="badge badge-secondary">
-                Topic: {category.replace("-", " ")}
-              </span>
-            )}
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <input
+                type="search"
+                placeholder="Search threads..."
+                className="kasi-input flex-1"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && applyFilters()}
+              />
+              <select
+                className="kasi-input"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="all">All Topics</option>
+                <option value="general">General</option>
+                <option value="safety">Safety Alerts</option>
+                <option value="load-shedding">Load-Shedding</option>
+                <option value="success_stories">Success Stories</option>
+              </select>
+              <button className="btn btn-primary" onClick={applyFilters}>
+                Search
+              </button>
+              <button className="btn btn-outline" onClick={clearFilters}>
+                Clear
+              </button>
+            </div>
+            <div className="grid gap-4 md:grid-cols-[220px_1fr]">
+              <div className="form-group">
+                <label htmlFor="forum-sort" className="label">Sort threads</label>
+                <select
+                  id="forum-sort"
+                  className="kasi-input"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                >
+                  <option value="newest">Newest first</option>
+                  <option value="oldest">Oldest first</option>
+                </select>
+              </div>
+              <div className="flex flex-wrap items-end gap-2">
+                {activeFilterCount > 0 ? (
+                  <span className="badge badge-info">{activeFilterCount} active filters</span>
+                ) : null}
+                {sortBy !== "newest" ? (
+                  <span className="badge badge-info">Sort: {sortBy}</span>
+                ) : null}
+                {query ? <span className="badge badge-secondary">Search: {query}</span> : null}
+                {category !== "all" ? (
+                  <span className="badge badge-secondary">
+                    Topic: {category.replace("-", " ")}
+                  </span>
+                ) : null}
+              </div>
+            </div>
           </div>
 
           <p className="sr-only" role="status" aria-live="polite">
@@ -274,9 +310,10 @@ function ForumInner() {
               Loading threads...
             </div>
           ) : posts.length === 0 ? (
-            <div className="kasi-card text-center py-10 text-on-surface-variant">
-              No threads found. Start the conversation!
-            </div>
+            <EmptyStateCard
+              title="No threads found"
+              description="Start the conversation with a practical update, a safety note, or a useful local tip."
+            />
           ) : (
             <div className="flex flex-col gap-4 mb-8">
               {sortedPosts.map((post) => (
@@ -339,7 +376,7 @@ function ForumInner() {
         </div>
 
         <aside>
-          <div className="kasi-card sticky top-20">
+          <div className="kasi-card sticky top-24">
             <h3 className="font-bold font-headline text-lg mb-4">
               Start a Thread
             </h3>

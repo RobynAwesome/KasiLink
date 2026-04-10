@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
+import { Eyebrow, MetricGrid, SectionHeading } from "@/components/ui/PagePrimitives";
 
 const CATEGORIES = [
   { value: "car_wash", label: "Car Wash" },
@@ -150,177 +152,249 @@ export default function PostGigPage() {
   }
 
   return (
-    <div className="max-w-screen-sm pt-8 pb-12 container">
-      <h1 className="mb-2 font-headline text-3xl font-bold">Post a Gig</h1>
-      <p className="text-on-surface-variant text-sm mb-8">
-        Find someone in your neighbourhood fast.
-      </p>
+    <div className="container page-shell">
+      <section className="page-hero animate-fade-in">
+        <div className="page-hero-grid">
+          <div className="page-hero-copy">
+            <Eyebrow>Post work fast</Eyebrow>
+            <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
+              Create a gig people nearby can trust and act on quickly.
+            </h1>
+            <p className="page-hero-description">
+              Keep the brief direct, location-specific, and clear about pay.
+              The better the local context, the faster the right person can
+              respond.
+            </p>
+            <div className="page-hero-actions">
+              <button
+                type="button"
+                className="btn btn-primary btn-lg"
+                onClick={() =>
+                  document.getElementById("gig-form")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  })
+                }
+              >
+                Start posting
+              </button>
+              <Link href="/marketplace" className="btn btn-outline btn-lg">
+                Browse gigs first
+              </Link>
+            </div>
+          </div>
 
-      {errors.general && (
-        <div className="alert alert-danger mb-5">{errors.general}</div>
-      )}
-
-      <form onSubmit={handleSubmit} className="gap-5 flex flex-col">
-        {/* Title */}
-        <div className="form-group">
-          <label className="label" htmlFor="title">
-            Gig Title *
-          </label>
-          <input
-            id="title"
-            className={fieldClass("title")}
-            placeholder="e.g. Car wash needed in Soweto"
-            value={form.title}
-            onChange={(e) => set("title", e.target.value)}
-          />
-          {errors.title && (
-            <span className="error-text mt-1 block">{errors.title}</span>
-          )}
-        </div>
-
-        {/* Category */}
-        <div className="form-group">
-          <label className="label" htmlFor="category">
-            Category *
-          </label>
-          <select
-            id="category"
-            className={fieldClass("category")}
-            value={form.category}
-            onChange={(e) => set("category", e.target.value)}
-          >
-            <option value="">Select a category…</option>
-            {CATEGORIES.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-          {errors.category && (
-            <span className="error-text mt-1 block">{errors.category}</span>
-          )}
-        </div>
-
-        {/* Description */}
-        <div className="form-group">
-          <label className="label" htmlFor="description">
-            Description *
-          </label>
-          <textarea
-            id="description"
-            className={fieldClass("description")}
-            rows={4}
-            placeholder="What needs to be done? Any specific requirements?"
-            value={form.description}
-            onChange={(e) => set("description", e.target.value)}
-          />
-          {errors.description && (
-            <span className="error-text mt-1 block">{errors.description}</span>
-          )}
-        </div>
-
-        {/* Location */}
-        <div className="form-group">
-          <label className="label" htmlFor="suburb">
-            Suburb / Township *
-          </label>
-          <select
-            id="suburb"
-            className={fieldClass("suburb")}
-            value={form.suburb}
-            onChange={(e) => set("suburb", e.target.value)}
-          >
-            <option value="">Select suburb…</option>
-            {SUBURBS.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-          {errors.suburb && (
-            <span className="error-text mt-1 block">{errors.suburb}</span>
-          )}
-        </div>
-
-        {/* Pay */}
-        <div className="form-group">
-          <label className="label" htmlFor="payDisplay">
-            Pay *
-          </label>
-          <input
-            id="payDisplay"
-            className={fieldClass("payDisplay")}
-            placeholder="e.g. R150/day, R80/car, Negotiable"
-            value={form.payDisplay}
-            onChange={(e) => set("payDisplay", e.target.value)}
-          />
-          {errors.payDisplay && (
-            <span className="error-text mt-1 block">{errors.payDisplay}</span>
-          )}
-        </div>
-
-        {/* Slots */}
-        <div className="form-group">
-          <label className="label" htmlFor="slots">
-            Number of people needed
-          </label>
-          <input
-            id="slots"
-            type="number"
-            min={1}
-            max={20}
-            className="kasi-input"
-            value={form.slots}
-            onChange={(e) => set("slots", e.target.value)}
-          />
-        </div>
-
-        {/* Requirements */}
-        <div className="form-group">
-          <label className="label" htmlFor="requirements">
-            Requirements (optional, comma-separated)
-          </label>
-          <input
-            id="requirements"
-            className="kasi-input"
-            placeholder="e.g. own transport, experience preferred"
-            value={form.requirements}
-            onChange={(e) => set("requirements", e.target.value)}
-          />
-        </div>
-
-        {/* Flags */}
-        <div className="gap-5 flex flex-wrap">
-          <label className="gap-2 flex cursor-pointer items-center">
-            <input
-              type="checkbox"
-              checked={form.isUrgent}
-              onChange={(e) => set("isUrgent", e.target.checked)}
+          <aside className="page-hero-aside">
+            <MetricGrid
+              items={[
+                { label: "Best response", value: "Local", helper: "Choose the closest suburb you can" },
+                { label: "Trust cue", value: "Clear pay", helper: "State the pay format upfront" },
+                { label: "Urgency", value: form.isUrgent ? "High" : "Normal", helper: "Only mark urgent if timing truly matters" },
+              ]}
             />
-            <span className="text-sm text-on-surface-variant">
-              🔥 Urgent — needed ASAP
-            </span>
-          </label>
-          <label className="gap-2 flex cursor-pointer items-center">
-            <input
-              type="checkbox"
-              checked={form.isFlexible}
-              onChange={(e) => set("isFlexible", e.target.checked)}
-            />
-            <span className="text-sm text-on-surface-variant">
-              🕐 Flexible timing
-            </span>
-          </label>
+          </aside>
+        </div>
+      </section>
+
+      <div className="form-shell pt-8">
+        <div className="kasi-card">
+          <SectionHeading
+            eyebrow={<Eyebrow tone="neutral">Gig form</Eyebrow>}
+            title="Tell the neighbourhood what you need"
+            description="The strongest posts are specific about the task, location, pay, and number of people needed."
+          />
+
+          {errors.general ? (
+            <div className="alert alert-danger mb-5">{errors.general}</div>
+          ) : null}
+
+          <form id="gig-form" onSubmit={handleSubmit} className="form-grid">
+            <div className="form-group">
+              <label className="label" htmlFor="title">
+                Gig title *
+              </label>
+              <input
+                id="title"
+                className={fieldClass("title")}
+                placeholder="e.g. Car wash needed in Soweto"
+                value={form.title}
+                onChange={(e) => set("title", e.target.value)}
+              />
+              <p className="input-note">
+                Lead with the task and suburb so people can decide fast.
+              </p>
+              {errors.title ? <span className="error-text">{errors.title}</span> : null}
+            </div>
+
+            <div className="form-group">
+              <label className="label" htmlFor="category">
+                Category *
+              </label>
+              <select
+                id="category"
+                className={fieldClass("category")}
+                value={form.category}
+                onChange={(e) => set("category", e.target.value)}
+              >
+                <option value="">Select a category…</option>
+                {CATEGORIES.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+              {errors.category ? <span className="error-text">{errors.category}</span> : null}
+            </div>
+
+            <div className="form-group">
+              <label className="label" htmlFor="description">
+                Description *
+              </label>
+              <textarea
+                id="description"
+                className={fieldClass("description")}
+                rows={5}
+                placeholder="What needs to be done? Any specific tools, timing, or requirements?"
+                value={form.description}
+                onChange={(e) => set("description", e.target.value)}
+              />
+              <p className="input-note">
+                Mention timing, what success looks like, and anything that would
+                affect travel or preparation.
+              </p>
+              {errors.description ? (
+                <span className="error-text">{errors.description}</span>
+              ) : null}
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="form-group">
+                <label className="label" htmlFor="suburb">
+                  Suburb / township *
+                </label>
+                <select
+                  id="suburb"
+                  className={fieldClass("suburb")}
+                  value={form.suburb}
+                  onChange={(e) => set("suburb", e.target.value)}
+                >
+                  <option value="">Select suburb…</option>
+                  {SUBURBS.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+                {errors.suburb ? <span className="error-text">{errors.suburb}</span> : null}
+              </div>
+
+              <div className="form-group">
+                <label className="label" htmlFor="payDisplay">
+                  Pay *
+                </label>
+                <input
+                  id="payDisplay"
+                  className={fieldClass("payDisplay")}
+                  placeholder="e.g. R150/day, R80/car, Negotiable"
+                  value={form.payDisplay}
+                  onChange={(e) => set("payDisplay", e.target.value)}
+                />
+                {errors.payDisplay ? (
+                  <span className="error-text">{errors.payDisplay}</span>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="form-group">
+                <label className="label" htmlFor="slots">
+                  Number of people needed
+                </label>
+                <input
+                  id="slots"
+                  type="number"
+                  min={1}
+                  max={20}
+                  className="kasi-input"
+                  value={form.slots}
+                  onChange={(e) => set("slots", e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="label" htmlFor="requirements">
+                  Requirements
+                </label>
+                <input
+                  id="requirements"
+                  className="kasi-input"
+                  placeholder="e.g. own transport, experience preferred"
+                  value={form.requirements}
+                  onChange={(e) => set("requirements", e.target.value)}
+                />
+                <p className="input-note">
+                  Optional. Separate items with commas.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-3 md:grid-cols-2">
+              <label className="surface-band flex cursor-pointer items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={form.isUrgent}
+                  onChange={(e) => set("isUrgent", e.target.checked)}
+                />
+                <span className="text-sm text-on-surface-variant">
+                  Mark as urgent when the job is needed as soon as possible.
+                </span>
+              </label>
+              <label className="surface-band flex cursor-pointer items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={form.isFlexible}
+                  onChange={(e) => set("isFlexible", e.target.checked)}
+                />
+                <span className="text-sm text-on-surface-variant">
+                  Keep timing flexible when you can accommodate different schedules.
+                </span>
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="mt-2 btn btn-primary btn-lg"
+            >
+              {submitting ? "Posting…" : "Post gig"}
+            </button>
+          </form>
         </div>
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="btn btn-primary btn-lg mt-3"
-        >
-          {submitting ? "Posting…" : "Post Gig"}
-        </button>
-      </form>
+        <aside className="form-sidebar">
+          <div className="surface-band">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
+              Posting checklist
+            </p>
+            <div className="mt-3 space-y-3 text-sm text-on-surface-variant">
+              <p>State the suburb clearly so transport expectations are obvious.</p>
+              <p>Write the pay in a familiar format like per day, per job, or negotiable.</p>
+              <p>Only use urgent when the timing truly affects the outcome.</p>
+            </div>
+          </div>
+
+          <div className="surface-band">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
+              After posting
+            </p>
+            <div className="mt-3 space-y-3 text-sm text-on-surface-variant">
+              <p>Reply quickly in chat once someone reaches out.</p>
+              <p>Use profile and verified pages to assess trust before meeting.</p>
+              <p>Keep the gig description updated if the scope changes.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }

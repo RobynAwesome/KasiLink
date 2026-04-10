@@ -4,6 +4,12 @@ import { useState, useEffect, useCallback, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formatRelativeTime } from "@/lib/format";
+import {
+  EmptyStateCard,
+  Eyebrow,
+  MetricGrid,
+  SectionHeading,
+} from "@/components/ui/PagePrimitives";
 
 // ── Types ──────────────────────────────────────────────────────────
 interface Gig {
@@ -238,199 +244,274 @@ function MarketplaceInner() {
     : sortedGigs;
 
   return (
-    <div className="container pt-8 pb-12">
-      <div className="mb-8 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-        <div>
-          <h1 className="mb-2 font-headline text-3xl font-bold">
-            Find your next hustle
-          </h1>
-          <p className="text-on-surface-variant text-sm">
-            {userCoords ? "Showing gigs near you" : "Gigs in South Africa"} ·{" "}
-            {total} available
-          </p>
+    <div className="container page-shell">
+      <section className="page-hero animate-fade-in">
+        <div className="page-hero-grid">
+          <div className="page-hero-copy">
+            <Eyebrow>Marketplace</Eyebrow>
+            <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
+              Find nearby work without losing time to clutter.
+            </h1>
+            <p className="page-hero-description">
+              The marketplace now leads with distance, trust, urgency, and pay.
+              Browse the jobs closest to you first, then refine with filters
+              that match township reality.
+            </p>
+            <div className="page-hero-actions">
+              <Link href="/gigs/new" className="btn btn-primary btn-lg">
+                Post urgent work
+              </Link>
+              <button
+                type="button"
+                className="btn btn-outline btn-lg"
+                onClick={clearFilters}
+                disabled={activeFilterCount === 0 && radius === "10" && sortBy === "newest"}
+              >
+                Reset filters
+              </button>
+            </div>
+          </div>
+
+          <aside className="page-hero-aside">
+            <MetricGrid
+              items={[
+                {
+                  label: "Available gigs",
+                  value: total,
+                  helper: userCoords ? "Pulled from your current radius" : "Across supported cities",
+                },
+                {
+                  label: "Search mode",
+                  value: userCoords ? "Nearby" : "Regional",
+                  helper: userCoords ? `${radius} km radius active` : "Location access not granted",
+                },
+                {
+                  label: "Trust filter",
+                  value: verifiedOnly ? "On" : "Optional",
+                  helper: verifiedOnly ? "Verified providers only" : "Enable it when safety matters most",
+                },
+              ]}
+            />
+          </aside>
         </div>
-        <div className="kasi-card bg-surface-container-low min-w-[260px]">
-          <p className="text-xs uppercase tracking-wider text-outline mb-1">
-            Marketplace Goals
-          </p>
-          <p className="text-sm text-on-surface-variant">
-            Browse by category, react to urgent work, and keep travel distance low.
-          </p>
-        </div>
-      </div>
+      </section>
 
-      {/* Search bar */}
-      <div className="flex gap-3 mb-5">
-        <input
-          type="search"
-          className="kasi-input flex-1"
-          placeholder="Search gigs…"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter")
-              applyFilter(query, category, suburb, city, radius, verifiedOnly, sortBy);
-          }}
-        />
-        <button
-          className="btn btn-primary"
-          onClick={() =>
-            applyFilter(query, category, suburb, city, radius, verifiedOnly, sortBy)
-          }
-        >
-          Search
-        </button>
-        <button
-          className="btn btn-outline"
-          onClick={clearFilters}
-          disabled={activeFilterCount === 0 && radius === "10"}
-        >
-          Clear
-        </button>
-      </div>
+      <section className="py-8">
+        <div className="filter-shell">
+          <SectionHeading
+            eyebrow={<Eyebrow tone="neutral">Search and narrow</Eyebrow>}
+            title="Shape the gig list around distance, topic, and trust"
+            description="Filter by suburb, city, radius, and provider verification without losing the live feel of the results."
+          />
 
-      <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr_0.7fr] gap-3 mb-5">
-        <input
-          type="text"
-          className="kasi-input"
-          placeholder="Filter by suburb or township"
-          value={suburb}
-          onChange={(e) => setSuburb(e.target.value)}
-          onBlur={() => applyFilter(query, category, suburb, city, radius)}
-        />
-        <select
-          className="kasi-input"
-          value={city}
-          onChange={(e) => {
-            setCity(e.target.value);
-            applyFilter(
-              query,
-              category,
-              suburb,
-              e.target.value,
-              radius,
-              verifiedOnly,
-              sortBy,
-            );
-          }}
-        >
-          <option value="">All cities</option>
-          {CITY_OPTIONS.filter(Boolean).map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-        <select
-          className="kasi-input"
-          value={radius}
-          onChange={(e) => {
-            setRadius(e.target.value);
-            applyFilter(
-              query,
-              category,
-              suburb,
-              city,
-              e.target.value,
-              verifiedOnly,
-              sortBy,
-            );
-          }}
-        >
-          {RADIUS_OPTIONS.map((option) => (
-            <option key={option} value={option}>
-              {option} km radius
-            </option>
-          ))}
-        </select>
-      </div>
+          <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto_auto]">
+            <input
+              type="search"
+              className="kasi-input flex-1"
+              placeholder="Search gigs, providers, or work type"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  applyFilter(
+                    query,
+                    category,
+                    suburb,
+                    city,
+                    radius,
+                    verifiedOnly,
+                    sortBy,
+                  );
+                }
+              }}
+            />
+            <button
+              className="btn btn-primary"
+              onClick={() =>
+                applyFilter(
+                  query,
+                  category,
+                  suburb,
+                  city,
+                  radius,
+                  verifiedOnly,
+                  sortBy,
+                )
+              }
+            >
+              Search
+            </button>
+            <button
+              className="btn btn-outline"
+              onClick={clearFilters}
+              disabled={activeFilterCount === 0 && radius === "10" && sortBy === "newest"}
+            >
+              Clear
+            </button>
+          </div>
 
-      <div className="mb-5 max-w-[240px]">
-        <label htmlFor="marketplace-sort" className="label">
-          Sort results
-        </label>
-        <select
-          id="marketplace-sort"
-          className="kasi-input"
-          value={sortBy}
-          onChange={(e) => {
-            setSortBy(e.target.value);
-            applyFilter(
-              query,
-              category,
-              suburb,
-              city,
-              radius,
-              verifiedOnly,
-              e.target.value,
-            );
-          }}
-        >
-          <option value="newest">Newest first</option>
-          <option value="nearest">Nearest first</option>
-          <option value="pay-high">Highest pay first</option>
-        </select>
-      </div>
+          <div className="grid gap-3 md:grid-cols-[1.1fr_0.8fr_0.7fr_0.8fr]">
+            <div className="form-group">
+              <label className="label" htmlFor="marketplace-suburb">
+                Suburb or township
+              </label>
+              <input
+                id="marketplace-suburb"
+                type="text"
+                className="kasi-input"
+                placeholder="Filter by suburb or township"
+                value={suburb}
+                onChange={(e) => setSuburb(e.target.value)}
+                onBlur={() =>
+                  applyFilter(
+                    query,
+                    category,
+                    suburb,
+                    city,
+                    radius,
+                    verifiedOnly,
+                    sortBy,
+                  )
+                }
+              />
+            </div>
 
-      <label className="mb-5 flex items-center gap-2 text-sm text-on-surface-variant">
-        <input
-          type="checkbox"
-          checked={verifiedOnly}
-          onChange={(e) => {
-            const next = e.target.checked;
-            setVerifiedOnly(next);
-            applyFilter(query, category, suburb, city, radius, next, sortBy);
-          }}
-        />
-        Show verified providers only
-      </label>
+            <div className="form-group">
+              <label className="label" htmlFor="marketplace-city">
+                City
+              </label>
+              <select
+                id="marketplace-city"
+                className="kasi-input"
+                value={city}
+                onChange={(e) => {
+                  setCity(e.target.value);
+                  applyFilter(
+                    query,
+                    category,
+                    suburb,
+                    e.target.value,
+                    radius,
+                    verifiedOnly,
+                    sortBy,
+                  );
+                }}
+              >
+                <option value="">All cities</option>
+                {CITY_OPTIONS.filter(Boolean).map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-      {/* Category chips */}
-      <div className="flex gap-2 overflow-x-auto pb-2 mb-6 no-scrollbar">
+            <div className="form-group">
+              <label className="label" htmlFor="marketplace-radius">
+                Radius
+              </label>
+              <select
+                id="marketplace-radius"
+                className="kasi-input"
+                value={radius}
+                onChange={(e) => {
+                  setRadius(e.target.value);
+                  applyFilter(
+                    query,
+                    category,
+                    suburb,
+                    city,
+                    e.target.value,
+                    verifiedOnly,
+                    sortBy,
+                  );
+                }}
+              >
+                {RADIUS_OPTIONS.map((option) => (
+                  <option key={option} value={option}>
+                    {option} km radius
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="marketplace-sort" className="label">
+                Sort results
+              </label>
+              <select
+                id="marketplace-sort"
+                className="kasi-input"
+                value={sortBy}
+                onChange={(e) => {
+                  setSortBy(e.target.value);
+                  applyFilter(
+                    query,
+                    category,
+                    suburb,
+                    city,
+                    radius,
+                    verifiedOnly,
+                    e.target.value,
+                  );
+                }}
+              >
+                <option value="newest">Newest first</option>
+                <option value="nearest">Nearest first</option>
+                <option value="pay-high">Highest pay first</option>
+              </select>
+            </div>
+          </div>
+
+          <label className="flex items-center gap-2 text-sm text-on-surface-variant">
+            <input
+              type="checkbox"
+              checked={verifiedOnly}
+              onChange={(e) => {
+                const next = e.target.checked;
+                setVerifiedOnly(next);
+                applyFilter(query, category, suburb, city, radius, next, sortBy);
+              }}
+            />
+            Show verified providers only
+          </label>
+
+          <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
         {CATEGORIES.map((cat) => (
           <button
             key={cat.value}
             onClick={() => {
               setCategory(cat.value);
-              applyFilter(query, cat.value, suburb, city, radius, verifiedOnly);
+              applyFilter(
+                query,
+                cat.value,
+                suburb,
+                city,
+                radius,
+                verifiedOnly,
+                sortBy,
+              );
             }}
-            className={`shrink-0 px-4 py-1.5 rounded-full text-sm cursor-pointer whitespace-nowrap transition-all border ${
+            className={`chip-toggle shrink-0 whitespace-nowrap ${
               category === cat.value
-                ? "border-primary bg-primary-container text-primary"
-                : "border-outline-variant bg-transparent text-on-surface-variant"
+                ? "chip-toggle-active"
+                : ""
             }`}
           >
             {cat.label}
           </button>
         ))}
-      </div>
+          </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
-        <div className="kasi-card bg-surface-container-low">
-          <p className="text-xs uppercase tracking-wider text-outline mb-1">
-            Search
-          </p>
-          <p className="text-sm text-on-surface-variant">
-            Search by work type, suburb, or employer signal.
-          </p>
+          <MetricGrid
+            items={[
+              { label: "Search", value: "Focused", helper: "Find by work type, suburb, or employer signal" },
+              { label: "Distance", value: "Low-cost", helper: "Keep transport time and spend down" },
+              { label: "Trust", value: "Visible", helper: "Verification and reviews appear early" },
+            ]}
+          />
         </div>
-        <div className="kasi-card bg-surface-container-low">
-          <p className="text-xs uppercase tracking-wider text-outline mb-1">
-            Distance
-          </p>
-          <p className="text-sm text-on-surface-variant">
-            Prioritize jobs that reduce transport cost and time.
-          </p>
-        </div>
-        <div className="kasi-card bg-surface-container-low">
-          <p className="text-xs uppercase tracking-wider text-outline mb-1">
-            Trust
-          </p>
-          <p className="text-sm text-on-surface-variant">
-            Verified providers and reviews are visible before you engage.
-          </p>
-        </div>
-      </div>
+      </section>
 
       <div className="flex flex-wrap gap-2 mb-6">
         {activeFilterCount > 0 && (
@@ -469,21 +550,20 @@ function MarketplaceInner() {
           ))}
         </div>
       ) : visibleGigs.length === 0 ? (
-        <div className="text-center py-12 text-on-surface-variant">
-          <p className="text-xl mb-3">😕 No gigs found</p>
-          <p>Try a different category or search term</p>
-          <p className="mt-2 text-xs text-outline">
-            If this keeps happening, loosen the suburb or radius filter first.
-          </p>
-          {activeFilterCount > 0 && (
-            <button className="btn btn-outline mt-4" onClick={clearFilters}>
+        <EmptyStateCard
+          title="No gigs found"
+          description="Try a broader radius, switch topic, or remove the suburb filter first. If no local work is visible yet, seed the loop by posting one."
+          action={
+            <button className="btn btn-outline" onClick={clearFilters}>
               Reset all filters
             </button>
-          )}
-          <Link href="/gigs/new" className="btn btn-primary mt-5">
-            Post the first gig
-          </Link>
-        </div>
+          }
+          secondary={
+            <Link href="/gigs/new" className="btn btn-primary">
+              Post the first gig
+            </Link>
+          }
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {visibleGigs.map((gig) => (

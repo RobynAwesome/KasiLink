@@ -178,6 +178,17 @@ export default function Navbar() {
   const [notificationsLoading, setNotificationsLoading] = useState(true);
   const [notificationsError, setNotificationsError] = useState("");
   const notificationsRef = useRef<HTMLDivElement>(null);
+  const mobilePrimaryLinks = [
+    { href: "/", label: "Home", icon: HomeIcon },
+    { href: "/marketplace", label: "Gigs", icon: BriefcaseIcon },
+    { href: "/forum", label: "Forum", icon: UsersIcon },
+    { href: "/chat", label: "Chat", icon: MessageIcon },
+    {
+      href: isLoaded && isSignedIn ? "/profile" : "/sign-in",
+      label: isLoaded && isSignedIn ? "Profile" : "Join",
+      icon: UsersIcon,
+    },
+  ];
 
   const refreshNotifications = useCallback(async () => {
     if (!isLoaded || !isSignedIn) return;
@@ -256,28 +267,33 @@ export default function Navbar() {
     <>
       <nav
         aria-label="Primary navigation"
-        className={`fixed top-0 left-0 right-0 z-[200] bg-background/90 backdrop-blur-md border-b transition-all duration-250 ${
+        className={`fixed top-0 left-0 right-0 z-[200] border-b bg-background/86 backdrop-blur-xl transition-all duration-250 ${
           scrolled
-            ? "border-outline-variant/30 shadow-sm"
+            ? "border-outline-variant/40 shadow-[0_20px_45px_rgba(0,0,0,0.16)]"
             : "border-transparent"
         }`}
       >
-        <div className="gap-6 container flex h-[3.75rem] items-center">
+        <div className="container flex h-[4.1rem] items-center gap-6">
           {/* Logo */}
           <Link
             href="/"
-            className="gap-2 flex shrink-0 items-center no-underline"
+            className="flex shrink-0 items-center gap-3 no-underline"
           >
-            <span className="w-8 h-8 rounded-lg bg-primary text-on-primary flex shrink-0 items-center justify-center">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-primary text-on-primary shadow-[0_10px_24px_rgba(69,149,192,0.35)]">
               <ZapIcon />
             </span>
-            <span className="font-bold text-lg text-on-background tracking-tight">
-              Kasi<span className="text-primary">Link</span>
+            <span className="min-w-0">
+              <span className="block text-lg font-black tracking-tight text-on-background">
+                Kasi<span className="text-primary">Link</span>
+              </span>
+              <span className="hide-mobile block text-[10px] uppercase tracking-[0.22em] text-outline">
+                Township-first work network
+              </span>
             </span>
           </Link>
 
           {/* Desktop nav links */}
-          <div className="md:flex gap-1 hidden flex-1 items-center">
+          <div className="hidden flex-1 items-center gap-1 md:flex">
             {navLinks.map(({ href, label }) => {
               const active =
                 pathname === href ||
@@ -290,10 +306,10 @@ export default function Navbar() {
                     setMobileOpen(false);
                     setShowNotifs(false);
                   }}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
+                  className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm transition-all ${
                     active
-                      ? "font-medium text-primary bg-primary-container"
-                      : "font-normal text-on-surface-variant hover:bg-surface-container-high/60"
+                      ? "bg-primary-container font-semibold text-primary"
+                      : "font-medium text-on-surface-variant hover:bg-surface-container-high/60 hover:text-on-surface"
                   }`}
                   aria-current={active ? "page" : undefined}
                 >
@@ -304,14 +320,17 @@ export default function Navbar() {
           </div>
 
           {/* Right side actions */}
-          <div className="gap-3 ml-auto flex items-center">
+          <div className="ml-auto flex items-center gap-3">
+            <div className="hide-mobile rounded-full border border-outline-variant/35 bg-surface-container-low px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-outline md:block">
+              Utility-aware hiring
+            </div>
             <ThemeToggle />
 
             {/* Post gig CTA (signed in only) */}
             {isLoaded && isSignedIn && (
               <Link
                 href="/gigs/new"
-                className="btn btn-primary btn-sm md:flex gap-1 hidden"
+                className="hidden gap-1 md:inline-flex btn btn-primary btn-sm"
               >
                 <PlusIcon />
                 Post Gig
@@ -325,7 +344,7 @@ export default function Navbar() {
                   <div className="relative" ref={notificationsRef}>
                     <button
                       onClick={handleToggleNotifs}
-                      className="btn btn-ghost btn-sm p-2 relative text-on-surface-variant hover:text-on-surface"
+                      className="btn btn-ghost btn-sm relative p-2 text-on-surface-variant hover:text-on-surface"
                       aria-label="Notifications"
                       aria-expanded={showNotifs}
                       aria-controls="notifications-menu"
@@ -342,7 +361,7 @@ export default function Navbar() {
                         id="notifications-menu"
                         role="menu"
                         aria-label="Notifications"
-                        className="absolute right-0 mt-2 w-72 max-h-[400px] overflow-y-auto bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-lg z-50 flex flex-col py-2 animate-in fade-in slide-in-from-top-2 duration-200"
+                        className="absolute right-0 z-50 mt-2 flex max-h-[400px] w-72 flex-col overflow-y-auto rounded-2xl border border-outline-variant/30 bg-surface-container-lowest py-2 shadow-lg animate-fade-in slide-in-from-top-2"
                       >
                         <div className="px-4 py-2 border-b border-outline-variant/30 mb-1">
                           <div className="flex items-center justify-between gap-2">
@@ -382,7 +401,7 @@ export default function Navbar() {
                               href={n.link || "#"}
                               onClick={() => setShowNotifs(false)}
                               role="menuitem"
-                              className="px-4 py-3 hover:bg-surface-variant/50 transition-colors flex flex-col gap-1 border-b border-outline-variant/10 last:border-0"
+                              className="flex flex-col gap-1 border-b border-outline-variant/10 px-4 py-3 transition-colors last:border-0 hover:bg-surface-variant/50"
                             >
                               <span className="text-sm font-bold text-on-background leading-tight flex items-center gap-2">
                                 {n.title}
@@ -426,7 +445,7 @@ export default function Navbar() {
 
             {/* Mobile menu toggle */}
             <button
-              className="btn btn-ghost btn-sm md:hidden p-2"
+              className="btn btn-ghost btn-sm p-2 md:hidden"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
               aria-expanded={mobileOpen}
@@ -438,7 +457,15 @@ export default function Navbar() {
 
         {/* Mobile menu */}
         {mobileOpen && (
-          <div className="border-outline-variant/30 bg-surface-container-low p-4 gap-2 flex flex-col border-t">
+          <div className="flex flex-col gap-2 border-t border-outline-variant/30 bg-surface-container-low p-4 md:hidden">
+            <div className="mb-2 rounded-2xl border border-outline-variant/30 bg-surface-container px-4 py-3">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-outline">
+                Quick move
+              </p>
+              <p className="mt-1 text-sm text-on-surface-variant">
+                Stay close to gigs, messages, and community updates.
+              </p>
+            </div>
             {navLinks.map(({ href, label, icon: Icon }) => {
               const active =
                 pathname === href ||
@@ -448,10 +475,10 @@ export default function Navbar() {
                   key={href}
                   href={href}
                   onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg text-base transition-colors ${
+                  className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-base transition-colors ${
                     active
-                      ? "font-medium text-primary bg-primary-container"
-                      : "font-normal text-on-background hover:bg-primary-subtle"
+                      ? "bg-primary-container font-semibold text-primary"
+                      : "font-medium text-on-background hover:bg-primary-subtle"
                   }`}
                   aria-current={active ? "page" : undefined}
                 >
@@ -465,7 +492,7 @@ export default function Navbar() {
               <Link
                 href="/gigs/new"
                 onClick={() => setMobileOpen(false)}
-                className="btn btn-primary mt-2 justify-center"
+                className="mt-2 justify-center btn btn-primary"
               >
                 <PlusIcon />
                 Post a Gig
@@ -474,7 +501,7 @@ export default function Navbar() {
 
             {isLoaded && !isSignedIn && (
               <SignInButton mode="modal">
-                <button className="btn btn-primary mt-2 w-full">
+                <button className="mt-2 w-full btn btn-primary">
                   Sign In to KasiLink
                 </button>
               </SignInButton>
@@ -482,6 +509,31 @@ export default function Navbar() {
           </div>
         )}
       </nav>
+
+      <div className="safe-bottom fixed inset-x-0 bottom-0 z-[205] border-t border-outline-variant/30 bg-background/92 backdrop-blur-xl md:hidden">
+        <div className="container flex h-[4.9rem] items-center justify-between gap-2">
+          {mobilePrimaryLinks.map(({ href, label, icon: Icon }) => {
+            const active =
+              pathname === href || (href !== "/" && pathname.startsWith(href));
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-semibold transition-colors ${
+                  active
+                    ? "bg-primary-container text-primary"
+                    : "text-on-surface-variant"
+                }`}
+              >
+                <span className="flex h-8 w-8 items-center justify-center rounded-2xl">
+                  <Icon />
+                </span>
+                <span className="truncate">{label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
     </>
   );
 }

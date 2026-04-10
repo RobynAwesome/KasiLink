@@ -32,6 +32,7 @@ status: active
 |----------|------|--------|
 | CRITICAL | [[KasiLink Blueprint]] | Mission anchor |
 | CRITICAL | [[Execution Map]] | Current delivery path |
+| CRITICAL | [[UI UX Rollout]] | Active visual-system phase |
 | CRITICAL | [[System Map]] | Architecture and file ownership |
 | HIGH | [[Coordination Hub]] | Live planning and status |
 | HIGH | [[DEV_S Reward Program]] | Session reset, trust, and supervision policy |
@@ -44,6 +45,7 @@ status: active
 ## 02 - Strategy
 
 - [[Execution Map]] - Current phase structure, rollout priorities, and the standard path through the repo docs.
+- [[UI UX Rollout]] - Phase 1 UI and UX foundation, route grouping, and rollout order.
 
 ## 03 - Architecture
 

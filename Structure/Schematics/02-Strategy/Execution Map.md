@@ -22,6 +22,7 @@ This note is the strategy bridge between mission and implementation.
 
 - Keep KasiLink production-safe while expanding township utility, trust, and gig features.
 - Standardize project knowledge under `Structure/Schematics/` so Obsidian and repo navigation use one pattern.
+- Start a dedicated UI and UX rollout so the app stops evolving page-by-page without a shared visual system.
 - Preserve design, information, and issue archives as supporting evidence rather than scattering core direction.
 
 ## Canonical Flow
@@ -32,6 +33,7 @@ This note is the strategy bridge between mission and implementation.
 
 - Schematics Index: [[Schematics Index]]
 - Dashboard: [[Dashboard]]
+- UI/UX rollout: [[UI UX Rollout]]
 - Alignment rules: [../../Updates/current-alignment-notes.md](../../Updates/current-alignment-notes.md)
 - Task execution: [../../Updates/master-todo.md](../../Updates/master-todo.md)
 - Audit trail: [../../Updates/comms-log.md](../../Updates/comms-log.md)

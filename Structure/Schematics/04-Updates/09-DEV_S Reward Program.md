@@ -3,6 +3,8 @@ title: DEV_S Reward Program
 created: 2026-04-07
 updated: 2026-04-07
 author: Codex
+aliases:
+  - DEV_S Reward Program
 tags:
   - rewards
   - permissions

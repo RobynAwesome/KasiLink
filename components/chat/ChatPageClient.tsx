@@ -9,6 +9,7 @@ import DiscordSkin from "@/components/chat-skins/DiscordSkin";
 import InstagramSkin from "@/components/chat-skins/InstagramSkin";
 import ConversationList from "@/components/chat/ConversationList";
 import DefaultChatPanel from "@/components/chat/DefaultChatPanel";
+import { Eyebrow, SectionHeading } from "@/components/ui/PagePrimitives";
 
 interface Conversation {
   _id: string;
@@ -151,24 +152,41 @@ export default function ChatPageClient() {
   }
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-8">
-      <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="mb-2 inline-flex rounded-full bg-primary-container px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
-            Chat
-          </p>
-          <h1 className="font-headline text-3xl font-bold">In-App Messaging</h1>
-          <p className="max-w-2xl text-sm text-on-surface-variant">
-            Switch between community chat skins while keeping the default KasiLink
-            experience intact.
-          </p>
+    <div className="container page-shell max-w-6xl">
+      <section className="page-hero animate-fade-in">
+        <div className="page-hero-grid">
+          <div className="page-hero-copy">
+            <Eyebrow>Messaging</Eyebrow>
+            <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
+              Keep gig coordination direct, fast, and readable.
+            </h1>
+            <p className="page-hero-description">
+              The default KasiLink chat stays calm and legible, while the skin
+              switcher lets you explore alternate community looks without
+              breaking the workflow.
+            </p>
+          </div>
+          <aside className="page-hero-aside">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
+              Session
+            </p>
+            <p className="mt-3 text-sm text-on-surface-variant">
+              Signed in as {user?.firstName || user?.username || "member"}.
+            </p>
+            <p className="mt-3 text-sm text-on-surface-variant">
+              Search by gig title, open a thread, and continue the conversation
+              without leaving the product shell.
+            </p>
+          </aside>
         </div>
-        <div className="text-sm text-on-surface-variant">
-          Signed in as {user?.firstName || user?.username || "member"}
-        </div>
-      </div>
+      </section>
 
-      <div className="mb-6">
+      <div className="py-8">
+        <SectionHeading
+          eyebrow={<Eyebrow tone="neutral">Chat skins</Eyebrow>}
+          title="Switch the visual tone, keep the same conversation state"
+          description="This lets the product experiment with familiar chat aesthetics while keeping the functional workflow stable."
+        />
         <SkinSelector activeSkin={activeSkin} onSkinChange={setActiveSkin} />
       </div>
 

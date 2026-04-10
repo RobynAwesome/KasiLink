@@ -151,7 +151,7 @@ export default function GigDetailsPage({
         </div>
 
         {!isLoaded || !isSignedIn ? (
-          <div className="alert bg-surface-variant text-on-surface text-center">
+          <div className="alert text-center">
             <p className="mb-3">Please sign in to apply for this gig.</p>
             <Link href="/sign-in" className="btn btn-primary">
               Sign In
@@ -159,7 +159,7 @@ export default function GigDetailsPage({
           </div>
         ) : appStatus ? (
           <div
-            className={`alert ${appStatus.includes("Success") ? "badge-success text-success-container" : "alert-danger"}`}
+            className={`alert ${appStatus.includes("Success") ? "alert-success" : "alert-danger"}`}
           >
             {appStatus}
           </div>
@@ -194,7 +194,7 @@ export default function GigDetailsPage({
             <h3 className="font-bold mb-3">Rate this Provider</h3>
             {reviewStatus && (
               <div
-                className={`alert mb-3 ${reviewStatus.includes("Success") ? "badge-success text-success-container" : "alert-danger"}`}
+                className={`alert mb-3 ${reviewStatus.includes("Success") ? "alert-success" : "alert-danger"}`}
               >
                 {reviewStatus}
               </div>
