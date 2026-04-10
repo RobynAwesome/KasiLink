@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import SkinSelector, { type SkinId } from "@/components/chat-skins/SkinSelector";
@@ -38,30 +38,40 @@ export default function ChatPageClient() {
   const [conversationQuery, setConversationQuery] = useState(
     searchParams.get("q") ?? "",
   );
+  // Track whether the URL write originated from local state to avoid sync loops
+  const writingUrl = useRef(false);
 
+  // URL → state: only sync when the URL changes externally (e.g. back/forward)
   useEffect(() => {
+    if (writingUrl.current) return;
     const urlQuery = searchParams.get("q") ?? "";
     if (urlQuery !== conversationQuery) {
       setConversationQuery(urlQuery);
     }
-  }, [searchParams, conversationQuery]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
+  // State → URL: debounce-free, guarded by ref to avoid loop
   useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (conversationQuery.trim()) {
-      params.set("q", conversationQuery.trim());
-    } else {
-      params.delete("q");
-    }
+    writingUrl.current = true;
+    const params = new URLSearchParams();
+    if (conversationQuery.trim()) params.set("q", conversationQuery.trim());
     const nextUrl = params.toString() ? `/chat?${params.toString()}` : "/chat";
     router.replace(nextUrl, { scroll: false });
-  }, [conversationQuery, router, searchParams]);
+    // Reset guard after micro-task so the searchParams effect doesn't react
+    Promise.resolve().then(() => { writingUrl.current = false; });
+  }, [conversationQuery, router]);
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
       router.push("/sign-in");
     }
   }, [isLoaded, isSignedIn, router]);
+
+  // Keep a ref to activeConversationId so the polling effect doesn't
+  // restart the interval every time the user selects a different conversation.
+  const activeConversationIdRef = useRef(activeConversationId);
+  useEffect(() => { activeConversationIdRef.current = activeConversationId; }, [activeConversationId]);
 
   useEffect(() => {
     if (!isSignedIn) return;
@@ -76,23 +86,24 @@ export default function ChatPageClient() {
         if (cancelled) return;
         const nextConversations = (data.conversations ?? []) as Conversation[];
         setConversations(nextConversations);
-        if (!activeConversationId && nextConversations.length > 0) {
+        // Only auto-select on first load (no active conversation yet)
+        if (!activeConversationIdRef.current && nextConversations.length > 0) {
           setActiveConversationId(nextConversations[0]._id);
         }
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchConversations();
-    const interval = setInterval(fetchConversations, 5000);
+    // Poll every 10s (reduced from 5s — conversations list changes rarely)
+    const interval = setInterval(fetchConversations, 10_000);
     return () => {
       cancelled = true;
       clearInterval(interval);
     };
-  }, [isSignedIn, activeConversationId]);
+  // isSignedIn is the only stable trigger; activeConversationId is via ref
+  }, [isSignedIn]);
 
   const activeConversation = useMemo(
     () =>
