@@ -103,6 +103,66 @@ const WaterAlertSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const TutoringSchema = new mongoose.Schema(
+  {
+    tutorId: { type: String, default: "seed_tutor_001" },
+    tutorName: String,
+    subject: String,
+    grade: String,
+    date: Date,
+    duration: Number,
+    location: String,
+    meetingLink: String,
+    suburb: String,
+    notes: String,
+    status: { type: String, default: "open" },
+    reference: String,
+  },
+  { timestamps: true }
+);
+
+const SpotlightSchema = new mongoose.Schema(
+  {
+    businessName: String,
+    category: String,
+    description: String,
+    suburb: String,
+    phone: String,
+    ownerName: String,
+    verified: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+);
+
+const IncidentSchema = new mongoose.Schema(
+  {
+    type: String,
+    title: String,
+    description: String,
+    suburb: String,
+    severity: String,
+    reporterName: { type: String, default: "Community Report (Seed)" },
+    status: { type: String, default: "open" },
+  },
+  { timestamps: true }
+);
+
+const UtilityScheduleSchema = new mongoose.Schema(
+  {
+    type: String,
+    title: String,
+    description: String,
+    suburb: String,
+    zone: String,
+    startTime: Date,
+    endTime: Date,
+    stage: Number,
+    status: { type: String, default: "confirmed" },
+    source: String,
+  },
+  { timestamps: true }
+);
+
 // ── Seed data ─────────────────────────────────────────────────────────────────
 
 const PROVIDER_ID = "seed_provider_001";
@@ -511,6 +571,207 @@ const waterAlerts = [
   },
 ];
 
+// ── Additional seed data ──────────────────────────────────────────────────────
+
+const tutoringSessions = [
+  {
+    tutorName: "Mpho Dlamini",
+    subject: "Mathematics",
+    grade: "Grade 12",
+    date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+    duration: 120,
+    location: "physical",
+    suburb: "Orange Farm",
+    notes: "Focus on trigonometry and calculus. Bring past papers. Group of up to 4 learners welcome.",
+    status: "open",
+    reference: "TUT-SEED-001",
+  },
+  {
+    tutorName: "Nomvula Khumalo",
+    subject: "Physical Science",
+    grade: "Grade 11",
+    date: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000),
+    duration: 90,
+    location: "online",
+    meetingLink: "meet.google.com/kasilink-science",
+    suburb: "Soweto",
+    notes: "Electricity and magnetism unit. Bring a calculator. Online via Google Meet.",
+    status: "open",
+    reference: "TUT-SEED-002",
+  },
+  {
+    tutorName: "Thabo Sithole",
+    subject: "English",
+    grade: "Grade 10",
+    date: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000),
+    duration: 60,
+    location: "physical",
+    suburb: "Alexandra",
+    notes: "Essay writing, comprehension, and literature summaries. R80/session.",
+    status: "open",
+    reference: "TUT-SEED-003",
+  },
+  {
+    tutorName: "Zanele Mokoena",
+    subject: "Accounting",
+    grade: "Grade 12",
+    date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+    duration: 180,
+    location: "online",
+    meetingLink: "meet.google.com/kasilink-accounting",
+    suburb: "Tembisa",
+    notes: "Financial statements, VAT, and depreciation. Exam prep focus.",
+    status: "open",
+    reference: "TUT-SEED-004",
+  },
+  {
+    tutorName: "Sipho Ndlovu",
+    subject: "Life Sciences",
+    grade: "Grade 12",
+    date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+    duration: 120,
+    location: "physical",
+    suburb: "Khayelitsha",
+    notes: "Human reproduction and genetics. Notes provided. Bring textbook.",
+    status: "open",
+    reference: "TUT-SEED-005",
+  },
+];
+
+const spotlightBusinesses = [
+  {
+    businessName: "Sisonke Mobile Phone Repairs",
+    category: "services",
+    description: "Fast and affordable mobile phone and tablet repairs in Soweto. Screen replacements, battery swaps, and software fixes. Same-day service on most repairs. Walk-ins welcome.",
+    suburb: "Soweto",
+    phone: "071 234 5678",
+    ownerName: "Bongani Sisonke",
+    verified: true,
+  },
+  {
+    businessName: "Kasi Fresh Produce",
+    category: "food",
+    description: "Fresh fruit and vegetables delivered directly to your door in Alexandra and surrounding areas. Order by 8am for same-day delivery. WhatsApp orders accepted.",
+    suburb: "Alexandra",
+    phone: "083 456 7890",
+    ownerName: "Thandi Khumalo",
+    verified: false,
+  },
+  {
+    businessName: "Ntombi's Alterations & Sewing",
+    category: "services",
+    description: "Professional clothing alterations, dress-making, and uniform repairs in Tembisa. School uniforms a speciality. Quick turnaround. Zulu and English spoken.",
+    suburb: "Tembisa",
+    phone: "060 789 0123",
+    ownerName: "Ntombifikile Dube",
+    verified: true,
+  },
+  {
+    businessName: "Diepsloot Solar Solutions",
+    category: "services",
+    description: "Load-shedding solutions for homes and small businesses in Diepsloot and surrounds. Solar panel installation, battery backup systems, and generator servicing. Free quotes.",
+    suburb: "Diepsloot",
+    phone: "079 012 3456",
+    ownerName: "Mpho Sethole",
+    verified: false,
+  },
+  {
+    businessName: "Mama Zola's Home Catering",
+    category: "food",
+    description: "Traditional South African catering for funerals, weddings, and community events in Khayelitsha. Umngqusho, samp, and fresh braai. Minimum order 20 people. 48-hour notice required.",
+    suburb: "Khayelitsha",
+    phone: "072 345 6789",
+    ownerName: "Zola Nkosi",
+    verified: true,
+  },
+];
+
+const incidents = [
+  {
+    type: "safety",
+    title: "Streetlight outage — Meadowlands Zone 4",
+    description: "Multiple streetlights have been out in Meadowlands Zone 4 for over two weeks. The area near the taxi rank is particularly dark at night, creating a safety concern for commuters and late-night workers.",
+    suburb: "Soweto",
+    severity: "medium",
+    reporterName: "Community Member (Seed)",
+  },
+  {
+    type: "road",
+    title: "Large pothole — 3rd Avenue, Alexandra",
+    description: "A significant pothole on 3rd Avenue near the school is causing damage to vehicles and is a hazard for cyclists and pedestrians. City of Joburg has been notified but no repair date given.",
+    suburb: "Alexandra",
+    severity: "medium",
+    reporterName: "Community Member (Seed)",
+  },
+  {
+    type: "water_outage",
+    title: "No water — Diepsloot Zone 3 since Monday",
+    description: "Zone 3 in Diepsloot has had no municipal water supply since Monday morning. Residents are collecting from tankers. Joburg Water has not provided a restoration timeline.",
+    suburb: "Diepsloot",
+    severity: "high",
+    reporterName: "Community Member (Seed)",
+  },
+  {
+    type: "load_shedding",
+    title: "Stage 2 tonight — affects Tembisa businesses",
+    description: "Eskom confirmed Stage 2 load-shedding from 18:00 to 22:00 tonight. Small businesses in the Rabie Ridge area should prepare. Gig workers with evening shifts should plan around the schedule.",
+    suburb: "Tembisa",
+    severity: "low",
+    reporterName: "Community Member (Seed)",
+  },
+];
+
+const utilitySchedules = [
+  {
+    type: "power",
+    title: "Load-shedding Stage 2 — Soweto South",
+    description: "Eskom Stage 2 load-shedding schedule for Soweto South. Plan gigs and outdoor work around these windows.",
+    suburb: "Soweto",
+    zone: "Zone 4",
+    startTime: new Date(Date.now() + 6 * 60 * 60 * 1000),
+    endTime: new Date(Date.now() + 8.5 * 60 * 60 * 1000),
+    stage: 2,
+    status: "confirmed",
+    source: "Eskom (Seed)",
+  },
+  {
+    type: "power",
+    title: "Load-shedding Stage 2 — Tembisa",
+    description: "Stage 2 power outage window for Tembisa residential areas. Affects Rabie Ridge and Ivory Park zones.",
+    suburb: "Tembisa",
+    zone: "Zone 2",
+    startTime: new Date(Date.now() + 18 * 60 * 60 * 1000),
+    endTime: new Date(Date.now() + 20.5 * 60 * 60 * 1000),
+    stage: 2,
+    status: "confirmed",
+    source: "Eskom (Seed)",
+  },
+  {
+    type: "water",
+    title: "Planned maintenance — Diepsloot water supply",
+    description: "Johannesburg Water conducting routine maintenance on the main supply line. Water will be off during this window.",
+    suburb: "Diepsloot",
+    zone: "Zone 3",
+    startTime: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    endTime: new Date(Date.now() + 32 * 60 * 60 * 1000),
+    stage: null,
+    status: "confirmed",
+    source: "Johannesburg Water (Seed)",
+  },
+  {
+    type: "power",
+    title: "Load-shedding Stage 1 — Alexandra",
+    description: "Stage 1 power outage window for Alexandra township. Affects Extension 7 and surrounding areas.",
+    suburb: "Alexandra",
+    zone: "Zone 1",
+    startTime: new Date(Date.now() + 30 * 60 * 60 * 1000),
+    endTime: new Date(Date.now() + 32 * 60 * 60 * 1000),
+    stage: 1,
+    status: "estimated",
+    source: "Eskom (Seed)",
+  },
+];
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 async function seed() {
@@ -521,23 +782,39 @@ async function seed() {
   const ForumPostModel = mongoose.models.ForumPost ?? mongoose.model("ForumPost", ForumPostSchema);
   const CalendarModel = mongoose.models.CommunityCalendar ?? mongoose.model("CommunityCalendar", CalendarEventSchema);
   const WaterAlertModel = mongoose.models.WaterAlert ?? mongoose.model("WaterAlert", WaterAlertSchema);
+  const TutoringModel = mongoose.models.TutoringSession ?? mongoose.model("TutoringSession", TutoringSchema);
+  const SpotlightModel = mongoose.models.SpotlightBusiness ?? mongoose.model("SpotlightBusiness", SpotlightSchema);
+  const IncidentModel = mongoose.models.Incident ?? mongoose.model("Incident", IncidentSchema);
+  const UtilityModel = mongoose.models.UtilitySchedule ?? mongoose.model("UtilitySchedule", UtilityScheduleSchema);
 
   // Clear existing seed data only
   await GigModel.deleteMany({ providerId: PROVIDER_ID });
   await ForumPostModel.deleteMany({ authorId: { $in: ["seed_author_001","seed_author_002","seed_author_003","seed_author_004","seed_author_005"] } });
   await CalendarModel.deleteMany({ organizer: { $in: ["Gauteng EPWP","Alexandra Community Forum","SASSA Ekurhuleni"] } });
   await WaterAlertModel.deleteMany({ source: { $in: ["Johannesburg Water","Joburg Water via Community Report"] } });
+  await TutoringModel.deleteMany({ reference: { $regex: /^TUT-SEED-/ } });
+  await SpotlightModel.deleteMany({ ownerName: { $in: spotlightBusinesses.map(b => b.ownerName) } });
+  await IncidentModel.deleteMany({ reporterName: "Community Member (Seed)" });
+  await UtilityModel.deleteMany({ source: { $regex: /\(Seed\)$/ } });
 
   const insertedGigs = await GigModel.insertMany(gigs);
   const insertedPosts = await ForumPostModel.insertMany(forumPosts);
   const insertedEvents = await CalendarModel.insertMany(calendarEvents);
   const insertedAlerts = await WaterAlertModel.insertMany(waterAlerts);
+  const insertedTutoring = await TutoringModel.insertMany(tutoringSessions);
+  const insertedSpotlight = await SpotlightModel.insertMany(spotlightBusinesses);
+  const insertedIncidents = await IncidentModel.insertMany(incidents);
+  const insertedUtility = await UtilityModel.insertMany(utilitySchedules);
 
   console.log(`✓ ${insertedGigs.length} gigs seeded`);
   console.log(`✓ ${insertedPosts.length} forum posts seeded`);
   console.log(`✓ ${insertedEvents.length} calendar events seeded`);
   console.log(`✓ ${insertedAlerts.length} water alerts seeded`);
-  console.log("\nSeed complete. Run again anytime to refresh seed data.");
+  console.log(`✓ ${insertedTutoring.length} tutoring sessions seeded`);
+  console.log(`✓ ${insertedSpotlight.length} spotlight businesses seeded`);
+  console.log(`✓ ${insertedIncidents.length} incidents seeded`);
+  console.log(`✓ ${insertedUtility.length} utility schedules seeded`);
+  console.log("\nSeed complete. Run: npx tsx scripts/seed.ts to refresh.");
 
   await mongoose.disconnect();
 }
