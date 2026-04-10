@@ -1,12 +1,13 @@
 {
-  "name": "KasiLink",
+  "name": "KasiLink — Township Gig Marketplace",
   "short_name": "KasiLink",
-  "description": "Find local gigs and services in your kasi",
+  "description": "Find local gigs and services in your kasi. Township-first job marketplace for South Africa.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#fff5e4",
-  "theme_color": "#D97706",
-  "orientation": "portrait",
+  "background_color": "#0d1117",
+  "theme_color": "#4595c0",
+  "orientation": "portrait-primary",
   "categories": ["productivity", "business"],
   "lang": "en-ZA",
   "dir": "ltr",
@@ -15,34 +16,47 @@
       "src": "/Icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/Icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/Icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
+      "purpose": "any"
+    },
     {
-      "src": "/Icons/screenshot-mobile.png",
-      "sizes": "390x844",
+      "src": "/Icons/icon-512.png",
+      "sizes": "512x512",
       "type": "image/png",
-      "form_factor": "narrow",
-      "label": "KasiLink marketplace on mobile"
+      "purpose": "maskable"
     }
   ],
   "shortcuts": [
     {
       "name": "Find Gigs",
+      "short_name": "Marketplace",
       "url": "/marketplace",
       "description": "Browse local gigs near you"
     },
     {
       "name": "Post a Gig",
+      "short_name": "Post",
       "url": "/gigs/new",
       "description": "Post a job in your area"
+    },
+    {
+      "name": "Community Forum",
+      "short_name": "Forum",
+      "url": "/forum",
+      "description": "Township community discussions"
     }
-  ]
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }

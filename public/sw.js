@@ -1,11 +1,13 @@
 // KasiLink Service Worker
 // Caches app shell for offline use. Township users have expensive data.
-const CACHE_VERSION = "kasilink-v1";
+const CACHE_VERSION = "kasilink-v2";
 const APP_SHELL = [
   "/",
   "/marketplace",
   "/forum",
   "/verified",
+  "/resources",
+  "/community-status",
   "/offline",
 ];
 
@@ -90,8 +92,8 @@ self.addEventListener("push", (event) => {
   event.waitUntil(
     self.registration.showNotification(data.title ?? "KasiLink", {
       body: data.message ?? "You have a new notification",
-      icon: "/icons/icon-192.png",
-      badge: "/icons/icon-192.png",
+      icon: "/Icons/icon-192.png",
+      badge: "/Icons/icon-192.png",
       data: { link: data.link ?? "/" },
       tag: data.type ?? "general",
     })
