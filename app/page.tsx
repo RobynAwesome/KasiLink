@@ -1,7 +1,6 @@
 import Link from "next/link";
 import LoadSheddingWidget from "@/components/LoadSheddingWidget";
 import GrokChatModal from "@/components/GrokChatModal";
-import OrchDashboard from "@/components/ai/OrchDashboard";
 import {
   EmptyStateCard,
   Eyebrow,
@@ -13,68 +12,37 @@ import { getRecentGigs } from "@/features/home/recent-gigs";
 export const dynamic = "force-dynamic";
 
 const heroStats = [
-  {
-    label: "SA unemployment",
-    value: "31.4%",
-    helper: "National recovery is still uneven on the ground",
-  },
-  {
-    label: "Youth without work",
-    value: "57%",
-    helper: "Township-first access is still necessary",
-  },
-  {
-    label: "CV required",
-    value: "0",
-    helper: "Speed, proximity, and trust lead first",
-  },
+  { label: "SA unemployment", value: "31.4%", helper: "National recovery is still uneven on the ground" },
+  { label: "Youth without work", value: "57%", helper: "Township-first access is still necessary" },
+  { label: "CV required", value: "0", helper: "Speed, proximity, and trust lead first" },
 ];
 
 const signalCards = [
   {
     title: "Utility-aware job search",
-    description:
-      "Check load-shedding and water disruption context before you accept a booking or dispatch work.",
+    description: "Check load-shedding and water disruption before accepting a booking or dispatching work.",
     href: "/water-outages",
     cta: "Track utility alerts",
   },
   {
     title: "Trusted local providers",
-    description:
-      "Verified profiles and community reviews reduce risk before money, transport, or time is spent.",
+    description: "Verified profiles and community reviews reduce risk before money, transport, or time is spent.",
     href: "/verified",
     cta: "Browse verified providers",
   },
   {
     title: "Neighbourhood coordination",
-    description:
-      "Forum updates help communities share availability, safety notes, and local demand in real time.",
+    description: "Forum updates help communities share availability, safety notes, and local demand in real time.",
     href: "/forum",
     cta: "Open the forum",
   },
 ];
 
 const quickActions = [
-  {
-    href: "/marketplace",
-    label: "Browse live gigs",
-    helper: "See work near you right now",
-  },
-  {
-    href: "/gigs/new",
-    label: "Post urgent work",
-    helper: "Reach nearby people faster",
-  },
-  {
-    href: "/chat",
-    label: "Continue chats",
-    helper: "Follow up with providers and applicants",
-  },
-  {
-    href: "/utility-schedule",
-    label: "Check schedules",
-    helper: "Plan work around outages",
-  },
+  { href: "/marketplace", label: "Browse live gigs", helper: "See work near you right now" },
+  { href: "/gigs/new", label: "Post urgent work", helper: "Reach nearby people faster" },
+  { href: "/chat", label: "Continue chats", helper: "Follow up with providers and applicants" },
+  { href: "/utility-schedule", label: "Check schedules", helper: "Plan work around outages" },
 ];
 
 const localSystemNotes = [
@@ -92,31 +60,20 @@ const localSystemNotes = [
   },
 ];
 
+const communityLinks = [
+  { href: "/incidents", label: "Report an incident", badge: "Safety" },
+  { href: "/community-calendar", label: "Community calendar", badge: "Events" },
+  { href: "/spotlight", label: "Business spotlight", badge: "Local" },
+  { href: "/tutoring", label: "Find a tutor", badge: "Education" },
+  { href: "/community-status", label: "Community status", badge: "Live" },
+  { href: "/my-water-reports", label: "Water reports", badge: "Alerts" },
+];
+
 const journeySteps = [
-  {
-    step: "01",
-    title: "Create a simple local profile",
-    description:
-      "Start with a phone number and become visible for nearby work without heavy setup.",
-  },
-  {
-    step: "02",
-    title: "Find or post work nearby",
-    description:
-      "Match by distance, category, urgency, and the trust signals that matter on the ground.",
-  },
-  {
-    step: "03",
-    title: "Coordinate directly",
-    description:
-      "Use in-app chat and community signals to confirm timing, safety, and availability quickly.",
-  },
-  {
-    step: "04",
-    title: "Build a stronger local reputation",
-    description:
-      "Completed gigs, reviews, and provider verification reinforce the trust loop over time.",
-  },
+  { step: "01", title: "Create a simple local profile", description: "Start with a phone number. Become visible for nearby work without heavy setup." },
+  { step: "02", title: "Find or post work nearby", description: "Match by distance, category, urgency, and the trust signals that matter on the ground." },
+  { step: "03", title: "Coordinate directly", description: "Use in-app chat and community signals to confirm timing, safety, and availability." },
+  { step: "04", title: "Build a stronger local reputation", description: "Completed gigs, reviews, and provider verification reinforce the trust loop over time." },
 ];
 
 export default async function HomePage() {
@@ -124,20 +81,21 @@ export default async function HomePage() {
 
   return (
     <div className="pb-12">
+      {/* ── HERO ──────────────────────────────────────────── */}
       <section className="container page-shell">
         <div className="page-hero animate-fade-in">
           <div className="page-hero-grid">
             <div className="page-hero-copy">
               <Eyebrow>South Africa&apos;s Township Platform</Eyebrow>
               <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
-                Local gigs. <span className="text-primary">Near you.</span> Right
-                now.
+                Local gigs.{" "}
+                <span className="text-primary">Near you.</span>{" "}
+                Right now.
               </h1>
               <p className="page-hero-description">
-                KasiLink is a township-first work and services network built
-                around proximity, trust, and real-time local conditions. Find
-                work, post urgent jobs, and coordinate without losing momentum
-                to distance, paperwork, or local disruption.
+                KasiLink is a township-first work and services network built around proximity,
+                trust, and real-time local conditions. Find work, post urgent jobs, and coordinate
+                without losing momentum to distance, paperwork, or local disruption.
               </p>
               <div className="page-hero-actions">
                 <Link href="/marketplace" className="btn btn-primary btn-lg">
@@ -159,9 +117,8 @@ export default async function HomePage() {
                   Work should start closer to home.
                 </p>
                 <p className="mt-2 text-sm leading-7 text-on-surface-variant">
-                  South Africa may be in recovery, but township-level work
-                  access still depends on local speed, local trust, and lower
-                  travel risk. No CV. Less commute. Faster local work.
+                  SA is in recovery — but township residents need tools that meet them where they
+                  are now. No CV. Less commute. Faster local work.
                 </p>
               </div>
             </aside>
@@ -169,6 +126,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ── BENTO: SIGNAL PANEL + SYSTEM NOTES ──────────── */}
       <section className="container pb-10">
         <div className="bento-grid md:grid-cols-12">
           <div className="feature-panel-contrast md:col-span-7 text-on-background">
@@ -182,25 +140,19 @@ export default async function HomePage() {
               Local work discovery should absorb reality instead of ignoring it.
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-on-surface-variant">
-              Recovery indicators at national level do not remove the township
-              need for hyperlocal work discovery. KasiLink keeps jobs, trust,
-              and community coordination in the same decision space.
+              Recovery indicators at national level do not remove the township need for hyperlocal
+              work discovery. KasiLink keeps jobs, trust, and community coordination in the same
+              decision space.
             </p>
             <div className="mt-5 signal-strip">
               {signalCards.map((signal) => (
-                <Link
-                  key={signal.title}
-                  href={signal.href}
-                  className="signal-tile no-underline"
-                >
+                <Link key={signal.title} href={signal.href} className="signal-tile no-underline">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-outline">
                     Core signal
                   </p>
                   <h3 className="signal-tile-title">{signal.title}</h3>
                   <p className="signal-tile-copy">{signal.description}</p>
-                  <span className="text-sm font-semibold text-primary">
-                    {signal.cta} →
-                  </span>
+                  <span className="text-sm font-semibold text-primary">{signal.cta} →</span>
                 </Link>
               ))}
             </div>
@@ -213,9 +165,7 @@ export default async function HomePage() {
                 <div key={item.title} className="impact-row">
                   <div>
                     <p className="text-sm font-semibold">{item.title}</p>
-                    <p className="text-sm text-on-surface-variant">
-                      {item.body}
-                    </p>
+                    <p className="mt-1 text-sm text-on-surface-variant">{item.body}</p>
                   </div>
                 </div>
               ))}
@@ -224,60 +174,73 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ── UTILITY WIDGET + COMMUNITY PULSE ────────────── */}
       <section className="container pb-10">
         <SectionHeading
           eyebrow={<Eyebrow tone="neutral">Working surface</Eyebrow>}
           title="Operational signals before the marketplace decision"
-          description="Utility status and support intelligence should help users decide faster, not compete with the marketplace for attention."
+          description="Utility status and community context help you decide faster — not compete with the marketplace for attention."
         />
-        <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
           <LoadSheddingWidget />
-          <div className="space-y-3">
-            <div className="feature-panel">
-              <p className="mini-stat-label">Support intelligence</p>
-              <h3 className="mt-2 text-xl font-black">
-                Orch is supporting infrastructure.
-              </h3>
-              <p className="mt-2 text-sm leading-7 text-on-surface-variant">
-                The product remains township work and services first. Orch
-                should appear as a supporting decision layer for routing,
-                insight, and fallback context.
-              </p>
+          <div className="feature-panel flex flex-col gap-4">
+            <p className="mini-stat-label">Community channels</p>
+            <div className="grid grid-cols-2 gap-2">
+              {communityLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="group flex flex-col gap-1 rounded-xl border border-outline-variant/30 bg-surface-container-low p-3 no-underline transition-colors hover:border-primary/40 hover:bg-primary/5"
+                >
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-outline">
+                    {link.badge}
+                  </span>
+                  <span className="text-sm font-semibold text-on-background group-hover:text-primary">
+                    {link.label}
+                  </span>
+                </Link>
+              ))}
             </div>
-            <OrchDashboard />
+            <Link href="/community-status" className="btn btn-outline btn-sm mt-auto w-full text-center">
+              View full community status →
+            </Link>
           </div>
         </div>
       </section>
 
+      {/* ── QUICK ACTIONS ────────────────────────────────── */}
       <section className="container pb-12">
-        <SectionHeading
-          eyebrow={<Eyebrow tone="neutral">Core actions</Eyebrow>}
-          title="Fast actions for the most common local decisions"
-          description="The homepage should behave like a board, not a brochure. The next step should be visible immediately on mobile and desktop."
-        />
-        <div className="signal-strip">
-          {quickActions.map((action, index) => (
-            <Link
-              key={action.href}
-              href={action.href}
-              className="signal-tile animate-slide-up no-underline"
-              style={{ animationDelay: `${index * 70}ms` }}
-            >
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-outline">
-                Action {index + 1}
-              </p>
-              <p className="signal-tile-title">{action.label}</p>
-              <p className="signal-tile-copy">{action.helper}</p>
-            </Link>
-          ))}
+        <div className="surface-band">
+          <SectionHeading
+            eyebrow={<Eyebrow tone="neutral">Quick actions</Eyebrow>}
+            title="Fast access for the most common local decisions"
+            description="The homepage should behave like a board, not a brochure. Your next step should be visible immediately."
+          />
+          <div className="signal-strip">
+            {quickActions.map((action, index) => (
+              <Link
+                key={action.href}
+                href={action.href}
+                className="signal-tile no-underline animate-slide-up"
+                style={{ animationDelay: `${index * 70}ms` }}
+              >
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-outline">
+                  Action {index + 1}
+                </p>
+                <p className="signal-tile-title">{action.label}</p>
+                <p className="signal-tile-copy">{action.helper}</p>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
+      {/* ── LATEST GIGS ──────────────────────────────────── */}
       <section className="container pb-12">
         <SectionHeading
           eyebrow={<Eyebrow tone="success">Marketplace pulse</Eyebrow>}
           title="Latest gigs"
-          description="Fresh opportunities appear here first. The layout prioritizes category, urgency, location, and pay in one clean scan."
+          description="Fresh opportunities appear here first. Category, urgency, location, and pay in one clean scan."
           action={
             <Link href="/marketplace" className="btn btn-outline btn-sm">
               See all gigs
@@ -303,43 +266,24 @@ export default async function HomePage() {
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {gigs.map((gig: any) => (
-                <Link
-                  key={gig._id}
-                  href={`/gigs/${gig._id}`}
-                  className="no-underline"
-                >
-                  <article className="directory-card directory-card-soft">
-                    <div className="directory-card-header">
-                      <div className="directory-card-meta">
-                        {gig.isUrgent ? (
-                          <span className="badge badge-danger">Urgent</span>
-                        ) : null}
-                        <span className="badge badge-primary">
-                          {gig.category.replace("_", " ")}
+                <Link key={gig._id} href={`/gigs/${gig._id}`} className="no-underline">
+                  <article className="kasi-card flex h-full flex-col">
+                    <div className="flex flex-wrap gap-2">
+                      {gig.isUrgent && <span className="badge badge-danger">Urgent</span>}
+                      <span className="badge badge-primary">{gig.category.replace("_", " ")}</span>
+                      {gig.isProviderVerified && <span className="badge badge-success">Verified</span>}
+                    </div>
+                    <h3 className="mt-4 text-xl font-bold">{gig.title}</h3>
+                    <p className="mt-3 line-clamp-3 text-sm leading-7 text-on-surface-variant">
+                      {gig.description}
+                    </p>
+                    <div className="mt-auto pt-5">
+                      <div className="flex items-center justify-between gap-3 border-t border-outline-variant/30 pt-4">
+                        <span className="text-lg font-bold text-primary">{gig.payDisplay}</span>
+                        <span className="text-xs uppercase tracking-[0.16em] text-outline">
+                          {gig.location?.suburb || "Local"}
                         </span>
-                        {gig.isProviderVerified ? (
-                          <span className="badge badge-success">Verified</span>
-                        ) : null}
                       </div>
-                      <span className="mini-stat-value text-primary">
-                        {gig.payDisplay}
-                      </span>
-                    </div>
-
-                    <div className="directory-card-body">
-                      <h3 className="text-xl font-bold">{gig.title}</h3>
-                      <p className="directory-card-detail line-clamp-3">
-                        {gig.description}
-                      </p>
-                    </div>
-
-                    <div className="directory-card-footer">
-                      <span className="text-xs uppercase tracking-[0.16em] text-outline">
-                        {gig.location?.suburb || "Local"}
-                      </span>
-                      <span className="text-sm font-semibold text-on-surface-variant">
-                        {gig.providerName || "Community provider"}
-                      </span>
                     </div>
                   </article>
                 </Link>
@@ -349,28 +293,28 @@ export default async function HomePage() {
         )}
       </section>
 
+      {/* ── HOW IT WORKS ─────────────────────────────────── */}
       <section className="container pb-12">
-        <div className="surface-band">
-          <SectionHeading
-            eyebrow={<Eyebrow tone="neutral">Why this framing</Eyebrow>}
-            title="The homepage has one job: make the local work loop obvious."
-            description="It should explain the system quickly, show which signals matter, and push users into the right route without over-explaining Orch."
-            align="center"
-          />
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {journeySteps.map((step) => (
-              <article key={step.step} className="signal-tile">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-outline">
-                  Step {step.step}
-                </p>
-                <h3 className="signal-tile-title">{step.title}</h3>
-                <p className="signal-tile-copy">{step.description}</p>
-              </article>
-            ))}
-          </div>
+        <SectionHeading
+          eyebrow={<Eyebrow tone="neutral">Core flow</Eyebrow>}
+          title="How the product should feel"
+          description="Each step is designed to reduce uncertainty: identify local demand, confirm trust, coordinate clearly, close the work loop."
+          align="center"
+        />
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {journeySteps.map((step) => (
+            <article key={step.step} className="kasi-card h-full">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-outline">
+                Step {step.step}
+              </p>
+              <h3 className="mt-3 text-lg font-bold">{step.title}</h3>
+              <p className="mt-3 text-sm leading-7 text-on-surface-variant">{step.description}</p>
+            </article>
+          ))}
         </div>
       </section>
 
+      {/* ── CTA FOOTER BAND ──────────────────────────────── */}
       <section className="container pb-6">
         <div className="page-hero">
           <div className="page-hero-grid">
@@ -380,8 +324,8 @@ export default async function HomePage() {
                 Join the neighbourhood work loop.
               </h2>
               <p className="page-hero-description">
-                Start with the marketplace if you need work now, or create a gig
-                if you need trusted local help fast.
+                Start with the marketplace if you need work now, or create a gig if you need
+                trusted local help fast.
               </p>
               <div className="page-hero-actions">
                 <Link href="/sign-in" className="btn btn-primary btn-lg">
@@ -398,19 +342,21 @@ export default async function HomePage() {
               </p>
               <div className="mt-4 space-y-3">
                 <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-low px-4 py-3">
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-outline">
-                    Browse
-                  </p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-outline">Browse</p>
                   <p className="mt-2 text-sm text-on-surface-variant">
                     Open the marketplace to see what is available close to home.
                   </p>
                 </div>
                 <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-low px-4 py-3">
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-outline">
-                    Verify
-                  </p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-outline">Verify</p>
                   <p className="mt-2 text-sm text-on-surface-variant">
                     Use verified profiles and reviews before you commit to travel.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-low px-4 py-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-outline">Coordinate</p>
+                  <p className="mt-2 text-sm text-on-surface-variant">
+                    Use chat and community signals to confirm timing before you move.
                   </p>
                 </div>
               </div>
