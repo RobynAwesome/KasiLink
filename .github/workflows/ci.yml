@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, recovery-local-2026-04-06]
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -32,13 +32,14 @@ jobs:
         run: npm run typecheck
 
       - name: Test (Vitest)
-        run: npm run test:vitest
+        run: npx vitest run
 
       - name: Build
         run: npm run build
         env:
-          # Stub env vars so Next.js build doesn't fail
+          # Stub env vars — build must pass without real secrets
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_stub
           CLERK_SECRET_KEY: sk_test_stub
           MONGODB_URI: mongodb://localhost:27017/stub
           CLERK_WEBHOOK_SECRET: whsec_stub
+          KasiLinkAI_XAI_API_KEY: xai-stub

@@ -28,12 +28,12 @@ audience: ALL AGENTS + OWNER
 
 | # | Task | Status | Owner |
 |---|------|--------|-------|
-| H1 | Switch Clerk to production keys (`pk_live_` / `sk_live_`) | ⏳ Pending | Owner |
-| H2 | Add `KasiLinkAI_XAI_API_KEY` to Vercel env vars (Grok) | ⏳ Pending | Owner |
+| H1 | Switch Clerk to production keys (`pk_live_` / `sk_live_`) | ✅ Done — already live | Owner |
+| H2 | Add `KasiLinkAI_XAI_API_KEY` to Vercel env vars (Grok) | ✅ Done — pushed 2026-04-11 | Lead |
 | H3 | Add Google OAuth redirect URI to Google Cloud Console | ⏳ Pending | Owner |
 | H4 | MongoDB Atlas IP whitelist — add Vercel iad1 IPs or 0.0.0.0/0 | ⏳ Pending | Owner |
 | H5 | Production smoke test — all 17 pages on kasilink.com | ⏳ Pending | Lead + Owner |
-| H6 | Fix 3 TypeScript errors in test files (`RequestInit` type conflict) | ⏳ Pending | Lead |
+| H6 | Fix 3 TypeScript errors in test files (`RequestInit` type conflict) | ✅ Done — 2026-04-11 | Lead |
 | H7 | Fix lint warning in terms page (unused SectionHeading import) | ✅ Done | Lead |
 
 ### High Priority
