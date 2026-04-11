@@ -1,4 +1,4 @@
-import { SectionHeading, Eyebrow } from "@/components/ui/PagePrimitives";
+import { Eyebrow } from "@/components/ui/PagePrimitives";
 
 export const metadata = {
   title: "Terms and Privacy (POPIA) | KasiLink",
@@ -25,7 +25,7 @@ export default function TermsPage() {
           <div className="space-y-4">
             <p>
               Under the Protection of Personal Information Act No. 4 of 2013 (POPIA), we 
-              act as the "Responsible Party" for your personal data.
+              act as the &ldquo;Responsible Party&rdquo; for your personal data.
             </p>
             <ul className="list-disc pl-5 space-y-2">
               <li><strong>What we collect:</strong> Phone number (via Clerk Auth), location data (for gig proximity), and gig history.</li>
