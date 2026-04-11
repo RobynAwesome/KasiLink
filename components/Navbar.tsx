@@ -148,8 +148,12 @@ export default function Navbar() {
             href="/"
             className="flex shrink-0 items-center gap-3 no-underline"
           >
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-primary text-on-primary shadow-[0_10px_24px_rgba(69,149,192,0.35)]">
-              <ZapIcon />
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[#121212] shadow-[0_10px_24px_rgba(0,0,0,0.35)]">
+              <img 
+                src="/kasilink-logo.png" 
+                alt="KasiLink Logo" 
+                className="h-full w-full object-cover"
+              />
             </span>
             <span className="min-w-0">
               <span className="block text-lg font-black tracking-tight text-on-background">
