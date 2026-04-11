@@ -75,15 +75,36 @@ export default function TutoringPage() {
   };
 
   useEffect(() => {
-    setLoading(true);
-    const params = new URLSearchParams();
-    if (subject) params.set("subject", subject);
-    if (suburb) params.set("suburb", suburb);
-    fetch(`/api/tutoring?${params.toString()}`)
-      .then((r) => r.json())
-      .then((d) => setSessions(d.sessions ?? []))
-      .catch(() => setSessions([]))
-      .finally(() => setLoading(false));
+    let cancelled = false;
+
+    async function loadSessions() {
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (subject) params.set("subject", subject);
+      if (suburb) params.set("suburb", suburb);
+
+      try {
+        const res = await fetch(`/api/tutoring?${params.toString()}`);
+        const data = await res.json();
+        if (!cancelled) {
+          setSessions(data.sessions ?? []);
+        }
+      } catch {
+        if (!cancelled) {
+          setSessions([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadSessions();
+
+    return () => {
+      cancelled = true;
+    };
   }, [subject, suburb]);
 
   const visibleSessions = useMemo(() => {
@@ -264,6 +285,28 @@ export default function TutoringPage() {
         </div>
       </section>
 
+      <section className="container pb-8">
+        <div className="bento-grid md:grid-cols-12">
+          <div className="feature-panel md:col-span-8">
+            <p className="mini-stat-label">Skills pathway</p>
+            <h2 className="mt-2 text-2xl font-black">
+              Tutoring should feel like a route from gigs into sustained earning.
+            </h2>
+            <p className="mt-2 text-sm leading-7 text-on-surface-variant">
+              This directory supports learners and tutors who need practical,
+              accessible ways to build capability without leaving their area unless necessary.
+            </p>
+          </div>
+          <div className="feature-panel md:col-span-4">
+            <p className="mini-stat-label">Session mode</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className="badge badge-info">Online first</span>
+              <span className="badge badge-secondary">In-person supported</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="container pb-12">
         <p className="sr-only" role="status" aria-live="polite">
           {loading
@@ -300,7 +343,7 @@ export default function TutoringPage() {
               <Link
                 key={s._id}
                 href={`/tutoring/${s._id}`}
-                className="kasi-card animate-slide-up no-underline"
+                className="editorial-entry editorial-entry-accent animate-slide-up no-underline"
                 style={{ animationDelay: `${index * 40}ms` }}
               >
                 <div className="flex items-start justify-between gap-3">

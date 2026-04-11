@@ -65,6 +65,7 @@ status: active
 - [FAQ/](FAQ/) - user question content.
 - [Issues/](Issues/) - issue and pain-point notes.
 - [Service/](Service/) - service directory content.
+- [source-to-copy-map.md](source-to-copy-map.md) - route-ready mapping from extracted notes to UI/content surfaces.
 
 ## Operating Rule
 

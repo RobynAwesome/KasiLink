@@ -27,12 +27,12 @@ status: active
 | `/marketplace` | `light-Mode/stitch/kasilink_marketplace_ubuntu_pulse/` | partial | Search/filter shell and editorial framing now align better, but card treatment and full marketplace composition still need tighter matching. |
 | `/forum` | `light-Mode/stitch/kasilink_forum_ubuntu_pulse/` | partial | Community heartbeat framing is in place, but the live route still needs stronger feed-style post presentation and feature-alert composition. |
 | `/verified` | `features/stitch/verified_provider_search_results/` | partial | Trust framing and filter hierarchy improved, but the provider card and directory shell are not yet fully aligned to the reference screen. |
-| `/water-outages` | `features/stitch/water_outage_alert_details/` | not audited this phase | Existing route was improved earlier, but this phase has not yet completed a design-to-route audit against the specific stitch asset. |
-| `/community-status` | `sub-features/stitch/stitch/community_status/` | not audited this phase | Existing route was improved earlier, but no current-phase route audit has been recorded yet. |
-| `/utility-schedule` | `sub-features/stitch/stitch/utility_schedule/` | not audited this phase | Existing route was improved earlier, but it has not yet been checked line-by-line against the design source in this phase. |
-| `/community-calendar` | `features/stitch/community_calendar/` | not audited this phase | Design asset exists and the route exists, but the current-phase mapping is still pending. |
-| `/spotlight` | `features/stitch/local_business_spotlight/` | not audited this phase | Design asset exists and the route exists, but the current-phase mapping is still pending. |
-| `/tutoring` | `tutoring/` | not audited this phase | Design source exists, but the route has not yet been evaluated against it in the current execution cycle. |
+| `/water-outages` | `features/stitch/water_outage_alert_details/` | partial | Route now carries stronger high-alert framing, response context, and community-impact layout, but it still does not reproduce the full dark incident-detail composition of the stitch source. |
+| `/community-status` | `sub-features/stitch/stitch/community_status/` | partial | Route now reads more like a status dashboard with stronger utility and safety cards, but still stops short of the exact bento composition of the stitch source. |
+| `/utility-schedule` | `sub-features/stitch/stitch/utility_schedule/` | partial | Next-outage emphasis and provider framing improved, but the route still uses a simpler live-data schedule grid than the more stylized stitch mockup. |
+| `/community-calendar` | `features/stitch/community_calendar/` | partial | Route now includes a calendar-shell highlight and stronger event emphasis, but the live implementation remains a practical hybrid of calendar and event feed. |
+| `/spotlight` | `features/stitch/local_business_spotlight/` | partial | Featured business framing and stronger cards are now present, but the route is still a directory view rather than a full single-business editorial surface. |
+| `/tutoring` | `tutoring/` | partial | Skills-pathway framing and richer session presentation improved, but the live list route still differs from the darker, detail-oriented tutoring stitch reference. |
 
 ## Route Audit Rule
 

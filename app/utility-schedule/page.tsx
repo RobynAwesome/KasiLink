@@ -62,15 +62,36 @@ export default function UtilitySchedulePage() {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    setLoading(true);
-    const params = new URLSearchParams();
-    if (suburb) params.set("suburb", suburb);
-    if (type) params.set("type", type);
-    fetch(`/api/utility-schedule?${params.toString()}`)
-      .then((r) => r.json())
-      .then((d) => setSchedules(d.schedules ?? []))
-      .catch(() => setSchedules([]))
-      .finally(() => setLoading(false));
+    let cancelled = false;
+
+    async function loadSchedules() {
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (suburb) params.set("suburb", suburb);
+      if (type) params.set("type", type);
+
+      try {
+        const res = await fetch(`/api/utility-schedule?${params.toString()}`);
+        const data = await res.json();
+        if (!cancelled) {
+          setSchedules(data.schedules ?? []);
+        }
+      } catch {
+        if (!cancelled) {
+          setSchedules([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadSchedules();
+
+    return () => {
+      cancelled = true;
+    };
   }, [suburb, type]);
 
   useEffect(() => {
@@ -93,6 +114,7 @@ export default function UtilitySchedulePage() {
       schedules.find((s) => new Date(s.startTime).getTime() > now) ?? null,
     [schedules, now],
   );
+  const providerTags = ["Eskom Direct", "Joburg Water", "City Power"];
 
   return (
     <div className="pb-12">
@@ -203,6 +225,42 @@ export default function UtilitySchedulePage() {
         </div>
       </section>
 
+      <section className="container pb-8">
+        <div className="bento-grid md:grid-cols-12">
+          <div className="feature-panel md:col-span-8">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="mini-stat-label">Next 48 hours</p>
+                <h2 className="mt-2 text-2xl font-black">
+                  Utility timeline for {suburb || "your area"}
+                </h2>
+                <p className="mt-2 text-sm leading-7 text-on-surface-variant">
+                  The schedule should read like a planning board: when the outage starts,
+                  how long it lasts, and whether the source is confirmed or estimated.
+                </p>
+              </div>
+              {next ? (
+                <span className="badge badge-warning shrink-0">
+                  Starts in {timeUntil(next.startTime, now)}
+                </span>
+              ) : (
+                <span className="badge badge-success shrink-0">No near outage</span>
+              )}
+            </div>
+          </div>
+          <div className="feature-panel md:col-span-4">
+            <p className="mini-stat-label">Service providers</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {providerTags.map((provider) => (
+                <span key={provider} className="badge badge-secondary">
+                  {provider}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="container pb-12">
         <p className="sr-only" role="status" aria-live="polite">
           {loading
@@ -247,10 +305,10 @@ export default function UtilitySchedulePage() {
                   {items.map((s) => (
                     <article
                       key={s._id}
-                      className={`kasi-card border-l-4 ${
+                      className={`editorial-entry ${
                         s.type === "power"
-                          ? "border-l-warning"
-                          : "border-l-primary"
+                          ? "editorial-entry-danger"
+                          : "editorial-entry-accent"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">

@@ -30,22 +30,32 @@ export default function VerifiedProvidersPage() {
   const [activeCategory, setActiveCategory] = useState("All");
 
   useEffect(() => {
-    setLoading(true);
     const controller = new AbortController();
-    fetch(`/api/users?verified=true&page=${page}&limit=${PAGE_SIZE}`, {
-      signal: controller.signal,
-    })
-      .then((res) => res.json())
-      .then((data) => {
+
+    async function loadProviders() {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `/api/users?verified=true&page=${page}&limit=${PAGE_SIZE}`,
+          {
+            signal: controller.signal,
+          },
+        );
+        const data = await res.json();
         setProviders(data.providers || []);
         setHasMore(Boolean(data.hasMore));
-      })
-      .catch((err) => {
-        if (err.name !== "AbortError") {
+      } catch (err) {
+        if ((err as Error).name !== "AbortError") {
           console.error("Failed to fetch verified providers", err);
         }
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadProviders();
 
     return () => controller.abort();
   }, [page]);

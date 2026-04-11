@@ -41,9 +41,8 @@ vi.mock("@/lib/models/Application", () => ({
   },
 }));
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function makeRequest(method: string, url: string, body?: unknown): NextRequest {
-  const init: any = { method };
+  const init: RequestInit = { method };
   if (body !== undefined) {
     init.body = JSON.stringify(body);
     init.headers = { "content-type": "application/json" };

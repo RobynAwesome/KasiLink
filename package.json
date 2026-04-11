@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "npx --yes tsx --test tests/**/*.test.ts",
+    "test": "vitest run",
     "test:vitest": "vitest run",
     "test:vitest:watch": "vitest",
     "test:coverage": "vitest run --coverage",

@@ -31,6 +31,12 @@ const EMERGENCY_CONTACTS = [
 export default function CommunityStatusPage() {
   const [data, setData] = useState<StatusData | null>(null);
   const [loading, setLoading] = useState(true);
+  const travelReadiness = loading
+    ? "—"
+    : Math.max(
+        28,
+        100 - ((data?.powerStage ?? 0) * 12 + (data?.activeIncidents ?? 0) * 6 + (data?.waterAlerts ?? 0) * 4),
+      );
 
   useEffect(() => {
     async function load() {
@@ -125,8 +131,8 @@ export default function CommunityStatusPage() {
       </section>
 
       <section className="container pb-8">
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="kasi-card">
+        <div className="bento-grid md:grid-cols-12">
+          <div className="feature-panel md:col-span-8">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <Eyebrow tone="neutral">Eskom / power</Eyebrow>
@@ -155,6 +161,24 @@ export default function CommunityStatusPage() {
             <p className="mt-4 text-[11px] uppercase tracking-[0.16em] text-outline">
               Updated {data?.lastUpdated ?? "—"}
             </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="mini-stat">
+                <p className="mini-stat-label">Travel readiness</p>
+                <p className="mini-stat-value text-primary">{travelReadiness}%</p>
+                <p className="mt-1 text-sm text-on-surface-variant">
+                  Quick confidence score based on power, water, and incident pressure.
+                </p>
+              </div>
+              <div className="mini-stat">
+                <p className="mini-stat-label">Community signal</p>
+                <p className="mini-stat-value">
+                  {(data?.powerStage ?? 0) >= 4 || (data?.activeIncidents ?? 0) > 0 ? "Watch" : "Stable"}
+                </p>
+                <p className="mt-1 text-sm text-on-surface-variant">
+                  Use this as a pre-gig check before you travel.
+                </p>
+              </div>
+            </div>
             <div className="mt-4 border-t border-outline-variant/30 pt-4">
               <Link href="/utility-schedule" className="text-sm font-semibold text-primary">
                 View full schedule →
@@ -162,22 +186,26 @@ export default function CommunityStatusPage() {
             </div>
           </div>
 
-          <div className="kasi-card">
-            <Eyebrow tone="neutral">Water</Eyebrow>
+          <div className="feature-panel md:col-span-4">
+            <Eyebrow tone="neutral">Area confidence</Eyebrow>
             <h2 className="mt-3 text-2xl font-bold">
               {loading
                 ? "Loading..."
-                : `${data?.waterAlerts ?? 0} active alert${data?.waterAlerts !== 1 ? "s" : ""}`}
+                : `${data?.waterAlerts ?? 0} water alert${data?.waterAlerts !== 1 ? "s" : ""}`}
             </h2>
             <p className="mt-1 text-sm text-on-surface-variant">
-              Pipe bursts, low pressure, and scheduled maintenance reports from
-              the community.
+              Municipal service failures and neighbourhood incidents can affect
+              whether people can safely take or deliver work.
             </p>
-            <div className="mt-4 border-t border-outline-variant/30 pt-4">
-              <Link href="/water-outages" className="text-sm font-semibold text-primary">
-                View water outages →
-              </Link>
+            <div className="mt-5 h-2 rounded-full bg-surface-container-high">
+              <div
+                className="h-2 rounded-full bg-primary transition-all"
+                style={{ width: `${loading ? 42 : travelReadiness}%` }}
+              />
             </div>
+            <p className="mt-2 text-xs text-outline">
+              Travel readiness is higher when outages and incidents stay low.
+            </p>
           </div>
         </div>
       </section>
@@ -194,7 +222,7 @@ export default function CommunityStatusPage() {
           }
         />
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="kasi-card">
+          <div className="editorial-entry editorial-entry-danger">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-outline">
               Active
             </p>
@@ -210,7 +238,7 @@ export default function CommunityStatusPage() {
               </Link>
             </div>
           </div>
-          <div className="kasi-card">
+          <div className="editorial-entry editorial-entry-accent">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-outline">
               Report
             </p>
@@ -238,7 +266,7 @@ export default function CommunityStatusPage() {
         />
         <div className="grid gap-4 sm:grid-cols-3">
           {EMERGENCY_CONTACTS.map((c) => (
-            <div key={c.name} className="kasi-card flex items-center gap-4">
+            <div key={c.name} className="feature-panel flex items-center gap-4">
               <span className="text-2xl" aria-hidden="true">
                 {c.icon}
               </span>

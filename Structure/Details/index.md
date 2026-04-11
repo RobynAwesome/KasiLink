@@ -36,6 +36,8 @@ status: active
 ## File Map
 
 - [technical-Specifications.md](technical-Specifications.md) - technical companion note for execution context.
+- [clarifying-pictures-index.md](clarifying-pictures-index.md) - index of the supporting architecture and test-plan images.
+- [route-review-support.md](route-review-support.md) - route audit support note linking design, factual, and code review expectations.
 - `clarifying-pictures/` - architecture, design, and test-plan images supplied as supporting evidence.
 
 ## Required Standard
