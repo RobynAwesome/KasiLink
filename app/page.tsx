@@ -1,7 +1,6 @@
 import Link from "next/link";
 import LoadSheddingWidget from "@/components/LoadSheddingWidget";
 import GrokChatModal from "@/components/GrokChatModal";
-import OrchDashboard from "@/components/ai/OrchDashboard";
 import {
   EmptyStateCard,
   Eyebrow,
@@ -122,21 +121,7 @@ export default async function HomePage() {
       </section>
 
       <section className="container pb-10">
-        <MetricGrid
-          items={[
-            { label: "SA unemployment", value: "31.4%", helper: "Proof that proximity matters" },
-            { label: "Youth without work", value: "57%", helper: "A core reality the app is built around" },
-            { label: "Average gig distance", value: "5 km", helper: "Keep transport costs and time low" },
-            { label: "CV required", value: "0", helper: "Local ability and speed come first" },
-          ]}
-        />
-      </section>
-
-      <section className="container pb-10">
-        <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
-          <LoadSheddingWidget />
-          <OrchDashboard />
-        </div>
+        <LoadSheddingWidget />
       </section>
 
       <section className="container pb-12">
