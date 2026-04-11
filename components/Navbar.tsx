@@ -31,7 +31,7 @@ const navLinks = [
   { href: "/", label: "Home", icon: HomeIcon },
   { href: "/marketplace", label: "Find Gigs", icon: BriefcaseIcon },
   { href: "/forum", label: "Community", icon: UsersIcon },
-  { href: "/verified", label: "Verified", icon: UsersIcon },
+  { href: "/studio", label: "Studio", icon: ZapIcon },
   { href: "/chat", label: "Messages", icon: MessageIcon },
 ];
 
