@@ -3,14 +3,14 @@ title: KasiLink Dashboard
 created: 2026-04-11
 updated: 2026-04-11
 author: Robyn Awesome
-tags:
-  - home
-  - dashboard
-  - kasi-link
-  - kopano
-  - navigation
-priority: critical
-status: active
+6: tags:
+7:   - home
+8:   - dashboard
+9:   - kasi-link
+10:   - kopano
+11:   - navigation
+12: priority: critical
+13: status: active
 ---
 
 # KasiLink Dashboard
@@ -20,13 +20,20 @@ status: active
 
 ---
 
+## 👥 Session Roster
+- **Lead Agent:** `Claude` (Elite - Lead)
+- **DEV_1:** `Gemini` (Implementation)
+- **Observer:** `KC` (Kopano Context - 2nd Brain Observer)
+
+---
+
 ## 🚀 Active Right Now
 
 | Priority | Feature / Milestone | Status |
 | :--- | :--- | :--- |
 | **CRITICAL** | **Microsoft Demo Day** | [Microsoft Demo Day!](../Microsoft%20Demo%20Day!/index.md) — Playbooks & Scripts |
 | **CRITICAL** | **Phase 10 Hardening** | [Production Hardening](../14-PRODUCTION%20HARDENING%20(PHASE%2010)/index.md) |
-| **HIGH** | **Final UI Polish** | [Design Index](../03-Architecture/Design/index.md) — Township Energy Aesthetic |
+| **HIGH** | **Final UI Polish** | [Design Index](../03-Architecture/index.md) — Township Energy Aesthetic |
 | **HIGH** | **Session Log** | [2026-04-11](../07-Sessions%20By%20Day/2026-04-11.md) — Current Lead Action Trace |
 
 ---
@@ -43,7 +50,7 @@ How we win. Marketing, scaling, and the **Kopano Context** rebrand strategy.
 
 ### [03 — Architecture](../03-Architecture/index.md)
 The tech stack. Tailwind CSS 4, Next.js 16, Clerk, MongoDB, and the `Navbar.tsx` refactor logic.
-- **[Design Hub](../03-Architecture/Design/index.md)** — Mockups, Colors, and Prototyping (Mandatory Preserve).
+- **[Design Hub](../03-Architecture/index.md)** — Mockups, Colors, and Prototyping (Mandatory Preserve).
 
 ### [04 — Updates](../04-Updates/index.md)
 Live coordination. Task boards, comms logs, and deployment status.
@@ -54,7 +61,7 @@ AI corpus. Owner profiles, operator rules, and agent behavioral standards.
 
 ### [06 — Reference](../06-Reference/index.md)
 The archive. 
-- **[Information Hub](../06-Reference/Information/index.md)** — Facts, FAQs, and Research (Mandatory Preserve).
+- **[Information Hub](../06-Reference/index.md)** — Facts, FAQs, and Research (Mandatory Preserve).
 - **[Issues Hub](../06-Reference/Issues/index.md)** — QA trackers and blockers.
 
 ---
