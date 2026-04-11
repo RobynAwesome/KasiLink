@@ -3,13 +3,13 @@
 import { useState } from "react";
 
 const agents = [
-  { id: "gemini", name: "Gemini 3 Flash", status: "Active", latency: "140ms", color: "#4285F4" },
+  { id: "kc", name: "Kopano Context", status: "Active", latency: "140ms", color: "#4595C0" },
   { id: "grok", name: "xAI Grok", status: "Standby", latency: "210ms", color: "#F5A623" },
-  { id: "claude", name: "Claude 4.6", status: "Optimizer", latency: "380ms", color: "#ea580c" },
+  { id: "claude", name: "Claude 4.6", status: "Lead", latency: "380ms", color: "#ea580c" },
 ];
 
 export default function AgentOrchestrator() {
-  const [activeId, setActiveId] = useState("gemini");
+  const [activeId, setActiveId] = useState("kc");
 
   return (
     <div className="kasi-card border-outline-variant/40 bg-surface-container-low shadow-xl">

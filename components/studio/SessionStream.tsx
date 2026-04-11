@@ -11,7 +11,7 @@ const mockLogs = [
 ];
 
 export default function SessionStream() {
-  const [logs, setLogs] = useState(mockLogs);
+  const [logs] = useState(mockLogs);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

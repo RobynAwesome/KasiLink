@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useUser, SignInButton, UserButton } from "@clerk/nextjs";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -149,9 +150,11 @@ export default function Navbar() {
             className="flex shrink-0 items-center gap-3 no-underline"
           >
             <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[#121212] shadow-[0_10px_24px_rgba(0,0,0,0.35)]">
-              <img 
-                src="/kasilink-logo.png" 
-                alt="KasiLink Logo" 
+              <Image
+                src="/kasilink-logo.png"
+                alt="KasiLink Logo"
+                width={40}
+                height={40}
                 className="h-full w-full object-cover"
               />
             </span>
