@@ -43,7 +43,7 @@ audience: ALL AGENTS + OWNER
 | H8 | EskomSePush API key — get from esp.info developer portal | ⏳ Blocked (Owner) | Owner |
 | H9 | Real content seeding — 20+ SA-authentic gigs in MongoDB | ⏳ Pending | Lead |
 | H10 | Vercel Analytics — enable in Vercel dashboard (zero config) | ⏳ Pending | Owner |
-| H11 | UptimeRobot monitor on kasilink.com | ⏳ Pending | Lead |
+| H11 | UptimeRobot monitor on kasilink.com | ✅ /api/health endpoint live — Owner registers on uptimerobot.com (see H11-uptimerobot.md) | Lead |
 | H12 | App Store metadata prep (icons, screenshots, description) | ⏳ Pending | Lead |
 
 ### Medium

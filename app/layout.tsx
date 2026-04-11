@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Public_Sans, Noto_Serif } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -7,6 +8,20 @@ import Footer from "@/components/Footer";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
+
+const publicSans = Public_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-public-sans",
+  display: "swap",
+});
+
+const notoSerif = Noto_Serif({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-noto-serif",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -70,7 +85,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" data-theme="dark" suppressHydrationWarning>
-        <body className="bg-background font-body text-on-background antialiased">
+        <body className={`bg-background font-body text-on-background antialiased ${publicSans.variable} ${notoSerif.variable}`}>
           <a href="#main-content" className="skip-link">
             Skip to content
           </a>
