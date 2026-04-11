@@ -30,6 +30,43 @@ status: active
 
 ---
 
+### 2026-04-11 | Claude (Lead Coder) | SESSION OPEN — KASILINK DEMO DAY SESSION
+
+**Roster:**
+- Creator (MASTER): RobynAwesome
+- Lead Coder: Claude
+- DEV_S: Codex / Germini (scoped — read dispatch before acting)
+- Observer: KC (Kopano Context) — Session 1 on KasiLink
+
+**Session files published:**
+- `Structure/07-Sessions By Day/2026-04-11 Session Begin.md` — master session doc
+- `Structure/04-Updates/Dispatch - DEV_S - 2026-04-11.md` — DEV_S lane + T4 (terms page)
+- `Structure/04-Updates/Observer Brief - KC - 2026-04-11.md` — Observer reading order + rules
+
+**PROVEN state confirmed:**
+- `www.kasilink.com` LIVE — Vercel, IPv4: 76.76.21.21
+- Clerk live keys in `.env.local` ✅
+- MongoDB Atlas (kasilink cluster) in `.env.local` ✅
+- `layout.tsx` updated to `https://www.kasilink.com` ✅
+- 45 routes live, build passing ✅
+- IONOS domain portfolio logged to KC Schematics/06-Reference/Domain Registry.md ✅
+
+**BLOCKED (do not convert to demo claims):**
+- WhatsApp device registration — OWNER-BLOCKED
+- `KasiLinkAI_XAI_API_KEY` in Vercel — likely missing — OWNER to add
+- `context.kopanolabs.com` DNS — IONOS subdomain CNAME not yet created — OWNER-BLOCKED
+- Visual QA real device — OWNER-PRESENT required
+
+**Active tasks:**
+- T4: DEV_S — create `app/terms/page.tsx` + add to Footer — spec in Dispatch file
+- T1: Claude — verify Vercel env vars match `.env.local`
+- T2: RobynAwesome — IONOS subdomain for `context.kopanolabs.com`
+- T3: Claude + RobynAwesome — full route smoke test on production
+
+**Demo Day: April 15–17, 2026 — 4 days away.**
+
+---
+
 ### 2026-04-06 | DEV_2 (Gemini) | VERCEL ANALYTICS COMPLETE
 
 WRITING TO: app/layout.tsx — confirmed against assignment
