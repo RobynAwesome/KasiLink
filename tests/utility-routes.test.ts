@@ -33,12 +33,12 @@ vi.mock("mongoose", async (importOriginal) => {
 });
 
 function makeRequest(method: string, url: string, body?: unknown): NextRequest {
-  const init: RequestInit = { method };
+  const init: Record<string, unknown> = { method };
   if (body !== undefined) {
     init.body = JSON.stringify(body);
     init.headers = { "content-type": "application/json" };
   }
-  return new NextRequest(url, init);
+  return new NextRequest(url, init as ConstructorParameters<typeof NextRequest>[1]);
 }
 
 // ── GET /api/load-shedding ────────────────────────────────────────────────────
