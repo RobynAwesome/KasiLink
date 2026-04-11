@@ -32,7 +32,7 @@ audience: ALL AGENTS + OWNER
 | H2 | Add `KasiLinkAI_XAI_API_KEY` to Vercel env vars (Grok) | ✅ Done — pushed 2026-04-11 | Lead |
 | H3 | Add Google OAuth redirect URI to Google Cloud Console | ⏳ Pending | Owner |
 | H4 | MongoDB Atlas IP whitelist — add Vercel iad1 IPs or 0.0.0.0/0 | ⏳ Pending | Owner |
-| H5 | Production smoke test — all 17 pages on kasilink.com | ⏳ Pending | Lead + Owner |
+| H5 | Production smoke test — all 17 pages on kasilink.com | ⏳ Checklist in H5-smoke-test.md — run after deploy | Lead + Owner |
 | H6 | Fix 3 TypeScript errors in test files (`RequestInit` type conflict) | ✅ Done — 2026-04-11 | Lead |
 | H7 | Fix lint warning in terms page (unused SectionHeading import) | ✅ Done | Lead |
 
@@ -44,13 +44,13 @@ audience: ALL AGENTS + OWNER
 | H9 | Real content seeding — 20+ SA-authentic gigs in MongoDB | ⏳ Pending | Lead |
 | H10 | Vercel Analytics — enable in Vercel dashboard (zero config) | ⏳ Pending | Owner |
 | H11 | UptimeRobot monitor on kasilink.com | ✅ /api/health endpoint live — Owner registers on uptimerobot.com (see H11-uptimerobot.md) | Lead |
-| H12 | App Store metadata prep (icons, screenshots, description) | ⏳ Pending | Lead |
+| H12 | App Store metadata prep (icons, screenshots, description) | ✅ Draft complete — H12-appstore-metadata.md | Lead |
 
 ### Medium
 
 | # | Task | Status | Owner |
 |---|------|--------|-------|
-| H13 | Lighthouse audit — all pages target 90+ performance | ⏳ Pending | Lead |
+| H13 | Lighthouse audit — all pages target 90+ performance | 🔄 Font optimized (next/font, no CLS) — run audit post-deploy | Lead |
 | H14 | PWA install test on Android Chrome | ⏳ Pending | Owner |
 | H15 | 3G simulation test (township network reality) | ⏳ Pending | Lead |
 | H16 | Kopano Labs planning — next product phase | 🔄 Starting | Lead + Owner |
