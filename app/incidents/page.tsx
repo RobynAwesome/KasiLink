@@ -64,15 +64,36 @@ export default function IncidentsPage() {
   };
 
   useEffect(() => {
-    setLoading(true);
-    const params = new URLSearchParams();
-    if (suburb) params.set("suburb", suburb);
-    if (type) params.set("type", type);
-    fetch(`/api/incidents?${params.toString()}`)
-      .then((r) => r.json())
-      .then((d) => setIncidents(d.incidents ?? []))
-      .catch(() => setIncidents([]))
-      .finally(() => setLoading(false));
+    let cancelled = false;
+
+    async function loadIncidents() {
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (suburb) params.set("suburb", suburb);
+      if (type) params.set("type", type);
+
+      try {
+        const res = await fetch(`/api/incidents?${params.toString()}`);
+        const data = await res.json();
+        if (!cancelled) {
+          setIncidents(data.incidents ?? []);
+        }
+      } catch {
+        if (!cancelled) {
+          setIncidents([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadIncidents();
+
+    return () => {
+      cancelled = true;
+    };
   }, [suburb, type]);
 
   const visibleIncidents = useMemo(() => {

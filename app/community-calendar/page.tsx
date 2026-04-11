@@ -48,15 +48,36 @@ export default function CommunityCalendarPage() {
   ).length;
 
   useEffect(() => {
-    setLoading(true);
-    const params = new URLSearchParams();
-    if (suburb) params.set("suburb", suburb);
-    if (type && type !== "all") params.set("type", type);
-    fetch(`/api/community-calendar?${params.toString()}`)
-      .then((res) => res.json())
-      .then((data) => setEvents(data.events ?? []))
-      .catch(() => setEvents([]))
-      .finally(() => setLoading(false));
+    let cancelled = false;
+
+    async function loadEvents() {
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (suburb) params.set("suburb", suburb);
+      if (type && type !== "all") params.set("type", type);
+
+      try {
+        const res = await fetch(`/api/community-calendar?${params.toString()}`);
+        const data = await res.json();
+        if (!cancelled) {
+          setEvents(data.events ?? []);
+        }
+      } catch {
+        if (!cancelled) {
+          setEvents([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadEvents();
+
+    return () => {
+      cancelled = true;
+    };
   }, [suburb, type]);
 
   const suburbs = useMemo(
@@ -65,6 +86,20 @@ export default function CommunityCalendarPage() {
   );
 
   const jobFairCount = events.filter((e) => e.type === "job_fair").length;
+  const highlightedEvent = events[0] ?? null;
+  const highlightedDay = highlightedEvent
+    ? new Date(highlightedEvent.date).getDate()
+    : new Date().getDate();
+  const monthLabel = highlightedEvent
+    ? new Date(highlightedEvent.date).toLocaleDateString("en-ZA", {
+        month: "long",
+        year: "numeric",
+      })
+    : new Date().toLocaleDateString("en-ZA", {
+        month: "long",
+        year: "numeric",
+      });
+  const monthDays = Array.from({ length: 14 }, (_, i) => i + 1);
 
   return (
     <div className="pb-12">
@@ -203,6 +238,65 @@ export default function CommunityCalendarPage() {
         </div>
       </section>
 
+      <section className="container pb-8">
+        <div className="bento-grid md:grid-cols-12">
+          <div className="calendar-shell md:col-span-7">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="mini-stat-label">{monthLabel}</p>
+                <h2 className="mt-2 text-2xl font-black">Calendar view</h2>
+              </div>
+              <span className="badge badge-primary">Live community listings</span>
+            </div>
+            <div className="mt-5 calendar-grid-shell">
+              {["S", "M", "T", "W", "T", "F", "S"].map((label, index) => (
+                <div key={`${label}-${index}`} className="text-center text-[11px] font-bold uppercase tracking-[0.16em] text-outline">
+                  {label}
+                </div>
+              ))}
+              {monthDays.map((day) => (
+                <div
+                  key={day}
+                  className={`calendar-day ${day === highlightedDay ? "calendar-day-active" : ""}`}
+                >
+                  <span className="text-sm font-semibold">{day}</span>
+                  <div className="flex gap-1">
+                    {day === highlightedDay ? (
+                      <>
+                        <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-info" />
+                      </>
+                    ) : day % 4 === 0 ? (
+                      <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
+                    ) : null}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="feature-panel md:col-span-5">
+            <p className="mini-stat-label">Featured date</p>
+            <h2 className="mt-2 text-2xl font-black">
+              {highlightedEvent ? highlightedEvent.title : "Nothing highlighted yet"}
+            </h2>
+            <p className="mt-2 text-sm leading-7 text-on-surface-variant">
+              {highlightedEvent
+                ? highlightedEvent.description
+                : "Add a job fair, market, or community meeting so local residents can discover it quickly."}
+            </p>
+            {highlightedEvent ? (
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className={`badge ${TYPE_BADGE[highlightedEvent.type] ?? "badge-secondary"}`}>
+                  {TYPE_LABELS[highlightedEvent.type]}
+                </span>
+                <span className="badge badge-secondary">{highlightedEvent.suburb}</span>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </section>
+
       <section className="container pb-12">
         <p className="sr-only" role="status" aria-live="polite">
           {loading
@@ -244,7 +338,7 @@ export default function CommunityCalendarPage() {
             {events.map((event, index) => (
               <article
                 key={event._id}
-                className="kasi-card animate-slide-up flex h-full flex-col"
+                className="editorial-entry editorial-entry-accent animate-slide-up flex h-full flex-col"
                 style={{ animationDelay: `${index * 40}ms` }}
               >
                 <div className="flex items-start justify-between gap-3">

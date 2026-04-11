@@ -51,59 +51,53 @@ const RADIUS_OPTIONS = ["5", "10", "25", "50"];
 function GigCard({ gig }: { gig: Gig }) {
   return (
     <Link href={`/gigs/${gig._id}`} className="no-underline block">
-      <article className="kasi-card cursor-pointer relative h-full flex flex-col">
-        {gig.isUrgent && (
-          <span className="badge badge-danger absolute top-4 right-4">
-            Urgent
-          </span>
-        )}
-
-        {/* Category + verified */}
-        <div className="flex items-center gap-2 mb-2.5">
-          <span className="badge badge-primary">
-            {gig.category.replace("_", " ")}
-          </span>
-          {gig.isProviderVerified && (
-            <span className="badge badge-success">✓ Verified</span>
-          )}
-        </div>
-
-        {/* Title */}
-        <h3 className="text-lg font-bold mb-1.5 text-on-background">
-          {gig.title}
-        </h3>
-
-        {/* Description */}
-        <p className="text-sm text-on-surface-variant mb-3 line-clamp-2">
-          {gig.description}
-        </p>
-
-        {/* Meta row */}
-        <div className="flex flex-wrap gap-3 text-xs text-outline mt-auto">
-          <span>
-            📍 {gig.location.suburb}, {gig.location.city}
-          </span>
-          {gig.distance !== undefined && (
-            <span>
-              🛤{" "}
-              {gig.distance < 1
-                ? `${Math.round(gig.distance * 1000)}m`
-                : `${gig.distance.toFixed(1)}km`}{" "}
-              away
+      <article className="directory-card directory-card-soft cursor-pointer">
+        <div className="directory-card-header">
+          <div className="directory-card-meta">
+            {gig.isUrgent ? (
+              <span className="badge badge-danger">Urgent</span>
+            ) : null}
+            <span className="badge badge-primary">
+              {gig.category.replace("_", " ")}
             </span>
-          )}
-          <span>👤 {gig.providerName}</span>
-          <span>⏱ {formatRelativeTime(gig.createdAt)}</span>
+            {gig.isProviderVerified ? (
+              <span className="badge badge-success">Verified</span>
+            ) : null}
+          </div>
+          <span className="mini-stat-value text-primary">{gig.payDisplay}</span>
         </div>
 
-        {/* Footer */}
-        <div className="flex justify-between items-center mt-4 pt-3 border-t border-outline-variant/30">
-          <span className="font-bold text-lg text-primary">
-            {gig.payDisplay}
+        <div className="directory-card-body">
+          <h3 className="text-xl font-bold text-on-background">{gig.title}</h3>
+          <p className="directory-card-detail line-clamp-3">
+            {gig.description}
+          </p>
+          <div className="impact-list">
+            <div className="impact-row">
+              <div>
+                <p className="text-sm font-semibold">Location</p>
+                <p className="text-sm text-on-surface-variant">
+                  {gig.location.suburb}, {gig.location.city}
+                </p>
+              </div>
+              {gig.distance !== undefined ? (
+                <span className="badge badge-info">
+                  {gig.distance < 1
+                    ? `${Math.round(gig.distance * 1000)}m`
+                    : `${gig.distance.toFixed(1)}km`} away
+                </span>
+              ) : null}
+            </div>
+          </div>
+        </div>
+
+        <div className="directory-card-footer">
+          <span className="text-sm font-semibold text-on-surface-variant">
+            {gig.providerName}
           </span>
           <span className="text-xs text-outline">
             {gig.applicationCount} applied · {gig.slots} slot
-            {gig.slots !== 1 ? "s" : ""}
+            {gig.slots !== 1 ? "s" : ""} · {formatRelativeTime(gig.createdAt)}
           </span>
         </div>
       </article>
@@ -242,6 +236,9 @@ function MarketplaceInner() {
   const visibleGigs = verifiedOnly
     ? sortedGigs.filter((gig) => gig.isProviderVerified)
     : sortedGigs;
+  const nearbyCount = visibleGigs.filter(
+    (gig) => typeof gig.distance === "number",
+  ).length;
 
   return (
     <div className="container page-shell">
@@ -253,9 +250,9 @@ function MarketplaceInner() {
               Find nearby work without losing time to clutter.
             </h1>
             <p className="page-hero-description">
-              The marketplace now leads with distance, trust, urgency, and pay.
+              The marketplace should lead with distance, urgency, trust, and pay.
               Browse the jobs closest to you first, then refine with filters
-              that match township reality.
+              that match township travel reality instead of generic search patterns.
             </p>
             <div className="page-hero-actions">
               <Link href="/gigs/new" className="btn btn-primary btn-lg">
@@ -293,6 +290,54 @@ function MarketplaceInner() {
               ]}
             />
           </aside>
+        </div>
+      </section>
+
+      <section className="pb-8">
+        <div className="bento-grid md:grid-cols-12">
+          <div className="feature-panel-contrast md:col-span-8 text-on-background">
+            <p className="mini-stat-label">Marketplace rules</p>
+            <h2 className="mt-2 text-2xl font-black">
+              Nearby work should beat long-distance guesswork.
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm leading-7 text-on-surface-variant">
+              Transport is part of economic participation. This route needs to
+              foreground neighbourhood relevance before secondary discovery features.
+            </p>
+            <div className="mt-5 signal-strip">
+              <div className="signal-tile">
+                <p className="signal-tile-title">Distance first</p>
+                <p className="signal-tile-copy">
+                  Show users whether the work is realistically close enough to attempt today.
+                </p>
+              </div>
+              <div className="signal-tile">
+                <p className="signal-tile-title">Trust visible early</p>
+                <p className="signal-tile-copy">
+                  Verified providers should appear in the first scan, not after a risky click.
+                </p>
+              </div>
+              <div className="signal-tile">
+                <p className="signal-tile-title">Urgency should read fast</p>
+                <p className="signal-tile-copy">
+                  High-speed jobs need stronger emphasis than passive listings.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="feature-panel md:col-span-4">
+            <p className="mini-stat-label">Current result scope</p>
+            <div className="mt-4 space-y-3">
+              <div className="mini-stat">
+                <p className="mini-stat-label">Visible listings</p>
+                <p className="mini-stat-value text-primary">{visibleGigs.length}</p>
+              </div>
+              <div className="mini-stat">
+                <p className="mini-stat-label">Distance-tagged gigs</p>
+                <p className="mini-stat-value text-warning">{nearbyCount}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -540,6 +585,20 @@ function MarketplaceInner() {
       <p className="sr-only" role="status" aria-live="polite">
         {loading ? "Loading gigs" : `${gigs.length} gigs loaded`}
       </p>
+
+      {!loading && visibleGigs.length > 0 ? (
+        <div className="mb-6 flex items-center justify-between gap-3">
+          <div>
+            <p className="mini-stat-label">Live results</p>
+            <h2 className="mt-1 text-2xl font-black">
+              {visibleGigs.length} gigs ready for review
+            </h2>
+          </div>
+          <span className="badge badge-secondary">
+            Sort: {sortBy.replace("-", " ")}
+          </span>
+        </div>
+      ) : null}
 
       {/* Gig grid */}
       <div aria-busy={loading}>

@@ -37,15 +37,36 @@ export default function SpotlightPage() {
   };
 
   useEffect(() => {
-    setLoading(true);
-    const params = new URLSearchParams();
-    if (suburb) params.set("suburb", suburb);
-    if (category && category !== "all") params.set("category", category);
-    fetch(`/api/spotlight?${params.toString()}`)
-      .then((res) => res.json())
-      .then((data) => setBusinesses(data.businesses ?? []))
-      .catch(() => setBusinesses([]))
-      .finally(() => setLoading(false));
+    let cancelled = false;
+
+    async function loadBusinesses() {
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (suburb) params.set("suburb", suburb);
+      if (category && category !== "all") params.set("category", category);
+
+      try {
+        const res = await fetch(`/api/spotlight?${params.toString()}`);
+        const data = await res.json();
+        if (!cancelled) {
+          setBusinesses(data.businesses ?? []);
+        }
+      } catch {
+        if (!cancelled) {
+          setBusinesses([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadBusinesses();
+
+    return () => {
+      cancelled = true;
+    };
   }, [suburb, category]);
 
   const categories = useMemo(
@@ -54,6 +75,7 @@ export default function SpotlightPage() {
   );
 
   const verifiedCount = businesses.filter((b) => b.verified).length;
+  const featuredBusiness = businesses[0] ?? null;
 
   return (
     <div className="pb-12">
@@ -164,6 +186,40 @@ export default function SpotlightPage() {
         </div>
       </section>
 
+      <section className="container pb-8">
+        <div className="bento-grid md:grid-cols-12">
+          <div className="feature-panel md:col-span-7">
+            <p className="mini-stat-label">Featured spotlight</p>
+            <h2 className="mt-2 text-3xl font-black">
+              {featuredBusiness ? featuredBusiness.businessName : "Local business feature pending"}
+            </h2>
+            <p className="mt-2 text-sm leading-7 text-on-surface-variant">
+              {featuredBusiness
+                ? featuredBusiness.description
+                : "List a business so the directory can highlight a trusted local service this week."}
+            </p>
+            {featuredBusiness ? (
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="badge badge-primary capitalize">
+                  {featuredBusiness.category}
+                </span>
+                <span className="badge badge-secondary">{featuredBusiness.suburb}</span>
+                {featuredBusiness.verified ? (
+                  <span className="badge badge-success">Verified</span>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
+          <div className="feature-panel md:col-span-5">
+            <p className="mini-stat-label">Why spotlight exists</p>
+            <p className="mt-3 text-sm leading-7 text-on-surface-variant">
+              Township-first discovery reduces long-distance spending and gives
+              neighbours a better chance of finding trusted services close to home.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="container pb-12">
         <p className="sr-only" role="status" aria-live="polite">
           {loading
@@ -199,7 +255,7 @@ export default function SpotlightPage() {
             {businesses.map((business, index) => (
               <article
                 key={business._id}
-                className="kasi-card animate-slide-up flex h-full flex-col"
+                className="editorial-entry editorial-entry-accent animate-slide-up flex h-full flex-col"
                 style={{ animationDelay: `${index * 40}ms` }}
               >
                 <div className="flex items-start justify-between gap-3">

@@ -1,7 +1,7 @@
 ---
 title: KasiLink Design Library
 created: 2026-04-05
-updated: 2026-04-05
+updated: 2026-04-11
 author: Codex
 tags:
   - design
@@ -30,6 +30,14 @@ status: active
 - Backend and orchestration diagrams.
 - Supporting design notes and explanation files.
 
+## April 11 Audit
+
+- Strength: the folder contains real implementation-grade assets, not vague moodboards.
+- Strength: core product surfaces already have matching stitch references in both light and dark directions.
+- Gap: there is no single route inventory that says which screen file governs which app route.
+- Gap: the folder mixes source-of-truth screens with exploratory explanations, but the priority level of each file is not made explicit.
+- Gap: implementation status is not tracked per reference, which makes it too easy to claim alignment without verifying the live route.
+
 ## Best Fit
 
 - `app/*` pages that need to match a mockup.
@@ -47,6 +55,28 @@ status: active
 - `sub-features/` - supporting utility and status screens.
 - `tutoring/` - tutoring design references.
 - `explation-of-designs/` - explanation pages and design rationale.
+
+## Priority Screen Map
+
+- [route-audit-matrix.md](route-audit-matrix.md) - current route-to-design audit status for the active phase.
+- `light-Mode/stitch/kasilink_home_feed_ubuntu_pulse/` - primary public homepage reference.
+- `light-Mode/stitch/kasilink_marketplace_ubuntu_pulse/` - primary `/marketplace` reference.
+- `light-Mode/stitch/kasilink_forum_ubuntu_pulse/` - primary `/forum` reference.
+- `features/stitch/verified_provider_search_results/` - primary `/verified` reference.
+- `features/stitch/water_outage_alert_details/` - primary `/water-outages` reference.
+- `sub-features/stitch/stitch/community_status/` - primary `/community-status` reference.
+- `sub-features/stitch/stitch/utility_schedule/` - primary `/utility-schedule` reference.
+- `features/stitch/community_calendar/` - primary `/community-calendar` reference.
+- `features/stitch/local_business_spotlight/` - primary `/spotlight` reference.
+- `tutoring/` - primary `/tutoring` reference.
+
+## Execution Rule
+
+For route work in this phase:
+
+1. Find the matching stitch asset first.
+2. Confirm whether the live route already matches it, partially matches it, or diverges.
+3. Record the gap in the current execution note before claiming the route is complete.
 
 ## Color Filters
 

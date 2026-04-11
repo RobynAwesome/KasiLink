@@ -1,7 +1,7 @@
 ---
 title: KasiLink Updates Control Center
 created: 2026-04-05
-updated: 2026-04-05
+updated: 2026-04-11
 author: Codex
 tags:
   - updates
@@ -26,16 +26,17 @@ status: active
 ## Read Order
 
 1. [../index.md](../index.md) - structure map for the whole repository
-2. [technical-Specifications.md](../technical-Specifications.md) - project mission and product intent
-3. [master-todo.md](master-todo.md) - highest-priority roadmap and owner split
-4. [billing-plan.md](billing-plan.md) - canonical user billing plan and pricing
-5. [delegation-protocol.md](delegation-protocol.md) - agent rules of engagement
-6. [current-alignment-notes.md](current-alignment-notes.md) - canonical file placement and route ownership
-7. [task-board.md](task-board.md) - live task status
-8. [comms-log.md](comms-log.md) - chronological status and decisions
-9. [dev-tracker.md](dev-tracker.md) - per-agent progress history
-10. [next-improvements.md](next-improvements.md) - completed follow-up work and open structural items
-11. [reference-notes.md](reference-notes.md) - consolidated legacy planning, environment, and archive context
+2. [2026-04-11-structure-audit-and-execution-plan.md](2026-04-11-structure-audit-and-execution-plan.md) - current phase-control note for Design, Information, and Details
+3. [technical-Specifications.md](../technical-Specifications.md) - project mission and product intent
+4. [master-todo.md](master-todo.md) - historical roadmap, useful but not the current phase-control note
+5. [billing-plan.md](billing-plan.md) - canonical user billing plan and pricing
+6. [delegation-protocol.md](delegation-protocol.md) - agent rules of engagement
+7. [current-alignment-notes.md](current-alignment-notes.md) - canonical file placement and route ownership
+8. [task-board.md](task-board.md) - live task status
+9. [comms-log.md](comms-log.md) - chronological status and decisions
+10. [dev-tracker.md](dev-tracker.md) - per-agent progress history
+11. [next-improvements.md](next-improvements.md) - completed follow-up work and open structural items
+12. [reference-notes.md](reference-notes.md) - consolidated legacy planning, environment, and archive context
 
 ## Workflow
 
@@ -50,6 +51,7 @@ status: active
 ## Canonical Sources
 
 - Mission and product direction: [technical-Specifications.md](../technical-Specifications.md)
+- Current structure-driven execution note: [2026-04-11-structure-audit-and-execution-plan.md](2026-04-11-structure-audit-and-execution-plan.md)
 - Active roadmap: [master-todo.md](master-todo.md)
 - Billing plan: [billing-plan.md](billing-plan.md)
 - Route ownership and file placement: [current-alignment-notes.md](current-alignment-notes.md)

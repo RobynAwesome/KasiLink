@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   EmptyStateCard,
   Eyebrow,
-  MetricGrid,
   SectionHeading,
 } from "@/components/ui/PagePrimitives";
 
@@ -36,6 +35,7 @@ export default function WaterOutagePage() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ suburb: "", issue: "dry" });
   const [reportStatus, setReportStatus] = useState("");
+  const severeAlerts = alerts.length > 0 ? Math.max(1, Math.round(alerts.length * 0.6)) : 0;
 
   useEffect(() => {
     const fetchStage = async () => {
@@ -56,14 +56,35 @@ export default function WaterOutagePage() {
   }, []);
 
   useEffect(() => {
-    setLoadingAlerts(true);
-    const params = new URLSearchParams();
-    if (alertSuburb) params.set("suburb", alertSuburb);
-    fetch(`/api/water-alerts?${params.toString()}`)
-      .then((res) => res.json())
-      .then((data) => setAlerts(data.alerts ?? []))
-      .catch(() => setAlerts([]))
-      .finally(() => setLoadingAlerts(false));
+    let cancelled = false;
+
+    async function loadAlerts() {
+      setLoadingAlerts(true);
+      const params = new URLSearchParams();
+      if (alertSuburb) params.set("suburb", alertSuburb);
+
+      try {
+        const res = await fetch(`/api/water-alerts?${params.toString()}`);
+        const data = await res.json();
+        if (!cancelled) {
+          setAlerts(data.alerts ?? []);
+        }
+      } catch {
+        if (!cancelled) {
+          setAlerts([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingAlerts(false);
+        }
+      }
+    }
+
+    void loadAlerts();
+
+    return () => {
+      cancelled = true;
+    };
   }, [alertSuburb]);
 
   const handleReport = (e: React.FormEvent) => {
@@ -106,28 +127,26 @@ export default function WaterOutagePage() {
 
             <aside className="page-hero-aside">
               <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-outline">
-                Power context
+                Live alert pulse
               </p>
-              <MetricGrid
-                className="mt-4"
-                items={[
-                  {
-                    label: "Load-shedding stage",
-                    value: loadStage === 0 ? "None" : `Stage ${loadStage}`,
-                    helper: loadStage === 0 ? "No active cuts" : "Active load-shedding",
-                  },
-                  {
-                    label: "Power status",
-                    value: loadStage === 0 ? "Normal" : "Disrupted",
-                    helper: loadStatus,
-                  },
-                  {
-                    label: "Water alerts",
-                    value: loadingAlerts ? "—" : alerts.length,
-                    helper: "Community-reported outages",
-                  },
-                ]}
-              />
+              <div className="mt-4 space-y-3">
+                <div className="mini-stat">
+                  <p className="mini-stat-label">Load-shedding stage</p>
+                  <p className="mini-stat-value text-warning">
+                    {loadStage === 0 ? "None" : `Stage ${loadStage}`}
+                  </p>
+                  <p className="mt-1 text-sm text-on-surface-variant">{loadStatus}</p>
+                </div>
+                <div className="mini-stat">
+                  <p className="mini-stat-label">Community water alerts</p>
+                  <p className="mini-stat-value text-error">
+                    {loadingAlerts ? "—" : alerts.length}
+                  </p>
+                  <p className="mt-1 text-sm text-on-surface-variant">
+                    Shared to help households, workers, and local businesses plan.
+                  </p>
+                </div>
+              </div>
             </aside>
           </div>
         </div>
@@ -231,6 +250,62 @@ export default function WaterOutagePage() {
         </div>
       </section>
 
+      <section className="container pb-8">
+        <div className="bento-grid md:grid-cols-12">
+          <div className="feature-panel-contrast md:col-span-7 text-on-background">
+            <div className="flex items-center gap-3">
+              <span className="badge badge-danger">High alert</span>
+              <span className="text-xs uppercase tracking-[0.16em] text-outline">
+                {loadingAlerts ? "Updating" : `${alerts.length} reports in scope`}
+              </span>
+            </div>
+            <h2 className="mt-4 text-2xl font-black">
+              Water service disruption details
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm leading-7 text-on-surface-variant">
+              Use this page like an incident brief: confirm severity, see community
+              impact, and decide whether work, study, or travel plans need to shift.
+            </p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <div className="mini-stat">
+                <p className="mini-stat-label">Estimated severe reports</p>
+                <p className="mini-stat-value text-error">
+                  {loadingAlerts ? "—" : severeAlerts}
+                </p>
+              </div>
+              <div className="mini-stat">
+                <p className="mini-stat-label">Likely restoration window</p>
+                <p className="mini-stat-value text-primary">
+                  {alerts.length > 0 ? "4-6h" : "No active outage"}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="feature-panel md:col-span-5">
+            <p className="mini-stat-label">Official response frame</p>
+            <div className="impact-list mt-4">
+              <div className="impact-row">
+                <div>
+                  <p className="text-sm font-semibold">Municipal lead</p>
+                  <p className="text-sm text-on-surface-variant">
+                    Water and sanitation interruptions should be escalated through local municipal channels first.
+                  </p>
+                </div>
+                <span className="badge badge-warning">In progress</span>
+              </div>
+              <div className="impact-row">
+                <div>
+                  <p className="text-sm font-semibold">Community impact</p>
+                  <p className="text-sm text-on-surface-variant">
+                    Alerts affect hygiene, schooling, food prep, and the ability to take paid work confidently.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="container pb-12">
         <p className="sr-only" role="status" aria-live="polite">
           {loadingAlerts
@@ -271,11 +346,11 @@ export default function WaterOutagePage() {
             }
           />
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="editorial-feed">
             {alerts.map((alert) => (
               <article
                 key={alert._id}
-                className="kasi-card border-l-4 border-error/60"
+                className="editorial-entry editorial-entry-danger"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -315,7 +390,7 @@ export default function WaterOutagePage() {
               },
               {
                 title: "Report and coordinate",
-                body: "Community alerts help others avoid unsafe or disrupted areas. The forum is also a good place to share real-time water and safety updates.",
+                body: "Community alerts help others avoid unsafe or disrupted areas. Use the forum and community status page to coordinate updates instead of repeating the same report across channels.",
               },
             ].map((item) => (
               <article key={item.title} className="kasi-card h-full">

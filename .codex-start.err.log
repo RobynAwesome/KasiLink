@@ -1,0 +1,47 @@
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\package-lock.json
+
+Error: Publishable key not valid.
+    at rs (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:15:62683)
+    at nQ.initPublishableKeyValues (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:26:20284)
+    at new nQ (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:26:18770)
+    at nZ (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:26:22532)
+    at async a3 (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:34:914)
+    at async (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:76:1536)
+    at async handler (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:76:12067)
+    at async (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:15:36688)
+    at async tp (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:15:33281)
+Error: Publishable key not valid.
+    at rs (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:15:62683)
+    at nQ.initPublishableKeyValues (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:26:20284)
+    at new nQ (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:26:18770)
+    at nZ (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:26:22532)
+    at async a3 (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:34:914)
+    at async (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:76:1536)
+    at async handler (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:76:12067)
+    at async (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:15:36688)
+    at async tp (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:15:33281)
+Error: Publishable key not valid.
+    at rs (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:15:62683)
+    at nQ.initPublishableKeyValues (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:26:20284)
+    at new nQ (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:26:18770)
+    at nZ (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:26:22532)
+    at async a3 (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:34:914)
+    at async (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:76:1536)
+    at async handler (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:76:12067)
+    at async (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:15:36688)
+    at async tp (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:15:33281)
+Error: Publishable key not valid.
+    at rs (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:15:62683)
+    at nQ.initPublishableKeyValues (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:26:20284)
+    at new nQ (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:26:18770)
+    at nZ (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:26:22532)
+    at async a3 (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:34:914)
+    at async (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:76:1536)
+    at async handler (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:76:12067)
+    at async (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:15:36688)
+    at async tp (C:\Users\rkhol\OneDrive\Documents\Anthropic\Introduction to MCP\KasiLink\.next\server\chunks\[root-of-the-server]__0iak24f._.js:15:33281)

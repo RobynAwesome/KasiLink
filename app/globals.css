@@ -766,6 +766,124 @@ a:hover { color: var(--primary-hover); }
   padding: var(--space-4);
 }
 
+.bento-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.feature-panel {
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xl);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 55%),
+    var(--surface-1);
+  padding: var(--space-5);
+  box-shadow: var(--card-shadow);
+}
+
+.feature-panel-contrast {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle at top right, rgba(241, 226, 89, 0.14), transparent 26%),
+    linear-gradient(180deg, color-mix(in srgb, var(--surface-1) 82%, black 18%), color-mix(in srgb, var(--surface-variant) 74%, black 26%));
+  padding: var(--space-5);
+  box-shadow: var(--card-shadow);
+}
+
+.impact-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.impact-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.impact-row:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.mini-stat {
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.9rem 1rem;
+}
+
+.mini-stat-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.mini-stat-value {
+  margin-top: 0.35rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.editorial-feed {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.editorial-entry {
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xl);
+  background: var(--card-bg);
+  padding: var(--space-5);
+  box-shadow: var(--card-shadow);
+}
+
+.editorial-entry-accent {
+  border-left: 4px solid var(--primary);
+}
+
+.editorial-entry-danger {
+  border-left: 4px solid var(--kasi-danger);
+}
+
+.calendar-shell {
+  border: 1px solid var(--card-border);
+  border-radius: calc(var(--radius-2xl) + 0.15rem);
+  background: var(--card-bg);
+  padding: var(--space-5);
+  box-shadow: var(--card-shadow);
+}
+
+.calendar-grid-shell {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  min-height: 4.75rem;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--surface-1) 94%, white 6%);
+  padding: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.calendar-day-active {
+  border-color: var(--primary);
+  background: var(--primary-subtle);
+}
+
 .section-heading {
   display: flex;
   align-items: flex-end;
@@ -1101,6 +1219,96 @@ a:hover { color: var(--primary-hover); }
    ============================================================ */
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
 .safe-top    { padding-top:    env(safe-area-inset-top); }
+
+.signal-strip {
+  display: grid;
+  gap: 0.9rem;
+}
+
+@media (min-width: 768px) {
+  .signal-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.signal-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  min-height: 100%;
+  padding: 1.2rem;
+  border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+  border-radius: 1.6rem;
+  background: color-mix(in srgb, var(--bg-secondary) 82%, white);
+  box-shadow: 0 18px 38px rgba(8, 15, 42, 0.06);
+}
+
+.signal-tile-title {
+  font-size: 1.04rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.signal-tile-copy {
+  font-size: 0.93rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.directory-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 100%;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+  border-radius: 1.75rem;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--bg-card) 96%, white) 0%, color-mix(in srgb, var(--bg-secondary) 92%, white) 100%);
+  box-shadow: 0 20px 44px rgba(8, 15, 42, 0.07);
+}
+
+.directory-card-soft {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--primary-light) 16%, white) 0%, color-mix(in srgb, var(--bg-secondary) 92%, white) 100%);
+}
+
+.directory-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.directory-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+.directory-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.directory-card-detail {
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.directory-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.95rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 52%, transparent);
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,
