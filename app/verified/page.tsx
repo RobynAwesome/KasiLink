@@ -61,11 +61,19 @@ export default function VerifiedProvidersPage() {
   }, [page]);
 
   const categories = ["All", ...new Set(providers.map((p) => p.category))];
+  const averageRating =
+    providers.length > 0
+      ? (
+          providers.reduce((sum, provider) => sum + provider.rating, 0) /
+          providers.length
+        ).toFixed(1)
+      : "0.0";
   const visibleProviders = providers.filter((provider) => {
     const matchesQuery =
       !query ||
       provider.displayName.toLowerCase().includes(query.toLowerCase()) ||
-      provider.category.toLowerCase().includes(query.toLowerCase());
+      provider.category.toLowerCase().includes(query.toLowerCase()) ||
+      provider.location.toLowerCase().includes(query.toLowerCase());
     const matchesCategory =
       activeCategory === "All" || provider.category === activeCategory;
     return matchesQuery && matchesCategory;
@@ -81,11 +89,11 @@ export default function VerifiedProvidersPage() {
               <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
                 Verified providers you can book with confidence.
               </h1>
-              <p className="page-hero-description">
-                Every provider on this page has been vetted through the KasiLink
-                trust process. Reviews, ratings, and verification status appear
-                upfront so you can decide before you travel.
-              </p>
+            <p className="page-hero-description">
+              Every provider on this page has been vetted through the KasiLink
+              trust process. Reviews, ratings, and verification status appear
+              upfront so you can decide before you travel or spend.
+            </p>
               <div className="page-hero-actions">
                 <Link href="/marketplace" className="btn btn-primary btn-lg">
                   Browse live gigs
@@ -121,6 +129,34 @@ export default function VerifiedProvidersPage() {
                 ]}
               />
             </aside>
+          </div>
+        </div>
+      </section>
+
+      <section className="container pb-8">
+        <div className="bento-grid md:grid-cols-12">
+          <div className="feature-panel-contrast md:col-span-7 text-on-background">
+            <p className="mini-stat-label">Verified search shell</p>
+            <h2 className="mt-2 text-2xl font-black">
+              Trust should be visible before a user commits money, time, or transport.
+            </h2>
+            <p className="mt-2 text-sm leading-7 text-on-surface-variant">
+              This route works best when it behaves like a local search directory:
+              quick scan, strong trust signals, and clear next actions.
+            </p>
+          </div>
+          <div className="feature-panel md:col-span-5">
+            <p className="mini-stat-label">Directory pulse</p>
+            <div className="mt-4 space-y-3">
+              <div className="mini-stat">
+                <p className="mini-stat-label">Loaded providers</p>
+                <p className="mini-stat-value text-primary">{providers.length}</p>
+              </div>
+              <div className="mini-stat">
+                <p className="mini-stat-label">Average rating</p>
+                <p className="mini-stat-value text-warning">{averageRating}</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -231,10 +267,10 @@ export default function VerifiedProvidersPage() {
             {visibleProviders.map((provider, index) => (
               <article
                 key={provider.clerkId}
-                className="kasi-card animate-slide-up flex h-full flex-col"
+                className="directory-card animate-slide-up flex h-full flex-col"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                <div className="flex items-start justify-between gap-3">
+                <div className="directory-card-header">
                   <div className="flex items-center gap-3">
                     <div
                       className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-container text-lg font-black text-primary"
@@ -263,21 +299,34 @@ export default function VerifiedProvidersPage() {
                   </span>
                 </div>
 
-                <div className="mt-3 flex items-center gap-2">
-                  <span className="text-warning" aria-hidden="true">
-                    ★
-                  </span>
-                  <span className="text-sm font-bold">
-                    {provider.rating.toFixed(1)}
-                  </span>
-                  <span className="text-xs text-outline">
-                    ({provider.reviewCount}{" "}
-                    {provider.reviewCount === 1 ? "review" : "reviews"})
-                  </span>
-                  <span className="badge badge-success ml-auto">Verified</span>
+                <div className="directory-card-body">
+                  <div className="impact-list">
+                    <div className="impact-row">
+                      <div>
+                        <p className="text-sm font-semibold">Location</p>
+                        <p className="text-sm text-on-surface-variant">
+                          {provider.location}
+                        </p>
+                      </div>
+                      <span className="badge badge-success">Verified</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 flex items-center gap-2">
+                    <span className="text-warning" aria-hidden="true">
+                      ★
+                    </span>
+                    <span className="text-sm font-bold">
+                      {provider.rating.toFixed(1)}
+                    </span>
+                    <span className="text-xs text-outline">
+                      ({provider.reviewCount}{" "}
+                      {provider.reviewCount === 1 ? "review" : "reviews"})
+                    </span>
+                  </div>
                 </div>
 
-                <div className="mt-auto flex gap-2 border-t border-outline-variant/30 pt-4">
+                <div className="directory-card-footer">
                   <Link
                     href={`/verified/${provider.clerkId}`}
                     className="btn btn-outline btn-sm flex-1 text-center"

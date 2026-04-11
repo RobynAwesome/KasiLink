@@ -29,6 +29,17 @@ const discussionTopics = [
   },
 ];
 
+const featuredSignals = [
+  {
+    title: "Stage and utility coordination",
+    body: "Use the forum when local conditions affect whether a gig or service can actually happen today.",
+  },
+  {
+    title: "Safety and scam notes",
+    body: "The strongest value of the forum is practical warnings attached to real places and real work contexts.",
+  },
+];
+
 interface ForumPostData {
   _id: string;
   title: string;
@@ -193,13 +204,39 @@ function ForumInner() {
         </div>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 py-8 md:grid-cols-3">
-        {discussionTopics.map((topic) => (
-          <article key={topic.title} className="kasi-card">
-            <h2 className="font-bold text-lg mb-2">{topic.title}</h2>
-            <p className="text-sm text-on-surface-variant">
-              {topic.description}
+      <section className="py-8">
+        <div className="bento-grid md:grid-cols-12">
+          <div className="feature-panel-contrast md:col-span-7 text-on-background">
+            <p className="mini-stat-label">Community heartbeat</p>
+            <h2 className="mt-2 text-2xl font-black">
+              The forum should feel like a local signal board, not a generic comment wall.
+            </h2>
+            <p className="mt-2 text-sm leading-7 text-on-surface-variant">
+              The best posts carry place-specific context, practical warnings,
+              and small pieces of operating knowledge that reduce wasted time.
             </p>
+          </div>
+          <div className="feature-panel md:col-span-5">
+            <p className="mini-stat-label">Trust system link</p>
+            <div className="impact-list mt-4">
+              {featuredSignals.map((item) => (
+                <div key={item.title} className="impact-row">
+                  <div>
+                    <p className="text-sm font-semibold">{item.title}</p>
+                    <p className="text-sm text-on-surface-variant">{item.body}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="grid grid-cols-1 gap-4 py-2 md:grid-cols-3">
+        {discussionTopics.map((topic) => (
+          <article key={topic.title} className="signal-tile">
+            <h2 className="signal-tile-title">{topic.title}</h2>
+            <p className="signal-tile-copy">{topic.description}</p>
           </article>
         ))}
       </section>
@@ -295,8 +332,10 @@ function ForumInner() {
           </p>
 
           {loading ? (
-            <div className="text-center py-10 text-on-surface-variant">
-              Loading threads...
+            <div className="flex flex-col gap-4">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div key={index} className="kasi-card skeleton h-32" />
+              ))}
             </div>
           ) : posts.length === 0 ? (
             <EmptyStateCard
@@ -304,9 +343,12 @@ function ForumInner() {
               description="Start the conversation with a practical update, a safety note, or a useful local tip."
             />
           ) : (
-            <div className="flex flex-col gap-4 mb-8">
+            <div className="editorial-feed mb-8">
               {sortedPosts.map((post) => (
-                <article key={post._id} className="kasi-card">
+                <article
+                  key={post._id}
+                  className="editorial-entry editorial-entry-accent"
+                >
                   <div className="flex justify-between items-start mb-2">
                     <span className="badge badge-secondary capitalize">
                       {post.category.replace("-", " ")}
@@ -365,7 +407,7 @@ function ForumInner() {
         </div>
 
         <aside>
-          <div className="kasi-card sticky top-24">
+          <div className="feature-panel sticky top-24">
             <h3 className="font-bold font-headline text-lg mb-4">
               Start a Thread
             </h3>

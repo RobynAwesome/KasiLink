@@ -1207,6 +1207,96 @@ a:hover { color: var(--primary-hover); }
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
 .safe-top    { padding-top:    env(safe-area-inset-top); }
 
+.signal-strip {
+  display: grid;
+  gap: 0.9rem;
+}
+
+@media (min-width: 768px) {
+  .signal-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.signal-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  min-height: 100%;
+  padding: 1.2rem;
+  border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+  border-radius: 1.6rem;
+  background: color-mix(in srgb, var(--bg-secondary) 82%, white);
+  box-shadow: 0 18px 38px rgba(8, 15, 42, 0.06);
+}
+
+.signal-tile-title {
+  font-size: 1.04rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.signal-tile-copy {
+  font-size: 0.93rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.directory-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 100%;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+  border-radius: 1.75rem;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--bg-card) 96%, white) 0%, color-mix(in srgb, var(--bg-secondary) 92%, white) 100%);
+  box-shadow: 0 20px 44px rgba(8, 15, 42, 0.07);
+}
+
+.directory-card-soft {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--primary-light) 16%, white) 0%, color-mix(in srgb, var(--bg-secondary) 92%, white) 100%);
+}
+
+.directory-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.directory-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+.directory-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.directory-card-detail {
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.directory-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.95rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 52%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

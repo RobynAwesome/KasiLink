@@ -23,10 +23,10 @@ status: active
 
 | Route | Canonical Design Source | Status | Current Read |
 |---|---|---|---|
-| `/` | `light-Mode/stitch/kasilink_home_feed_ubuntu_pulse/` | partial | Hero hierarchy and signal framing improved, but the live page still does not fully mirror the stitch feed composition. |
-| `/marketplace` | `light-Mode/stitch/kasilink_marketplace_ubuntu_pulse/` | partial | Search/filter shell and editorial framing now align better, but card treatment and full marketplace composition still need tighter matching. |
-| `/forum` | `light-Mode/stitch/kasilink_forum_ubuntu_pulse/` | partial | Community heartbeat framing is in place, but the live route still needs stronger feed-style post presentation and feature-alert composition. |
-| `/verified` | `features/stitch/verified_provider_search_results/` | partial | Trust framing and filter hierarchy improved, but the provider card and directory shell are not yet fully aligned to the reference screen. |
+| `/` | `light-Mode/stitch/kasilink_home_feed_ubuntu_pulse/` | partial | Homepage now reads more like a township signal board with stronger local-first and trust framing, but it remains a practical hybrid rather than a direct mobile-feed clone. |
+| `/marketplace` | `light-Mode/stitch/kasilink_marketplace_ubuntu_pulse/` | partial | Results now carry stronger local-distance, urgency, and trust-first hierarchy, but the live marketplace still keeps a denser utility filter system than the pure stitch composition. |
+| `/forum` | `light-Mode/stitch/kasilink_forum_ubuntu_pulse/` | partial | Community heartbeat and thread-feed presentation are stronger now, but the route still blends practical posting tools with the more editorial stitch reference. |
+| `/verified` | `features/stitch/verified_provider_search_results/` | partial | Verified search now behaves more like a local trust directory with stronger cards and trust cues, but the live shell still differs from the exact search-bar-first mobile reference. |
 | `/water-outages` | `features/stitch/water_outage_alert_details/` | partial | Route now carries stronger high-alert framing, response context, and community-impact layout, but it still does not reproduce the full dark incident-detail composition of the stitch source. |
 | `/community-status` | `sub-features/stitch/stitch/community_status/` | partial | Route now reads more like a status dashboard with stronger utility and safety cards, but still stops short of the exact bento composition of the stitch source. |
 | `/utility-schedule` | `sub-features/stitch/stitch/utility_schedule/` | partial | Next-outage emphasis and provider framing improved, but the route still uses a simpler live-data schedule grid than the more stylized stitch mockup. |
