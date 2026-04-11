@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 
 const mockLogs = [
   { id: 1, type: "system", msg: "Orchestration Layer v10.4 Initialized.", time: "10:22:04" },
-  { id: 2, type: "agent", agent: "Gemini", msg: "Scanning marketplace for urgency signals...", time: "10:22:05" },
+  { id: 2, type: "agent", agent: "KC", msg: "Scanning marketplace for urgency signals...", time: "10:22:05" },
   { id: 3, type: "audit", msg: "SafeSkill Audit: Handshake confirmed with Clerk Auth.", time: "10:22:07" },
   { id: 4, type: "action", msg: "Dispatched GigAlert to +27******245 (WhatsApp)", time: "10:22:10" },
   { id: 5, type: "thinking", agent: "Claude", msg: "Optimizing token discipline for regional latency.", time: "10:22:15" },

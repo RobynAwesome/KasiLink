@@ -4,6 +4,7 @@ import SessionStream from "@/components/studio/SessionStream";
 import AgentOrchestrator from "@/components/studio/AgentOrchestrator";
 import SafeSkillAudit from "@/components/studio/SafeSkillAudit";
 import SystemMap from "@/components/studio/SystemMap";
+import KCActivityPanel from "@/components/studio/KCActivityPanel";
 import { Eyebrow } from "@/components/ui/PagePrimitives";
 import Link from "next/link";
 import { Zap, Command, ShieldCheck, Activity } from "lucide-react";
@@ -14,14 +15,14 @@ export default function StudioPage() {
       <div className="container py-8">
         <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 animate-fade-in">
           <div className="space-y-4">
-            <Eyebrow tone="success">Operational GUI v1.0</Eyebrow>
+            <Eyebrow tone="success">Kopano Labs — Intelligence Layer</Eyebrow>
             <h1 className="text-4xl md:text-5xl font-black tracking-tight flex items-center gap-4">
               <span className="text-primary"><Zap size={48} /></span>
               Kopano <span className="text-outline-variant italic">Studio</span>
             </h1>
             <p className="text-on-surface-variant max-w-xl text-lg font-medium leading-relaxed">
-              Real-time multi-agent orchestration control plane. Built for the 
-              Microsoft Demo Day to visualize the KasiLink reasoning engine.
+              Real-time orchestration control plane for KasiLink.
+              Monitor KC activity, agent health, and system signals in one view.
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -68,6 +69,7 @@ export default function StudioPage() {
 
           {/* Side Analytics Column */}
           <aside className="space-y-6">
+            <KCActivityPanel />
             <SystemMap />
             <div className="kasi-card border-outline-variant/30 bg-surface-container-high relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
