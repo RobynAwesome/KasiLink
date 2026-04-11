@@ -27,9 +27,9 @@ tags:
 
 ## Quick Links
 
-- [Structure Map](index.md)
-- [Updates Hub](Updates/index.md)
-- [Mission Companion](Details/technical-Specifications.md)
+- [Project Dashboard](../00-Home/Dashboard.md)
+- [Updates Hub](../04-Updates/index.md)
+- [Marketplace Specs](../03-Architecture/index.md)
 
 ## Summary
 

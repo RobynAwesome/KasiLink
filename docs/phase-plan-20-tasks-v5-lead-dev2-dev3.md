@@ -38,4 +38,4 @@ Status date: 2026-04-06
 - [x] Run `npm run lint`.
 - [x] Run `npm run typecheck`.
 - [x] Run `npm run test`.
-- [ ] Deploy production and record inspector URL.
+- [x] Deploy production and record inspector URL (https://vercel.com/robynawesomes-projects/kasi-link/8Mydb2W6CugENU9P6ajjmLdtaZCJ)

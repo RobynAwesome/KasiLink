@@ -1,79 +1,83 @@
 ---
-title: KasiLink Structure Map
-created: 2026-04-05
-updated: 2026-04-06
-author: Codex
+title: KasiLink Dashboard
+created: 2026-04-11
+updated: 2026-04-11
+author: Robyn Awesome
 tags:
-  - structure
+  - home
+  - dashboard
+  - kasi-link
+  - kopano
   - navigation
-  - mission
-  - planning
-  - design
-  - information
-  - issues
 priority: critical
-audience:
-  - owner
-  - lead
-  - devs
-  - reviewers
 status: active
 ---
 
-# KasiLink Structure Map
+# KasiLink Dashboard
 
-> Start here when you need to understand how the project is organized.
-> This folder is the control plane for product intent, planning, reference material, and design evidence.
+> **Mission:** Link the kasi hustle — connect talent, create opportunity, and build community in Gauteng's townships through local, trusted gigs.
+> **Engine:** Integrated with the **Kopano Context** orchestration system for multi-agent intelligence and automated workforce management.
 
-## Primary Entry Point
+---
 
-The canonical navigation layer now starts in `Structure/Schematics/`, following the same numbered vault pattern used in `Introduction to MCP`.
+## 🚀 Active Right Now
 
-- [Schematics/index.md](Schematics/index.md) - Schematics root index and stable entrypoint.
-- [Schematics/00-Home/Dashboard.md](Schematics/00-Home/Dashboard.md) - standard home dashboard for mission, strategy, architecture, updates, training, and reference.
-- [Schematics/dashboard.md](Schematics/dashboard.md) - Obsidian-safe alias that redirects to the canonical dashboard.
+| Priority | Feature / Milestone | Status |
+| :--- | :--- | :--- |
+| **CRITICAL** | **Microsoft Demo Day** | [Microsoft Demo Day!](../Microsoft%20Demo%20Day!/index.md) — Playbooks & Scripts |
+| **CRITICAL** | **Phase 10 Hardening** | [Production Hardening](../14-PRODUCTION%20HARDENING%20(PHASE%2010)/index.md) |
+| **HIGH** | **Final UI Polish** | [Design Index](../03-Architecture/Design/index.md) — Township Energy Aesthetic |
+| **HIGH** | **Session Log** | [2026-04-11](../07-Sessions%20By%20Day/2026-04-11.md) — Current Lead Action Trace |
 
-## Read Flow
+---
 
-`Structure/index.md` -> `Structure/Schematics/index.md` -> `Structure/Schematics/00-Home/Dashboard.md` -> `Structure/technical-Specifications.md` -> `Structure/Updates/index.md` -> `Structure/Information/index.md` -> `Structure/Design/index.md` -> `Structure/Details/index.md` -> `Structure/Issues/index.md`
+## 🏛️ Ecosystem Structure
 
-## Folder Map
+### [01 — Mission](../01-Mission/index.md)
+The bedrock of KasiLink. Mission statement, problem definition, and the **KasiLink Blueprint**.
+- [KasiLink Blueprint](../01-Mission/KasiLink%20Blueprint.md) — Technical Specifications & Product Intent.
 
-- [Schematics/index.md](Schematics/index.md) - root index for the Schematics navigation layer.
-- [Schematics/00-Home/Dashboard.md](Schematics/00-Home/Dashboard.md) - canonical dashboard modeled on the Anthropic vault standard.
-- [Schematics/01-Mission/KasiLink Blueprint.md](Schematics/01-Mission/KasiLink%20Blueprint.md) - mission synthesis note linked to the full technical specification.
-- [Schematics/02-Strategy/Execution Map.md](Schematics/02-Strategy/Execution%20Map.md) - strategy and execution path.
-- [Schematics/03-Architecture/System Map.md](Schematics/03-Architecture/System%20Map.md) - architecture and styling guardrails.
-- [Schematics/04-Updates/Coordination Hub.md](Schematics/04-Updates/Coordination%20Hub.md) - entry into the live execution layer.
-- [Schematics/05-Training/AI Editor Rules.md](Schematics/05-Training/AI%20Editor%20Rules.md) - editor and orch guardrails.
-- [Schematics/06-Reference/Reference Map.md](Schematics/06-Reference/Reference%20Map.md) - canonical cross-links into the reference archives.
-- [Schematics/Templates/Note Template.md](Schematics/Templates/Note%20Template.md) - standard frontmatter template for new notes.
-- [technical-Specifications.md](technical-Specifications.md) - mission, product intent, and feature vision.
-- [Updates/index.md](Updates/index.md) - active planning, coordination, billing, and execution control.
-- [Information/index.md](Information/index.md) - source-backed facts, FAQs, services, and archive references.
-- [Design/index.md](Design/index.md) - mockups, screenshots, and design references for implementation.
-- [Details/index.md](Details/index.md) - supporting reference material and clarifications.
-- [Issues/index.md](Issues/index.md) - smoke tests, QA issues, and follow-up tracking.
-- [Obsidian/index.md](Obsidian/index.md) - second-brain vault layout and templates.
+### [02 — Strategy](../02-Strategy/index.md)
+How we win. Marketing, scaling, and the **Kopano Context** rebrand strategy.
+- [Kopano Labs Strategy](../02-Strategy/Kopano%20Labs%20Strategy.md) — SA-First AI Tooling.
 
-## Color Filters
+### [03 — Architecture](../03-Architecture/index.md)
+The tech stack. Tailwind CSS 4, Next.js 16, Clerk, MongoDB, and the `Navbar.tsx` refactor logic.
+- **[Design Hub](../03-Architecture/Design/index.md)** — Mockups, Colors, and Prototyping (Mandatory Preserve).
 
-- <span style="color:#dc2626">Critical</span> - blocks core product flow, launch, or trust.
-- <span style="color:#ea580c">High</span> - important for the core experience and user adoption.
-- <span style="color:#ca8a04">Medium</span> - differentiates the product or fills a major gap.
-- <span style="color:#16a34a">Low</span> - polish, optional expansion, or post-launch work.
+### [04 — Updates](../04-Updates/index.md)
+Live coordination. Task boards, comms logs, and deployment status.
+- **[KasiLink Updates](../04-Updates/index.md)** — Active coordination (Mandatory Preserve).
 
-## Extra Filters
+### [05 — Training](../05-Training/index.md)
+AI corpus. Owner profiles, operator rules, and agent behavioral standards.
 
-Use these tags when deciding where a file belongs:
+### [06 — Reference](../06-Reference/index.md)
+The archive. 
+- **[Information Hub](../06-Reference/Information/index.md)** — Facts, FAQs, and Research (Mandatory Preserve).
+- **[Issues Hub](../06-Reference/Issues/index.md)** — QA trackers and blockers.
 
-- `Mission` - directly supports the product vision.
-- `Execution` - active build or coordination work.
-- `Reference` - factual material or source content.
-- `Design` - mockups, visual specs, or UI direction.
-- `QA` - tests, regressions, or verification notes.
-- `Archive` - useful history that should stay readable but not drive current work.
-- `Billing` - pricing, plans, plan gating, payment architecture.
-- `Compliance` - POPIA, privacy, legal, or policy material.
-- `Operations` - logging, monitoring, deployment, or system processes.
-- `Obsidian` - local second-brain sync and note templates.
+---
+
+## 🧠 Continuous Improvement (KC Feedback)
+
+> [!IMPORTANT]
+> **Observer Rule:** All sessions must generate feedback for **Kopano Context (KC)**. Failures, hallucinations, or user corrections ("shit-on" events) must be logged and actioned.
+
+- **[Session Improvements](../10-SESSION%20IMPROVEMENTS/index.md)** — Refining lead doctrine.
+- **[AI Hallucination — CRITICAL](../11-AI%20HALLUCINATION%20-%20CRITICAL/index.md)** — Mandatory audit trail for AI failures.
+
+---
+
+## 📅 Calendar
+
+| Date | Milestone |
+| :--- | :--- |
+| **Apr 2026** | **Microsoft Demo Day** — Full Stack Staging & Pilot |
+| **May 2026** | **Milestone 2** — Polish, Community Stories, & PWA Hardening |
+| **Jun 2026** | **Milestone 3** — Gauteng Township Marketing & Official Launch |
+
+---
+
+- **Kasilink Market:** [www.kasilink.co.za](https://www.kasilink.co.za)
+- **Kopano Context:** [context.kopanolabs.com](https://www.context.kopanolabs.com)

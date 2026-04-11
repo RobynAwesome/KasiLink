@@ -4,6 +4,19 @@
    Two themes (toggled via data-theme on <html>):
      dark  (default) — steel blue  #4595c0
      light (Ubuntu Pulse) — kasi yellow #f1e259
+
+   Table of Contents:
+   1.  @theme デザイン図面 (Tokens)     - Line 27
+   2.  Light Theme Overrides            - Line 106
+   3.  Runtime CSS Properties           - Line 165
+   4.  Base / Reset                     - Line 310
+   5.  Typography                       - Line 375
+   6.  Components (Card, Btn, Input)    - Line 399
+   7.  Layout Helpers (Grid, Hero)      - Line 651
+   8.  Utility (Badge, Chip, Form)      - Line 808
+   9.  Accessibility (Scroll, Focus)    - Line 1003
+   10. Animations                       - Line 1031
+   11. Mobile / PWA Helpers             - Line 1063
    ============================================================ */
 
 /* 1. Google Fonts — @import must precede everything else in CSS */
