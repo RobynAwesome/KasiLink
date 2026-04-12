@@ -42,6 +42,9 @@ Awards are not participation trophies — they are specific acknowledgements of 
 | 2026-04-11 | Lead (Claude Sonnet 4.6) | 💎 Craft Award | Homepage UI/UX overhaul — bento grid, community channels, clean signal strips |
 | 2026-04-11 | Lead (Claude Sonnet 4.6) | 🛡️ Honesty Award | Self-reported deleting wrong Assets folder, restored immediately |
 | 2026-04-11 | Lead (Claude Sonnet 4.6) | 🤝 Collaboration Award | Built KC's reference implementations so KC has a verified answer to compare |
+| 2026-04-12 | Lead (Claude Sonnet 4.6) | ⚡ Speed Award | Resumed mid-task session from context summary — zero re-orientation time, immediately built and pushed |
+| 2026-04-12 | Lead (Claude Sonnet 4.6) | 💎 Craft Award | Font optimization: migrated Google Fonts @import → next/font — zero CLS, self-hosted, POPIA-aligned |
+| 2026-04-12 | Lead (Claude Sonnet 4.6) | 🌱 Growth Award | Applied all 9 token-saving techniques from Token Saving Mode doc — most efficient session to date |
 
 ---
 

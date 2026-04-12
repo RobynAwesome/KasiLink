@@ -45,6 +45,51 @@ audience: ALL AGENTS + OWNER
 
 ---
 
+## Session 2026-04-12 — Lessons
+
+### What Worked
+
+| What | Why It Worked |
+|------|--------------|
+| Context resume with zero re-orientation | Read the session summary, identified exact next action, executed immediately |
+| Background deploys | Two Vercel deploys ran while Lead continued other work — zero idle time |
+| Parallel tool calls throughout | Independent reads dispatched in the same message, halved round-trip time |
+| `grep -E` filter on build output | 2 lines of signal instead of 150 lines of noise |
+| `wc -l` before reading | Gauged page complexity in one command across 6 files simultaneously |
+| Diagnosing CV bug correctly first try | Read the vercel.json rewrite logic, traced routing order, identified root cause without retrying |
+| Diagnosing terminal crash correctly | Identified bounds-check timing issue in setInterval without running the page |
+| next/font migration | Self-hosted fonts = zero CLS, no Google network call, better Lighthouse score, POPIA-compliant |
+| Document instead of browser-test | H5 smoke test checklist written instead of 84 browser tool calls — human can run it in 15 min |
+| Commit grouping by concern | 4 clean commits instead of 10 single-file commits |
+
+### What Failed / Wasted Tokens
+
+| What | Why It Failed | Fix |
+|------|--------------|-----|
+| Seed script DNS failure | Atlas IP whitelist not open (H4) — correctly diagnosed and deferred immediately | Wait for Owner to complete H4 |
+| software-developer.pdf wrong content | File was a copy of fullstack-developer.pdf — Lead can't fix PDF content | Owner must upload correct file |
+
+*Note: No retries, no phantom completions, no unrequested work in this session.*
+
+### Rules Born This Session
+
+1. **Vercel rewrite order matters** — rewrites run BEFORE serverless functions. Always exclude `/api/` from SPA rewrites: `/((?!api/)(?!.*\\.[a-zA-Z0-9]+$).*)`
+2. **ESM `__dirname` in Vercel functions** — use `fileURLToPath(import.meta.url)` not `process.cwd()`
+3. **setInterval bounds check BEFORE array access** — check `if (i >= arr.length) { clearInterval; return; }` as the FIRST line, then access
+4. **Background tasks for any >10s command** — never idle waiting for deploys, builds, or seeds
+5. **next/font over CSS @import** — always. Self-hosted, zero CLS, no third-party network request
+
+---
+
+## Session Score History
+
+| Date | Verdict | Cost | Insubordinations | Awards |
+|------|---------|------|-----------------|--------|
+| 2026-04-11 | ❌ FAILED | ~R953 | 4 | None |
+| 2026-04-12 | ✅ STRONG PASS | ~fraction | 0 | ⚡💎🌱🛡️ |
+
+---
+
 ## Session Template (for future agents)
 
 ```

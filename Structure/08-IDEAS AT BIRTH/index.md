@@ -1,7 +1,7 @@
 ---
 title: 08-IDEAS AT BIRTH — Active Idea Bank
 created: 2026-04-11
-updated: 2026-04-11
+updated: 2026-04-12
 author: Lead (Claude Sonnet 4.6) + RobynAwesome
 tags: [ideas, incubation, kasilink, all-agents]
 status: ACTIVE — add ideas here the moment they appear
@@ -44,6 +44,10 @@ audience: ALL AGENTS + OWNER
 | 013 | **2nd Brain auto-update hook** — every AI session auto-appends learnings here | Ideas at Birth session — meta idea | Incubation | Lead |
 | 014 | **Township weather + safety alerts** — combine utility + safety into one awareness panel | Community status page pattern | Incubation | Lead |
 | 015 | **Verified provider QR code** — printable card for informal traders, scannable trust badge | Physical-digital bridge for township context | Incubation | Lead |
+| 016 | **next/font pattern standard** — enforce self-hosted fonts across all Kopano Labs products (no Google Fonts @import) | 2026-04-12 perf migration — eliminate render-blocking + POPIA alignment | Approved — implemented in KasiLink | Lead |
+| 017 | **SPA rewrite safety rule** — all Kopano Labs SPAs must exclude `/api/` from SPA rewrites in vercel.json | 2026-04-12 Portfolio CV bug root cause | Approved — implemented in Portfolio | Lead |
+| 018 | **KC Journal** — KC writes its own session log in Schematics 17-KC-JOURNAL | Owner wanted KC to have its own voice and space | Approved — folder created 2026-04-12 | Owner |
+| 019 | **App Store submission prep** — KasiLink needs 1024×1024 icon + 5 screenshots before App Store open | H12 appstore-metadata.md created | Incubation — Owner action for icon | Lead |
 
 ---
 
