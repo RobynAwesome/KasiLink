@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+import { MapPin, Shield, MessageSquare, TrendingUp, Zap, Users, Clock } from "lucide-react";
 import LoadSheddingWidget from "@/components/LoadSheddingWidget";
 import GrokChatModal from "@/components/GrokChatModal";
 import {
@@ -23,26 +25,29 @@ const signalCards = [
     description: "Check load-shedding and water disruption before accepting a booking or dispatching work.",
     href: "/water-outages",
     cta: "Track utility alerts",
+    Icon: Zap,
   },
   {
     title: "Trusted local providers",
     description: "Verified profiles and community reviews reduce risk before money, transport, or time is spent.",
     href: "/verified",
     cta: "Browse verified providers",
+    Icon: Shield,
   },
   {
     title: "Neighbourhood coordination",
     description: "Forum updates help communities share availability, safety notes, and local demand in real time.",
     href: "/forum",
     cta: "Open the forum",
+    Icon: Users,
   },
 ];
 
 const quickActions = [
-  { href: "/marketplace", label: "Browse live gigs", helper: "See work near you right now" },
-  { href: "/gigs/new", label: "Post urgent work", helper: "Reach nearby people faster" },
-  { href: "/chat", label: "Continue chats", helper: "Follow up with providers and applicants" },
-  { href: "/utility-schedule", label: "Check schedules", helper: "Plan work around outages" },
+  { href: "/marketplace", label: "Browse live gigs", helper: "See work near you right now", Icon: MapPin },
+  { href: "/gigs/new", label: "Post urgent work", helper: "Reach nearby people faster", Icon: Zap },
+  { href: "/chat", label: "Continue chats", helper: "Follow up with providers and applicants", Icon: MessageSquare },
+  { href: "/utility-schedule", label: "Check schedules", helper: "Plan work around outages", Icon: Clock },
 ];
 
 const localSystemNotes = [
@@ -70,10 +75,10 @@ const communityLinks = [
 ];
 
 const journeySteps = [
-  { step: "01", title: "Create a simple local profile", description: "Start with a phone number. Become visible for nearby work without heavy setup." },
-  { step: "02", title: "Find or post work nearby", description: "Match by distance, category, urgency, and the trust signals that matter on the ground." },
-  { step: "03", title: "Coordinate directly", description: "Use in-app chat and community signals to confirm timing, safety, and availability." },
-  { step: "04", title: "Build a stronger local reputation", description: "Completed gigs, reviews, and provider verification reinforce the trust loop over time." },
+  { step: "01", title: "Create a simple local profile", description: "Start with a phone number. Become visible for nearby work without heavy setup.", Icon: Users },
+  { step: "02", title: "Find or post work nearby", description: "Match by distance, category, urgency, and the trust signals that matter on the ground.", Icon: MapPin },
+  { step: "03", title: "Coordinate directly", description: "Use in-app chat and community signals to confirm timing, safety, and availability.", Icon: MessageSquare },
+  { step: "04", title: "Build a stronger local reputation", description: "Completed gigs, reviews, and provider verification reinforce the trust loop over time.", Icon: TrendingUp },
 ];
 
 export default async function HomePage() {
@@ -86,6 +91,26 @@ export default async function HomePage() {
         <div className="page-hero animate-fade-in">
           <div className="page-hero-grid">
             <div className="page-hero-copy">
+              {/* Logo + animation */}
+              <div className="mb-5 flex items-center gap-4">
+                <Image
+                  src="/kasilink-logo.png"
+                  alt="KasiLink"
+                  width={56}
+                  height={56}
+                  className="rounded-2xl shadow-lg"
+                  priority
+                />
+                <video
+                  src="/kasiLink-Logo-animation.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="h-14 w-auto rounded-xl"
+                  aria-hidden="true"
+                />
+              </div>
               <Eyebrow>South Africa&apos;s Township Platform</Eyebrow>
               <h1 className="page-hero-title mt-4 font-headline font-black text-on-background">
                 Local gigs.{" "}
@@ -147,9 +172,9 @@ export default async function HomePage() {
             <div className="mt-5 signal-strip">
               {signalCards.map((signal) => (
                 <Link key={signal.title} href={signal.href} className="signal-tile no-underline">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-outline">
-                    Core signal
-                  </p>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary mb-2">
+                    <signal.Icon size={16} />
+                  </div>
                   <h3 className="signal-tile-title">{signal.title}</h3>
                   <p className="signal-tile-copy">{signal.description}</p>
                   <span className="text-sm font-semibold text-primary">{signal.cta} →</span>
@@ -224,9 +249,9 @@ export default async function HomePage() {
                 className="signal-tile no-underline animate-slide-up"
                 style={{ animationDelay: `${index * 70}ms` }}
               >
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-outline">
-                  Action {index + 1}
-                </p>
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary mb-2">
+                  <action.Icon size={16} />
+                </div>
                 <p className="signal-tile-title">{action.label}</p>
                 <p className="signal-tile-copy">{action.helper}</p>
               </Link>
@@ -304,10 +329,15 @@ export default async function HomePage() {
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {journeySteps.map((step) => (
             <article key={step.step} className="kasi-card h-full">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-outline">
-                Step {step.step}
-              </p>
-              <h3 className="mt-3 text-lg font-bold">{step.title}</h3>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
+                  <step.Icon size={18} />
+                </div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-outline">
+                  Step {step.step}
+                </p>
+              </div>
+              <h3 className="text-lg font-bold">{step.title}</h3>
               <p className="mt-3 text-sm leading-7 text-on-surface-variant">{step.description}</p>
             </article>
           ))}
