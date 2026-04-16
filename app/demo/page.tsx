@@ -99,7 +99,7 @@ export default function DemoLeaderboard() {
           <div className="text-right">
             <p className="text-[9px] uppercase tracking-[0.2em] text-white/30">Intelligence by</p>
             <a
-              href="https://context.kopanolabs.com"
+              href="https://github.com/RobynAwesome/Introduction-to-MCP"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-xs font-bold text-[#4595C0] hover:underline"

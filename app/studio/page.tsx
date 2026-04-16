@@ -27,7 +27,7 @@ export default function StudioPage() {
           </div>
           <div className="flex items-center gap-3">
             <a
-              href="https://context.kopanolabs.com"
+              href="https://github.com/RobynAwesome/Introduction-to-MCP"
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-outline border-primary/40 text-primary text-xs font-bold uppercase tracking-widest px-6 h-12 rounded-2xl hover:bg-primary/10 inline-flex items-center gap-2"

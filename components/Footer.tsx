@@ -97,7 +97,7 @@ export default function Footer() {
             <div className="mt-4 inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 px-3 py-2">
               <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
               <a
-                href="https://context.kopanolabs.com"
+                href="https://github.com/RobynAwesome/Introduction-to-MCP"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[10px] font-bold uppercase tracking-widest text-primary hover:underline no-underline inline-flex items-center gap-1"
@@ -153,7 +153,7 @@ export default function Footer() {
           </div>
           <div className="flex flex-wrap items-center gap-4">
             <a
-              href="https://context.kopanolabs.com"
+              href="https://github.com/RobynAwesome/Introduction-to-MCP"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-primary hover:underline no-underline"

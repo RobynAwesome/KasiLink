@@ -152,7 +152,7 @@ export default function UtilityRescheduler({ suburb }: Props) {
           )}
 
           <a
-            href="https://context.kopanolabs.com"
+            href="https://github.com/RobynAwesome/Introduction-to-MCP"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-primary hover:underline"
