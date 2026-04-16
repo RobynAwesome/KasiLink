@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 import {
   EmptyStateCard,
   Eyebrow,
@@ -27,15 +28,17 @@ function timeAgo(iso: string) {
 }
 
 export default function WaterOutagePage() {
+  const { isSignedIn } = useUser();
   const [loadStage, setLoadStage] = useState<number>(0);
   const [loadStatus, setLoadStatus] = useState<string>("Checking...");
   const [alerts, setAlerts] = useState<WaterAlert[]>([]);
   const [alertSuburb, setAlertSuburb] = useState("");
   const [loadingAlerts, setLoadingAlerts] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ suburb: "", issue: "dry" });
-  const [reportStatus, setReportStatus] = useState("");
-  const severeAlerts = alerts.length > 0 ? Math.max(1, Math.round(alerts.length * 0.6)) : 0;
+  const [form, setForm] = useState({ suburb: "", title: "", description: "", type: "water_outage" });
+  const [submitting, setSubmitting] = useState(false);
+  const [reportStatus, setReportStatus] = useState<{ kind: "success" | "error"; message: string } | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchStage = async () => {
@@ -85,17 +88,47 @@ export default function WaterOutagePage() {
     return () => {
       cancelled = true;
     };
-  }, [alertSuburb]);
+  }, [alertSuburb, refreshKey]);
 
-  const handleReport = (e: React.FormEvent) => {
+  const handleReport = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.suburb) return;
-    setReportStatus(
-      `Outage reported for ${form.suburb}. Thank you for helping the community.`,
-    );
-    setForm({ suburb: "", issue: "dry" });
-    setShowForm(false);
+    if (!form.suburb || !form.title || !form.description) return;
+    setSubmitting(true);
+    setReportStatus(null);
+    try {
+      const res = await fetch("/api/water-alerts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: form.title,
+          description: form.description,
+          suburb: form.suburb,
+          type: form.type,
+        }),
+      });
+      if (res.ok) {
+        setReportStatus({
+          kind: "success",
+          message: `Outage reported for ${form.suburb}. Thank you for helping the community.`,
+        });
+        setForm({ suburb: "", title: "", description: "", type: "water_outage" });
+        setShowForm(false);
+        setRefreshKey((k) => k + 1);
+      } else if (res.status === 401) {
+        setReportStatus({ kind: "error", message: "Please sign in to report an outage." });
+      } else {
+        const data = await res.json();
+        setReportStatus({ kind: "error", message: data.error ?? "Failed to submit. Please try again." });
+      }
+    } catch {
+      setReportStatus({ kind: "error", message: "Network error. Please check your connection and try again." });
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  const affectedSuburbs = new Set(alerts.map((a) => a.suburb)).size;
+  const mostRecent = alerts.length > 0 ? timeAgo(alerts[0].createdAt) : null;
 
   return (
     <div className="pb-12">
@@ -154,8 +187,11 @@ export default function WaterOutagePage() {
 
       {reportStatus && (
         <div className="container pb-4">
-          <div className="alert alert-success" role="status">
-            {reportStatus}
+          <div
+            className={`alert ${reportStatus.kind === "success" ? "alert-success" : "alert-error"}`}
+            role="status"
+          >
+            {reportStatus.message}
           </div>
         </div>
       )}
@@ -169,12 +205,20 @@ export default function WaterOutagePage() {
             <SectionHeading
               eyebrow={<Eyebrow tone="danger">Report an outage</Eyebrow>}
               title="Help your neighbourhood plan around disruptions"
-              description="Add your suburb and the type of problem so others can see what is happening nearby."
+              description="Add your suburb and what is happening so others can see it in the live feed."
             />
+            {!isSignedIn && (
+              <div className="mb-4 rounded-lg border border-warning/40 bg-warning/10 px-4 py-3 text-sm text-on-background">
+                <Link href="/sign-in" className="font-semibold text-primary hover:underline">
+                  Sign in
+                </Link>{" "}
+                to submit a report. Your identity is not shown publicly — only the suburb and issue type appear.
+              </div>
+            )}
             <div className="grid gap-4 md:grid-cols-2">
               <div className="form-group">
                 <label htmlFor="outage-suburb" className="label">
-                  Location / suburb
+                  Location / suburb <span className="text-error">*</span>
                 </label>
                 <input
                   id="outage-suburb"
@@ -187,25 +231,59 @@ export default function WaterOutagePage() {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="outage-issue" className="label">
-                  Issue type
+                <label htmlFor="outage-type" className="label">
+                  Issue type <span className="text-error">*</span>
                 </label>
                 <select
-                  id="outage-issue"
+                  id="outage-type"
                   className="kasi-input"
-                  value={form.issue}
-                  onChange={(e) => setForm({ ...form, issue: e.target.value })}
+                  value={form.type}
+                  onChange={(e) => setForm({ ...form, type: e.target.value })}
                 >
-                  <option value="dry">Completely dry taps</option>
-                  <option value="low_pressure">Very low pressure</option>
-                  <option value="pipe_burst">Pipe burst</option>
-                  <option value="maintenance">Scheduled maintenance</option>
+                  <option value="water_outage">Water outage / dry taps</option>
+                  <option value="load_shedding">Load-shedding related</option>
+                  <option value="both">Both water and power</option>
                 </select>
               </div>
             </div>
+            <div className="mt-4 form-group">
+              <label htmlFor="outage-title" className="label">
+                Short title <span className="text-error">*</span>
+              </label>
+              <input
+                id="outage-title"
+                type="text"
+                className="kasi-input"
+                placeholder="e.g. No water since 6am in Site C"
+                value={form.title}
+                onChange={(e) => setForm({ ...form, title: e.target.value })}
+                minLength={5}
+                maxLength={120}
+                required
+              />
+            </div>
+            <div className="mt-4 form-group">
+              <label htmlFor="outage-description" className="label">
+                Details <span className="text-error">*</span>
+              </label>
+              <textarea
+                id="outage-description"
+                className="kasi-input min-h-[80px] resize-y"
+                placeholder="Describe what you are experiencing — e.g. completely dry, very low pressure, pipe burst on the corner of X and Y"
+                value={form.description}
+                onChange={(e) => setForm({ ...form, description: e.target.value })}
+                minLength={10}
+                maxLength={500}
+                required
+              />
+            </div>
             <div className="mt-4 flex gap-3">
-              <button type="submit" className="btn btn-primary">
-                Submit report
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={submitting || !isSignedIn}
+              >
+                {submitting ? "Submitting…" : "Submit report"}
               </button>
               <button
                 type="button"
@@ -268,15 +346,15 @@ export default function WaterOutagePage() {
             </p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               <div className="mini-stat">
-                <p className="mini-stat-label">Estimated severe reports</p>
+                <p className="mini-stat-label">Affected suburbs</p>
                 <p className="mini-stat-value text-error">
-                  {loadingAlerts ? "—" : severeAlerts}
+                  {loadingAlerts ? "—" : affectedSuburbs}
                 </p>
               </div>
               <div className="mini-stat">
-                <p className="mini-stat-label">Likely restoration window</p>
+                <p className="mini-stat-label">Most recent report</p>
                 <p className="mini-stat-value text-primary">
-                  {alerts.length > 0 ? "4-6h" : "No active outage"}
+                  {loadingAlerts ? "—" : mostRecent ?? "None active"}
                 </p>
               </div>
             </div>

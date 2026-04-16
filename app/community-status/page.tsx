@@ -24,19 +24,21 @@ const STAGE_COLOR: Record<number, string> = {
 
 const EMERGENCY_CONTACTS = [
   { name: "Eskom Helpline", number: "0860 037 566", icon: "⚡" },
-  { name: "Joburg Water", number: "011 688 1400", icon: "💧" },
+  { name: "City of Cape Town Water", number: "0860 103 050", icon: "💧" },
+  { name: "Joburg Water", number: "011 688 1400", icon: "🚰" },
   { name: "SAPS Emergency", number: "10111", icon: "🚔" },
 ];
 
 export default function CommunityStatusPage() {
   const [data, setData] = useState<StatusData | null>(null);
   const [loading, setLoading] = useState(true);
-  const travelReadiness = loading
-    ? "—"
-    : Math.max(
-        28,
-        100 - ((data?.powerStage ?? 0) * 12 + (data?.activeIncidents ?? 0) * 6 + (data?.waterAlerts ?? 0) * 4),
-      );
+  const areaCondition = loading
+    ? "Checking"
+    : (data?.powerStage ?? 0) >= 4 || (data?.activeIncidents ?? 0) >= 3 || (data?.waterAlerts ?? 0) >= 5
+    ? "High Alert"
+    : (data?.powerStage ?? 0) >= 2 || (data?.activeIncidents ?? 0) >= 1 || (data?.waterAlerts ?? 0) >= 2
+    ? "Monitor"
+    : "Stable";
 
   useEffect(() => {
     async function load() {
@@ -163,10 +165,12 @@ export default function CommunityStatusPage() {
             </p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <div className="mini-stat">
-                <p className="mini-stat-label">Travel readiness</p>
-                <p className="mini-stat-value text-primary">{travelReadiness}%</p>
+                <p className="mini-stat-label">Area condition</p>
+                <p className={`mini-stat-value ${areaCondition === "High Alert" ? "text-error" : areaCondition === "Monitor" ? "text-warning" : "text-success"}`}>
+                  {areaCondition}
+                </p>
                 <p className="mt-1 text-sm text-on-surface-variant">
-                  Quick confidence score based on power, water, and incident pressure.
+                  Based on live power stage, water alerts, and incident reports.
                 </p>
               </div>
               <div className="mini-stat">
@@ -199,12 +203,12 @@ export default function CommunityStatusPage() {
             </p>
             <div className="mt-5 h-2 rounded-full bg-surface-container-high">
               <div
-                className="h-2 rounded-full bg-primary transition-all"
-                style={{ width: `${loading ? 42 : travelReadiness}%` }}
+                className={`h-2 rounded-full transition-all ${areaCondition === "High Alert" ? "bg-error" : areaCondition === "Monitor" ? "bg-warning" : "bg-success"}`}
+                style={{ width: loading ? "33%" : areaCondition === "Stable" ? "100%" : areaCondition === "Monitor" ? "55%" : "20%" }}
               />
             </div>
             <p className="mt-2 text-xs text-outline">
-              Travel readiness is higher when outages and incidents stay low.
+              Condition worsens as power, water, and safety incidents increase.
             </p>
           </div>
         </div>
@@ -264,7 +268,7 @@ export default function CommunityStatusPage() {
           title="Key numbers for service failures"
           description="Call these directly when utility disruptions or safety issues cannot wait."
         />
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
           {EMERGENCY_CONTACTS.map((c) => (
             <div key={c.name} className="feature-panel flex items-center gap-4">
               <span className="text-2xl" aria-hidden="true">

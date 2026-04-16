@@ -165,7 +165,7 @@ export default function TutoringPage() {
                   },
                   {
                     label: "PYEI participants",
-                    value: "156K+",
+                    value: "156,587",
                     helper: "SA youth in employment programmes",
                   },
                 ]}
