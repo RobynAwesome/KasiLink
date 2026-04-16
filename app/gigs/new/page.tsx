@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { Eyebrow, MetricGrid, SectionHeading } from "@/components/ui/PagePrimitives";
 import { SUBURBS, inferCity, coordsForSuburb } from "@/lib/suburbs";
+import UtilityRescheduler from "@/components/UtilityRescheduler";
 
 const CATEGORIES = [
   { value: "car_wash", label: "Car Wash" },
@@ -307,6 +308,10 @@ export default function PostGigPage() {
                 </p>
               </div>
             </div>
+
+            {form.suburb && (
+              <UtilityRescheduler suburb={form.suburb} />
+            )}
 
             <div className="grid gap-3 md:grid-cols-2">
               <label className="surface-band flex cursor-pointer items-center gap-3">

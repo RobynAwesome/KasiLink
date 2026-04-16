@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 
 const ZapIcon = () => (
   <svg
@@ -93,6 +94,18 @@ export default function Footer() {
               opportunities. Built for South Africa, powered by community, and
               tuned for trust, speed, and local conditions.
             </p>
+            <div className="mt-4 inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 px-3 py-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              <a
+                href="https://context.kopanolabs.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[10px] font-bold uppercase tracking-widest text-primary hover:underline no-underline inline-flex items-center gap-1"
+              >
+                Intelligence by Kopano Context
+                <ExternalLink size={9} />
+              </a>
+            </div>
           </div>
 
           <nav>
@@ -130,10 +143,37 @@ export default function Footer() {
           </nav>
         </div>
 
+        {/* Kopano Labs band */}
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-outline-variant/20 bg-surface-container px-5 py-3">
+          <div className="flex items-center gap-3">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+              A Kopano Labs product
+            </span>
+          </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <a
+              href="https://context.kopanolabs.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-primary hover:underline no-underline"
+            >
+              Kopano Context
+              <ExternalLink size={9} />
+            </a>
+            <a
+              href="mailto:rkholofelo@kopanolabs.com"
+              className="text-[10px] text-outline hover:text-primary no-underline"
+            >
+              rkholofelo@kopanolabs.com
+            </a>
+          </div>
+        </div>
+
         {/* Bottom row */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-outline-variant/30 pt-5">
           <p className="text-xs text-outline">
-            © {year} KasiLink. Made in South Africa.
+            © {year} KasiLink · Kopano Labs. Made in South Africa.
           </p>
           <div className="gap-4 flex items-center">
             {legalLinks.map(({ label, href }) => (

@@ -7,7 +7,7 @@ import SystemMap from "@/components/studio/SystemMap";
 import KCActivityPanel from "@/components/studio/KCActivityPanel";
 import { Eyebrow } from "@/components/ui/PagePrimitives";
 import Link from "next/link";
-import { Zap, Command, ShieldCheck, Activity } from "lucide-react";
+import { Zap, Command, ShieldCheck, Activity, ExternalLink } from "lucide-react";
 
 export default function StudioPage() {
   return (
@@ -26,9 +26,15 @@ export default function StudioPage() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <button className="btn btn-outline border-outline-variant/30 text-xs font-bold uppercase tracking-widest px-6 h-12 rounded-2xl hover:bg-surface-variant">
-              System Logs
-            </button>
+            <a
+              href="https://context.kopanolabs.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-outline border-primary/40 text-primary text-xs font-bold uppercase tracking-widest px-6 h-12 rounded-2xl hover:bg-primary/10 inline-flex items-center gap-2"
+            >
+              Full KC Platform
+              <ExternalLink size={12} />
+            </a>
             <button className="btn btn-primary text-xs font-black uppercase tracking-widest px-8 h-12 rounded-2xl shadow-[0_12px_44px_rgba(69,149,192,0.4)]">
               Restart Core
             </button>
