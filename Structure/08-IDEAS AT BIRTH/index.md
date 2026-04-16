@@ -1,7 +1,7 @@
 ---
 title: 08-IDEAS AT BIRTH — Active Idea Bank
 created: 2026-04-11
-updated: 2026-04-12
+updated: 2026-04-16
 author: Lead (Claude Sonnet 4.6) + RobynAwesome
 tags: [ideas, incubation, kasilink, all-agents]
 status: ACTIVE — add ideas here the moment they appear
@@ -38,8 +38,8 @@ audience: ALL AGENTS + OWNER
 | 007 | **Gig completion certificate** — PDF/image proof of work done, shareable | Township workers need portable reputation | Incubation | Lead |
 | 008 | **Neighbourhood job board widget** — embeddable card for community WhatsApp groups | WhatsApp is the real SA communication layer | Incubation | Lead |
 | 009 | **Micro-payment escrow** — hold payment in escrow until gig marked complete | Trust gap between poster and worker | Incubation | Lead |
-| 010 | **Utility disruption rescheduler** — auto-suggest new gig time when load-shedding conflicts | LoadSheddingWidget + gig scheduling | Incubation | Lead |
-| 011 | **Demo Day live leaderboard** — show real-time gig posts/applications during the pitch | April 15-17 Demo Day is 4 days away | Approved — build if time | Lead |
+| 010 | **Utility disruption rescheduler** — auto-suggest new gig time when load-shedding conflicts | LoadSheddingWidget + gig scheduling | ✅ SHIPPED 2026-04-16 — `components/UtilityRescheduler.tsx` live on `/gigs/new` | Lead |
+| 011 | **Demo Day live leaderboard** — show real-time gig posts/applications during the pitch | April 15-17 Demo Day is 4 days away | ✅ SHIPPED 2026-04-16 — `app/demo/page.tsx` live at kasilink.com/demo | Lead |
 | 012 | **KC monitoring dashboard** — Robyn sees what KC is doing in real time | KC Intern-Dev session born | Incubation | KC |
 | 013 | **2nd Brain auto-update hook** — every AI session auto-appends learnings here | Ideas at Birth session — meta idea | Incubation | Lead |
 | 014 | **Township weather + safety alerts** — combine utility + safety into one awareness panel | Community status page pattern | Incubation | Lead |
@@ -59,8 +59,12 @@ audience: ALL AGENTS + OWNER
 
 ---
 
-## Approved → Moved to Strategy
+## Approved → Shipped
 
-| # | Idea | Moved To | Date |
-|---|------|----------|------|
-| 011 | Demo Day live leaderboard | 02-Strategy — if Demo Day prep session starts | 2026-04-11 |
+| # | Idea | Shipped As | Date |
+|---|------|------------|------|
+| 010 | Utility disruption rescheduler | `components/UtilityRescheduler.tsx` + `/gigs/new` | 2026-04-16 |
+| 011 | Demo Day live leaderboard | `app/demo/page.tsx` → kasilink.com/demo | 2026-04-16 |
+| 016 | next/font pattern standard | All Kopano Labs products | 2026-04-12 |
+| 017 | SPA rewrite safety rule | Portfolio vercel.json | 2026-04-12 |
+| 018 | KC Journal | Schematics 17-KC-JOURNAL | 2026-04-12 |
