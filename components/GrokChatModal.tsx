@@ -4,7 +4,7 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useRef, useState } from "react";
 
-export default function GrokChatModal() {
+export default function KCChatModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const { messages, sendMessage, status, setMessages } = useChat({
@@ -29,11 +29,11 @@ export default function GrokChatModal() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-8 right-8 bg-gradient-to-r from-purple-600 to-violet-600 text-white rounded-2xl shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center gap-3 px-6 py-4 z-50 hover:scale-105"
+        className="fixed bottom-8 right-8 bg-gradient-to-r from-[#4595C0] to-[#2d7ba8] text-white rounded-2xl shadow-2xl hover:shadow-[#4595C0]/50 transition-all duration-300 flex items-center gap-3 px-6 py-4 z-50 hover:scale-105"
       >
-        <span className="text-3xl">🦾</span>
+        <span className="text-3xl">💬</span>
         <div>
-          <div className="font-semibold text-lg leading-none">Ask Grok</div>
+          <div className="font-semibold text-lg leading-none">Ask KC</div>
           <div className="text-xs opacity-75">KasiLink AI</div>
         </div>
       </button>
@@ -46,11 +46,11 @@ export default function GrokChatModal() {
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-800 px-6 py-4">
           <div className="flex items-center gap-3">
-            <span className="text-3xl">🦾</span>
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#4595C0] text-white font-black text-sm">KC</div>
             <div>
-              <h2 className="font-bold text-xl">Grok AI</h2>
+              <h2 className="font-bold text-xl">Kopano Context</h2>
               <p className="text-xs text-gray-400">
-                Powered by xAI • Gigs, load-shedding, Kasi tips
+                KasiLink AI — Gigs, load-shedding, Kasi tips
               </p>
             </div>
           </div>
@@ -74,8 +74,8 @@ export default function GrokChatModal() {
         <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-950">
           {messages.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center text-center">
-              <div className="text-6xl mb-4">👋</div>
-              <p className="text-xl text-gray-300">Hi, I&apos;m Grok!</p>
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#4595C0] text-white font-black text-2xl mb-4">KC</div>
+              <p className="text-xl text-gray-300">Hi, I&apos;m KC!</p>
               <p className="text-gray-400 mt-2 max-w-xs">
                 Ask me about local gigs, load shedding, business ideas, or
                 anything in Kasi.
@@ -90,7 +90,7 @@ export default function GrokChatModal() {
                 <div
                   className={`max-w-[80%] rounded-2xl px-5 py-3 ${
                     m.role === "user"
-                      ? "bg-purple-600 text-white"
+                      ? "bg-[#4595C0] text-white"
                       : "bg-gray-800 text-gray-100"
                   }`}
                 >
@@ -105,8 +105,8 @@ export default function GrokChatModal() {
           {isLoading && (
             <div className="flex justify-start">
               <div className="bg-gray-800 rounded-2xl px-5 py-3 flex items-center gap-2">
-                Grok is thinking
-                <span className="w-2 h-2 bg-purple-400 rounded-full animate-ping"></span>
+                KC is thinking
+                <span className="w-2 h-2 bg-[#4595C0] rounded-full animate-ping"></span>
               </div>
             </div>
           )}
@@ -122,7 +122,7 @@ export default function GrokChatModal() {
           <div className="flex gap-3">
             <input
               type="text"
-              className="flex-1 bg-gray-900 border border-gray-700 rounded-2xl px-6 py-4 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
+              className="flex-1 bg-gray-900 border border-gray-700 rounded-2xl px-6 py-4 text-white placeholder-gray-400 focus:outline-none focus:border-[#4595C0]"
               placeholder="Type your message..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -131,7 +131,7 @@ export default function GrokChatModal() {
             <button
               type="submit"
               disabled={isLoading || !inputValue.trim()}
-              className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-700 px-8 rounded-2xl font-medium transition-colors"
+              className="bg-[#4595C0] hover:bg-[#3a80a8] disabled:bg-gray-700 px-8 rounded-2xl font-medium transition-colors"
             >
               Send
             </button>
