@@ -8,7 +8,7 @@ export default function KCChatModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const { messages, sendMessage, status, setMessages } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/grok" }),
+    transport: new DefaultChatTransport({ api: "/api/kc" }),
   });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -17,6 +17,18 @@ export default function KCChatModal() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const msg = (e as CustomEvent<{ message: string }>).detail?.message;
+      setIsOpen(true);
+      if (msg) {
+        setInputValue(msg);
+      }
+    };
+    window.addEventListener("kc:open", handler);
+    return () => window.removeEventListener("kc:open", handler);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

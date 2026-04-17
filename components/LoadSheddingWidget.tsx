@@ -67,6 +67,9 @@ export default function LoadSheddingWidget() {
             Community Updates
           </Link>
         </div>
+        <p className="text-[10px] text-[#4595C0] font-semibold tracking-wide mt-1">
+          Powered by Kopano Context
+        </p>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { MapPin, Shield, MessageSquare, TrendingUp, Zap, Users, Clock } from "lucide-react";
 import LoadSheddingWidget from "@/components/LoadSheddingWidget";
 import GrokChatModal from "@/components/GrokChatModal";
+import KCCommandStrip from "@/components/KCCommandStrip";
 import {
   EmptyStateCard,
   Eyebrow,
@@ -146,9 +147,18 @@ export default async function HomePage() {
                   are now. No CV. Less commute. Faster local work.
                 </p>
               </div>
+              <div className="mt-3 flex items-center gap-2 rounded-xl border border-[#4595C0]/30 bg-[#4595C0]/5 px-4 py-2.5">
+                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#4595C0] text-white font-black text-[10px]">KC</div>
+                <p className="text-xs text-[#4595C0] font-semibold">Intelligence powered by Kopano Context</p>
+              </div>
             </aside>
           </div>
         </div>
+      </section>
+
+      {/* ── KC COMMAND STRIP ─────────────────────────────── */}
+      <section className="container pb-6">
+        <KCCommandStrip />
       </section>
 
       {/* ── BENTO: SIGNAL PANEL + SYSTEM NOTES ──────────── */}
@@ -297,6 +307,9 @@ export default async function HomePage() {
                       {gig.isUrgent && <span className="badge badge-danger">Urgent</span>}
                       <span className="badge badge-primary">{gig.category.replace("_", " ")}</span>
                       {gig.isProviderVerified && <span className="badge badge-success">Verified</span>}
+                      <span className="inline-flex items-center gap-1 rounded-full border border-[#4595C0]/40 bg-[#4595C0]/10 px-2 py-0.5 text-[10px] font-bold text-[#4595C0]">
+                        KC ✓
+                      </span>
                     </div>
                     <h3 className="mt-4 text-xl font-bold">{gig.title}</h3>
                     <p className="mt-3 line-clamp-3 text-sm leading-7 text-on-surface-variant">
