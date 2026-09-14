@@ -1,0 +1,28 @@
+{
+  "receipt_id": "RCPT_a66108c8-163",
+  "timestamp": "2026-09-14T14:16:07.143Z",
+  "opportunity_id": "gig_0987",
+  "mode": "dry_run",
+  "provider_called": false,
+  "target_contact": "<E1***ONE>",
+  "governance": {
+    "human_approved": true,
+    "bounded_goal": "Call to verify if the Graphic Designer position is open and pays 500 ZAR for the weekend event. Ask: 1) Is the position still open? 2) Is the pay 500 ZAR? Do not negotiate or apply. Report back the answers.",
+    "idempotency_enforced": true
+  },
+  "actuation_evidence": {
+    "provider": "CALL-E_DRY_RUN_CONTRACT",
+    "server_url": "https://seleven-mcp-sg.airudder.com/mcp/openagent_oauth",
+    "plan_id": null,
+    "run_id": null,
+    "provider_status": "NOT_CALLED",
+    "summary": "Dry-run contract simulation verified.",
+    "transcript": null,
+    "structured_extraction": null,
+    "evidence_sha256": "0f673aeffea1ec4bcea4eaaccabd25631a6e720a90b8214c19d13a08fe95e664"
+  },
+  "pka_resolution": {
+    "state": "UNKNOWN",
+    "justification": "Dry-run execution proves interface contract only; zero external provider actuation."
+  }
+}
