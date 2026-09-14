@@ -25,8 +25,8 @@ describe("formatRelativeTime", () => {
   it("returns formatted date for timestamps older than 7 days", () => {
     const oldDate = new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString();
     const result = formatRelativeTime(oldDate);
-    // Should contain a month abbreviation like Jan, Feb, Mar etc.
-    expect(result).toMatch(/\d{2}\s\w{3}\s\d{4}/);
+    // Should contain a month abbreviation like Jan, Feb, Mar, Sept etc.
+    expect(result).toMatch(/\d{2}\s\w{3,4}\s\d{4}/);
   });
 
   it("accepts a Date object", () => {

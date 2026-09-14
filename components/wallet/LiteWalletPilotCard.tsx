@@ -93,6 +93,7 @@ export default function LiteWalletPilotCard() {
   const [connectingWalletId, setConnectingWalletId] = useState<WalletCandidate["id"] | null>(null);
   const [activeWalletId, setActiveWalletId] = useState<WalletCandidate["id"] | null>(null);
   const [connectedAddress, setConnectedAddress] = useState<string | null>(null);
+  const [solBalance, setSolBalance] = useState<number | null>(null);
 
   useEffect(() => {
     setWallets(detectWalletCandidates());
@@ -138,6 +139,33 @@ export default function LiteWalletPilotCard() {
     () => wallets.find((candidate) => candidate.id === activeWalletId) ?? null,
     [activeWalletId, wallets],
   );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchBalance() {
+      if (!connectedAddress) {
+        setSolBalance(null);
+        return;
+      }
+      try {
+        const res = await fetch(`/api/lite/solana/balance?address=${connectedAddress}`);
+        if (!res.ok) throw new Error("Balance fetch failed");
+        const data = await res.json();
+        if (!cancelled && typeof data.sol === "number") {
+          setSolBalance(data.sol);
+        }
+      } catch (err) {
+        console.error("RPC Proxy error:", err);
+      }
+    }
+
+    void fetchBalance();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [connectedAddress]);
 
   async function handleConnect(candidate: WalletCandidate) {
     if (!candidate.provider) {
@@ -215,7 +243,7 @@ export default function LiteWalletPilotCard() {
           ) : null}
         </div>
 
-        <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
           <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-low p-4">
             <p className="mini-stat-label">Status</p>
             <p className="mt-2 text-lg font-bold text-on-background">{connectionLabel}</p>
@@ -230,6 +258,12 @@ export default function LiteWalletPilotCard() {
             <p className="mini-stat-label">Address</p>
             <p className="mt-2 text-lg font-bold text-on-background">
               {shortenWalletAddress(connectedAddress)}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-low p-4">
+            <p className="mini-stat-label">Balance</p>
+            <p className="mt-2 text-lg font-bold text-on-background">
+              {solBalance !== null ? `${solBalance.toFixed(4)} SOL` : "—"}
             </p>
           </div>
           <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-low p-4">

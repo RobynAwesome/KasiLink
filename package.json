@@ -30,14 +30,18 @@
     "@vercel/otel": "^2.1.1",
     "ai": "^6.0.277",
     "braintrust": "^2.0.0",
-    "lucide-react": "^1.8.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^13.2.0",
+    "lucide-react": "^1.45.0",
     "mongodb": "^7.1.1",
     "mongoose": "^9.3.3",
+    "motion": "^13.2.0",
     "next": "16.3.4",
     "openai": "^6.33.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "svix": "^1.90.0"
+    "svix": "^1.90.0",
+    "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

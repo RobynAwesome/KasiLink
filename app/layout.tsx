@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Public_Sans, Noto_Serif } from "next/font/google";
+import { Public_Sans, Source_Serif_4, Lexend } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import { TopBar } from "@/components/TopBar";
+import { BottomNav } from "@/components/BottomNav";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
@@ -16,10 +16,17 @@ const publicSans = Public_Sans({
   display: "swap",
 });
 
-const notoSerif = Noto_Serif({
+const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-noto-serif",
+  weight: ["400", "600", "700", "900"],
+  variable: "--font-source-serif",
+  display: "swap",
+});
+
+const lexend = Lexend({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-lexend",
   display: "swap",
 });
 
@@ -84,19 +91,22 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en" data-theme="dark" suppressHydrationWarning>
-        <body className={`bg-background font-body text-on-background antialiased ${publicSans.variable} ${notoSerif.variable}`}>
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        </head>
+        <body className={`bg-background font-body text-on-background antialiased ${publicSans.variable} ${sourceSerif.variable} ${lexend.variable}`}>
           <a href="#main-content" className="skip-link">
             Skip to content
           </a>
           <GoogleAnalytics />
           <ThemeProvider>
             <ServiceWorkerRegistration />
-            <Navbar />
-            <main id="main-content" className="page-content">
+            <TopBar />
+            <main id="main-content" className="page-content min-h-screen">
               {children}
             </main>
-            <Footer />
+            <BottomNav />
           </ThemeProvider>
           <Analytics />
         </body>

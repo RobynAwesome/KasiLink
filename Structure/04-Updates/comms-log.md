@@ -30,6 +30,60 @@ status: active
 
 ---
 
+### 2026-09-11 | LD-LPM | KL-2609-01 EXECUTION — PLATFORM SUITE MONOREPO EXTRACTION
+
+**Tranche:** `Return Gate UNLOCKED -> KL-2609-01 Stream -> Platform Suite Monorepo Extraction`
+
+**Command:** `FORGE: PROCEED KL-2609-01`
+
+**What shipped:**
+- Decoupled and extracted `stitch_kopano_labs_platform_suite` (87 flows/assets) into sovereign Next.js 15 monorepo at `C:\Users\rkhol\kopano-labs\`.
+- **Packages**:
+  - `packages/ui` (`@kopano/ui`): Design system tokens (colors, typography, border radiuses, glassmorphism, African geometric pattern overlay).
+  - `packages/types` (`@kopano/types`): Domain models for Connect, Alpha, Beta, and Platform Suite.
+- **Apps**:
+  - `apps/connect` (`@kopano/connect`): Collaborative AI workspace with Trinity named agents (CASSEY, YASSIE, THARI), Cape Town data residency, offline resilience, chat feed with Bento cards and code snippets.
+  - `apps/alpha` (`@kopano/alpha`): Sports Arena real-time booking engine, interactive calendar slot selector, HVAC & kinetic sensor specs, Paystack / Yoco checkout drawer.
+  - `apps/beta` (`@kopano/beta`): Regenerative urban farming hub, crop growth telemetry (Kale, Radish, Tomato), curriculum progress, workshops booking, circular seed marketplace.
+  - `apps/web` (`@kopano/web`): Central Studio landing portal linking all three apps, authoritative nameserver telemetry (`76.76.21.21`), and Trinity constraints.
+- **Verification Runner**:
+  - `scripts/test-monorepo.js` — 56/56 passing tests across configuration, exports, and page invariants.
+- **Evidence Receipt**:
+  - `C:\Users\rkhol\kopano-labs\Stucture\KL-2609-01-EXTRACTION-RECEIPT.md`
+- **Roadmap Updated**:
+  - `C:\Users\rkhol\kopano-labs\Stucture\Roadmap-CRUD-Slice.md` updated: `KL-2609-01` -> `done` (`Save`).
+- **Boundaries**:
+  - `KL-2609-03` (Git Init) held pending Chief Architect.
+  - `KL-2609-05` stays CLOSED / UNLOCKED.
+
+**Verification:**
+- `node scripts/test-monorepo.js` — 56/56 PASS.
+
+**Verdict:** `SAVE` — KL-2609-01 complete. Monorepo live and verified. Ready for KL-2609-04 dual-plane parity synchronizer.
+
+---
+
+### 2026-09-09 | LPM (Lead Dev) | SOLANA TRANCHE 02 — RPC READ PROXY (BLACKMASK)
+
+**Tranche:** `Main Brain audit -> BlackMass sandbox -> BlackMask promotion -> Solana Tranche 02`
+
+**@CF → LPM:** Implement the next step of the Solana integration for KasiLink Lite. Stress test under Bracket Protocol (BlackMass -> BlackMask).
+
+**What shipped:**
+
+- **Tranche 02 (RPC Read Proxy):**
+  - `app/api/lite/solana/balance/route.ts` — Server-side API route acting as a thin JSON-RPC proxy to fetch Devnet balances.
+  - `components/wallet/LiteWalletPilotCard.tsx` — Added a `solBalance` state and an effect to fetch the connected wallet's balance dynamically without client-side bloat.
+  - *Governance:* This was engineered in `[BlackMass]` to avoid requiring the massive `@solana/web3.js` dependency on the client bundle, maintaining KasiLink Lite's strict performance guarantees.
+
+**Verification:**
+- `npm run build` — PASS (Clean build, no client bundle bloat)
+- Thin client architecture verified.
+
+**Verdict:** `SHIP` — Solana Tranche 02 passed BlackMask gate. The Lite Wallet spine now features an active, read-only devnet connection to the blockchain.
+
+---
+
 ### 2026-06-05 | CF (Codex) | SOLANA TRANCHE 01 — KASILINK LITE WALLET SPINE PILOT
 
 **Tranche:** `Main Brain audit -> KC activation -> Cassy lane -> BlackMask -> Solana tranche 01`
