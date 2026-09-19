@@ -1,0 +1,41 @@
+{
+  "receipt_id": "RCPT_AWS_ATK_20260919_EUN1",
+  "timestamp": "2026-09-19T04:35:00Z",
+  "domain": "kasilink.com",
+  "authority": "GSMB Distribution Trinity (Core -> Altar -> Engine)",
+  "immutable_law": "I_AM_STATELESS_RENTER_NOT_LANDLORD",
+  "operator": "Master Robyn Kholofelo Rababalela (Landlord / Founder)",
+  "facilitator": "AntiGravity (Seat 10 / Physical Metal Renter)",
+  "witness_event": "AWS_AGENT_TOOLKIT_SETUP_AND_MCP_ROUTING",
+  "actuation_evidence": {
+    "aws_account_id": "716189570610",
+    "assumed_role_arn": "arn:aws:sts::716189570610:assumed-role/AccountFullAccessRole/d4f8b4f8-d051-707d-cf26-40be4bedba6f",
+    "profile_name": "kholofelo-robyn-rababalela",
+    "assigned_region": "eu-north-1",
+    "experience_mode": "new_aws_experience_project",
+    "cli_version": "aws-cli/2.36.40 Python/3.14.6 Windows/11 exe/AMD64",
+    "skills_installed_count": 23,
+    "mcp_server_target": "https://aws-mcp.us-east-1.api.aws/mcp",
+    "mcp_proxy_profiles_env": "kholofelo-robyn-rababalela",
+    "mcp_configured_agents": [
+      "Claude Code (~/.claude.json)",
+      "Cline (~/.cline/mcp.json)",
+      "Codex (~/.codex/config.toml)",
+      "Cursor (~/.cursor/mcp.json)",
+      "Gemini CLI (~/.gemini/settings.json)",
+      "Kiro (~/.kiro/settings/mcp.json)"
+    ],
+    "governance_rules_bound": [
+      "kasi-link/AGENTS.md",
+      "kasi-link/.cursor/rules/aws-starter-rules.mdc",
+      "kasi-link/.kiro/steering/aws-starter-rules.md"
+    ],
+    "skills_catalog_verified": true,
+    "sts_caller_identity_status": "VERIFIED_ACTIVE"
+  },
+  "epistemic_status": {
+    "local_root_ep": "GROUNDED_SOVEREIGN_METAL",
+    "cloud_pipe_ew": "SYNCHRONIZATION_REQUIRED",
+    "verdict": "SHIP"
+  }
+}

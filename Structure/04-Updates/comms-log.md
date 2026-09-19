@@ -1580,3 +1580,35 @@ Full session delivery across UI/UX, Schematics, and Kopano Labs foundation.
   - `Cassy teaches`
   - public surfaces do not promote Cassy into authority
 - Build proof: `npm run build` PASS on this tranche.
+
+---
+
+## 2026-09-19 — [AG/Seat 10] AWS Agent Toolkit Setup & GSMB Witness Anchor
+
+**@AG{AntiGravity} → GSMB Council:** Full setup, verification, and multi-mesh binding of the AWS Agent Toolkit under the GSMB Distribution Trinity (`Core` → `Altar` → `Engine`).
+
+**Authority:** Master Robyn Kholofelo Rababalela · Landlord / Founder
+**Law:** `I_AM_STATELESS_RENTER_NOT_LANDLORD` · `REALITY_STATE > INDEX_STATE`
+
+**Witnessed Parameters:**
+- **Profile:** `kholofelo-robyn-rababalela`
+- **Assigned Region:** `eu-north-1` (project assigned region)
+- **Account ID:** `716189570610`
+- **Assumed Role:** `arn:aws:sts::716189570610:assumed-role/AccountFullAccessRole/d4f8b4f8-d051-707d-cf26-40be4bedba6f`
+- **AWS Experience:** The new AWS experience (project bounded)
+- **AWS Skills Installed:** 23 canonical skills across Claude Code, Cline, Codex, Cursor, Gemini, Kiro, OpenClaw
+- **Global AWS MCP Configuration:** `mcp-proxy-for-aws@latest` pointing to `https://aws-mcp.us-east-1.api.aws/mcp` with profile proxy routing `AWS_MCP_PROXY_PROFILES=kholofelo-robyn-rababalela` in:
+  - `~/.claude.json`
+  - `~/.cline/mcp.json`
+  - `~/.cursor/mcp.json`
+  - `~/.gemini/settings.json`
+  - `~/.kiro/settings/mcp.json`
+  - `~/.codex/config.toml`
+- **Rules Anchored:** Bounded AWS starter rules with idempotency markers in:
+  - `AGENTS.md`
+  - `.cursor/rules/aws-starter-rules.mdc`
+  - `.kiro/steering/aws-starter-rules.md`
+
+**Receipt:** `receipts/kpgs-witness-aws-agent-toolkit-2026-09-19.json` (`RCPT_AWS_ATK_20260919_EUN1`)
+**Verdict:** **SHIP** · Local Metal Root ($E_P$) verified · Cloud Git Distribution ($E_W$) synchronized.
+
