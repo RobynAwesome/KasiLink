@@ -25,7 +25,13 @@ jobs:
       - name: Checkout exact branch head
         uses: actions/checkout@v4
         with:
-          ref: agent/kpgs-gig-canonical-final
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Verify checked-out revision
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
