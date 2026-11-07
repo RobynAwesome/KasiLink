@@ -65,6 +65,9 @@
     "@opentelemetry/core": ">=2.6.1",
     "js-yaml": ">=3.13.1",
     "@babel/core": ">=7.29.6",
-    "esbuild": ">=0.25.0"
+    "esbuild": ">=0.25.0",
+    "@ai-sdk/provider-utils": {
+      "undici": "6.29.1"
+    }
   }
 }
