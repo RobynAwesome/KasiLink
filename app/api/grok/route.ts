@@ -1,5 +1,6 @@
 import { createXai } from "@ai-sdk/xai";
 import { NextRequest } from "next/server";
+import { readTextChatMessages } from "@/lib/ai-chat-messages";
 import { braintrustAI, braintrustLogger } from "@/lib/braintrust";
 
 export const runtime = "nodejs";
@@ -11,7 +12,10 @@ const xaiProvider = createXai({
 const { streamText } = braintrustAI;
 
 export async function POST(req: NextRequest) {
-  const { messages } = await req.json();
+  const messages = await readTextChatMessages(req);
+  if (!messages) {
+    return Response.json({ error: "Expected text-only chat messages." }, { status: 400 });
+  }
   const result = braintrustLogger
     ? braintrustLogger.traced(
         () =>
@@ -30,7 +34,7 @@ export async function POST(req: NextRequest) {
             },
             metadata: {
               route: "/api/grok",
-              messageCount: Array.isArray(messages) ? messages.length : 0,
+              messageCount: messages.length,
             },
           },
         },
