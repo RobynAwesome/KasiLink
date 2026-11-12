@@ -16,6 +16,26 @@ const askQuestion = (query: string): Promise<string> =>
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+type JsonObject = Record<string, unknown>;
+
+function asJsonObject(value: unknown): JsonObject | null {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+    ? value as JsonObject
+    : null;
+}
+
+function stringField(value: unknown): string | null {
+  return typeof value === "string" && value.length > 0 ? value : null;
+}
+
+function nestedObject(value: JsonObject, key: string): JsonObject | null {
+  return asJsonObject(value[key]);
+}
+
+function errorMessage(value: unknown): string {
+  return value instanceof Error ? value.message : String(value);
+}
+
 function maskPhone(phone: string): string {
   if (!phone || phone.length < 6) return phone || "<E164_PHONE>";
   return phone.slice(0, 3) + '***' + phone.slice(-4);
@@ -33,7 +53,7 @@ function resolveCalleCliPath(): string {
   throw new Error("Unable to locate @call-e/cli/bin/calle.js in npm global or local path.");
 }
 
-async function runCalleCli(args: string[]): Promise<any> {
+async function runCalleCli(args: string[]): Promise<JsonObject> {
   const cliScript = resolveCalleCliPath();
   const env = {
     ...process.env,
@@ -48,14 +68,21 @@ async function runCalleCli(args: string[]): Promise<any> {
       shell: false,
       maxBuffer: 10 * 1024 * 1024
     });
-    return JSON.parse(stdout);
-  } catch (err: any) {
-    if (err.stdout) {
+    const parsed: unknown = JSON.parse(stdout);
+    const result = asJsonObject(parsed);
+    if (!result) throw new Error("CALL-E CLI returned a non-object JSON response.");
+    return result;
+  } catch (err: unknown) {
+    const record = asJsonObject(err);
+    const errorStdout = typeof record?.stdout === "string" ? record.stdout : null;
+    if (errorStdout) {
       try {
-        return JSON.parse(err.stdout);
+        const parsed: unknown = JSON.parse(errorStdout);
+        const result = asJsonObject(parsed);
+        if (result) return result;
       } catch {}
     }
-    throw new Error(`CALL-E CLI command failed: ${err.message}`);
+    throw new Error(`CALL-E CLI command failed: ${errorMessage(err)}`);
   }
 }
 
@@ -111,7 +138,7 @@ async function runVerticalSlice() {
   // Check auth for live mode
   if (!isDryRun) {
     const authStatus = await runCalleCli(["auth", "status", "--json"]);
-    if (!authStatus.usable) {
+    if (authStatus.usable !== true) {
       console.error("[ERROR] CALL-E CLI token is not usable. Complete 'calle auth login' first.");
       rl.close();
       process.exit(1);
@@ -124,7 +151,7 @@ async function runVerticalSlice() {
   let confirmToken: string | null = null;
   let readyToRun = false;
   let providerExecutionState = "NOT_CALLED";
-  let planDetails: any = null;
+  let planDetails: JsonObject | null = null;
 
   if (isDryRun) {
     // 1. DRY RUN MUST NEVER LOOK LIKE PROVIDER ACTUATION
@@ -140,17 +167,18 @@ async function runVerticalSlice() {
       "--json"
     ]);
 
-    planDetails = planRes.result?.structuredContent || planRes;
-    planId = planDetails.plan_id || null;
-    confirmToken = planDetails.confirm_token || null;
-    readyToRun = Boolean(planDetails.ready_to_run);
+    const planResult = nestedObject(planRes, "result");
+    planDetails = asJsonObject(planResult?.structuredContent) || planRes;
+    planId = stringField(planDetails.plan_id);
+    confirmToken = stringField(planDetails.confirm_token);
+    readyToRun = planDetails.ready_to_run === true;
 
     console.log(`[CALL-E] Provider Plan ID: ${planId}`);
-    console.log(`[CALL-E] Provider Display Goal: ${planDetails.display_goal || boundedGoal}`);
+    console.log(`[CALL-E] Provider Display Goal: ${stringField(planDetails.display_goal) || boundedGoal}`);
 
     // 7. PRESERVE ZA PROVIDER REALITY
     if (!readyToRun || !confirmToken) {
-      const clarifying = planDetails.clarifying_questions || [planDetails.confirm_summary];
+      const clarifying = planDetails.clarifying_questions || [stringField(planDetails.confirm_summary)];
       console.log(`\n[CALL-E REALITY NOTICE] Provider reported execution restriction:`);
       console.log(` -> ${JSON.stringify(clarifying)}`);
       
@@ -188,7 +216,7 @@ async function runVerticalSlice() {
   let terminalStatus = providerExecutionState;
   let transcript: string | null = null;
   let summary: string | null = null;
-  let structuredExtraction: any = null;
+  let structuredExtraction: JsonObject | null = null;
 
   if (isDryRun) {
     terminalStatus = "NOT_CALLED";
@@ -212,7 +240,8 @@ async function runVerticalSlice() {
     ]);
 
     // 2. NO FABRICATED RUN ID
-    runId = runRes.run_id || runRes.result?.run_id || null;
+    const runResult = nestedObject(runRes, "result");
+    runId = stringField(runRes.run_id) || stringField(runResult?.run_id);
     console.log(`[CALL-E] Provider Run ID: ${runId}`);
 
     if (runId) {
@@ -227,20 +256,21 @@ async function runVerticalSlice() {
           "--run-id", runId,
           "--json"
         ]);
-        const currentStatus = statusRes.status || statusRes.result?.status;
+        const statusResult = nestedObject(statusRes, "result");
+        const currentStatus = stringField(statusRes.status) || stringField(statusResult?.status);
         console.log(`[CALL-E] Polling get_call_run [${attempts}]: ${currentStatus}`);
 
-        if (["completed", "failed", "canceled", "declined"].includes(currentStatus)) {
+        if (currentStatus && ["completed", "failed", "canceled", "declined"].includes(currentStatus)) {
           terminalStatus = currentStatus;
-          transcript = statusRes.transcript || statusRes.result?.transcript || null;
-          summary = statusRes.summary || statusRes.result?.summary || null;
-          structuredExtraction = statusRes.extracted_data || statusRes.result?.extracted_data || null;
+          transcript = stringField(statusRes.transcript) || stringField(statusResult?.transcript);
+          summary = stringField(statusRes.summary) || stringField(statusResult?.summary);
+          structuredExtraction = asJsonObject(statusRes.extracted_data) || asJsonObject(statusResult?.extracted_data);
           polled = true;
         }
       }
     } else {
       console.log(`[CALL-E Notice] No run_id returned by provider. Raw response preserved.`);
-      terminalStatus = runRes.status || "PROVIDER_REJECTED";
+      terminalStatus = stringField(runRes.status) || "PROVIDER_REJECTED";
       summary = JSON.stringify(runRes);
     }
   }
@@ -322,8 +352,8 @@ async function runVerticalSlice() {
   rl.close();
 }
 
-runVerticalSlice().catch(err => {
-  console.error("\n[EXECUTION ERROR]", err.message);
+runVerticalSlice().catch((err: unknown) => {
+  console.error("\n[EXECUTION ERROR]", errorMessage(err));
   rl.close();
   process.exit(1);
 });
